@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sintaxis en JavaScript</title>
+  <link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96"
+    type="image/png">
+  <link
+    href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;700&family=Syne:wght@400;700;800&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+
+  <!-- ── NAVBAR STICKY ──────────────────────────────────────────────────── -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <div class="navbar-brand"><a href="#header-inner"><span>sJS</span></a></div>
+
+      <!-- Links desktop -->
+      <div class="navbar-links" id="navLinks">
+        <a href="#reglas">01 Reglas</a>
+        <a href="#valores">02 Valores</a>
+        <a href="#literales">03 Literales</a>
+        <a href="#palabras">04 Keywords</a>
+        <a href="#variables">05 Variables</a>
+        <a href="#identificadores">06 IDs</a>
+        <a href="#operadores">07 Operadores</a>
+        <a href="#expresiones">08 Expresiones</a>
+        <a href="#declaraciones">09 Declaraciones</a>
+        <a href="#comentarios">10 Comentarios</a>
+      </div>
+
+      <div class="navbar-controls">
+        <!-- Cambio de tema -->
+        <button class="theme-btn" id="themeBtn" title="Cambiar tema" aria-label="Cambiar tema">☀️</button>
+        <!-- Hamburguesa (solo mobile) -->
+        <button class="hamburger" id="hamburger" aria-label="Abrir menú" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Mobile menu drawer -->
+  <div class="mobile-menu" id="mobileMenu" aria-hidden="true">
+    <a href="#reglas" onclick="closeMenu()"><span class="mn">01</span> Reglas de Sintaxis</a>
+    <a href="#valores" onclick="closeMenu()"><span class="mn">02</span> Valores</a>
+    <a href="#literales" onclick="closeMenu()"><span class="mn">03</span> Literales</a>
+    <a href="#palabras" onclick="closeMenu()"><span class="mn">04</span> Palabras Clave</a>
+    <a href="#variables" onclick="closeMenu()"><span class="mn">05</span> Variables</a>
+    <a href="#identificadores" onclick="closeMenu()"><span class="mn">06</span> Identificadores</a>
+    <a href="#operadores" onclick="closeMenu()"><span class="mn">07</span> Operadores</a>
+    <a href="#expresiones" onclick="closeMenu()"><span class="mn">08</span> Expresiones</a>
+    <a href="#declaraciones" onclick="closeMenu()"><span class="mn">09</span> Declaraciones</a>
+    <a href="#comentarios" onclick="closeMenu()"><span class="mn">10</span> Comentarios</a>
+  </div>
+  <div class="menu-overlay" id="menuOverlay" onclick="closeMenu()"></div>
+
+  <div class="container">
+
+    <header>
+      <div class="header-inner"  id="header-inner">
+        <div class="logo-area">
+          <p>// Introducción a JavaScript</p>
+          <h1>SINTAXIS en<br><span class="js">JavaScript</span></h1>
+          <p>Es el conjunto de reglas formales que determinan cómo deben escribirse las instrucciones, declaraciones y
+            estructuras del
+            lenguaje para que el motor de ejecución las interprete correctamente.
+            Define la forma válida de variables, funciones, expresiones, operadores, estructuras de control y
+            delimitadores dentro del código.</p>
+        </div>
+      </div>
+    </header>
+
+
+    <main>
+
+      <!-- 01 REGLAS DE SINTAXIS -->
+      <section class="section" id="reglas">
+        <div class="section-header">
+          <span class="section-num">01</span>
+          <h2 class="section-title"><span class="tag c1"></span>Reglas de Sintaxis</h2>
+        </div>
+        <p class="section-def">// Conjunto de normas que definen cómo debe escribirse el código JS para ser válido e
+          interpretable por el motor.</p>
+        <div class="code-block">
+            <div class="code-header">
+              <div class="dots"><span></span><span></span><span></span></div>
+              <span class="filename">01_reglas.js</span>
+            </div>
+            <pre><span class="cmt">// REGLA 1: JavaScript distingue mayúsculas de minúsculas (case-sensitive)</span>
+            <span class="kw">let</span> <span class="vr">nombre</span> <span class="op">=</span> <span class="str">"Ana"</span><span class="pun">;</span>        <span class="cmt">// variable válida</span>
+            <span class="kw">let</span> <span class="vr">Nombre</span> <span class="op">=</span> <span class="str">"Luis"</span><span class="pun">;</span>       <span class="cmt">// diferente variable (N mayúscula)</span>
+            
+            <span class="cmt">// REGLA 2: Los espacios en blanco son ignorados (excepto en strings)</span>
+            <span class="kw">let</span> <span class="vr">suma</span> <span class="op">=</span> <span class="num">5</span> <span class="op">+</span> <span class="num">3</span><span class="pun">;</span>           <span class="cmt">// válido con espacios</span>
+            <span class="kw">let</span> <span class="vr">suma2</span><span class="op">=</span><span class="num">5</span><span class="op">+</span><span class="num">3</span><span class="pun">;</span>              <span class="cmt">// también válido sin espacios</span>
+            
+            <span class="cmt">// REGLA 3: Las instrucciones terminan con punto y coma (opcional pero recomendado)</span>
+            <span class="kw">let</span> <span class="vr">x</span> <span class="op">=</span> <span class="num">10</span><span class="pun">;</span>
+            <span class="kw">let</span> <span class="vr">y</span> <span class="op">=</span> <span class="num">20</span><span class="pun">;</span>
+            
+            <span class="cmt">// REGLA 4: Los bloques de código se delimitan con llaves { }</span>
+            <span class="kw">if</span> <span class="pun">(</span><span class="vr">x</span> <span class="op">&lt;</span> <span class="vr">y</span><span class="pun">) {</span>
+              <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"x es menor"</span><span class="pun">);</span>  <span class="cmt">// código dentro del bloque</span>
+            <span class="pun">}</span>
+            
+            <span class="cmt">// REGLA 5: El código se ejecuta de arriba hacia abajo, línea por línea</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"Línea 1"</span><span class="pun">);</span>      <span class="cmt">// se ejecuta primero</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"Línea 2"</span><span class="pun">);</span>      <span class="cmt">// se ejecuta después</span></pre>
+          </div>
+      </section>
+
+      <!-- 02 VALORES -->
+      <section class="section" id="valores">
+        <div class="section-header">
+          <span class="section-num">02</span>
+          <h2 class="section-title"><span class="tag c2"></span>Valores</h2>
+        </div>
+        <p class="section-def">// Dato concreto que JS puede almacenar, procesar o retornar. Puede ser primitivo
+          (inmutable) o de referencia (objeto/array).</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">02_valores.js</span>
+          </div>
+          <pre><span class="cmt">// ── VALORES PRIMITIVOS (tipos simples, inmutables) ──────────────────</span>
+          
+          <span class="kw">let</span> <span class="vr">texto</span>      <span class="op">=</span> <span class="str">"Hola mundo"</span><span class="pun">;</span>    <span class="cmt">// String  → cadena de texto</span>
+          <span class="kw">let</span> <span class="vr">edad</span>       <span class="op">=</span> <span class="num">25</span><span class="pun">;</span>              <span class="cmt">// Number  → número entero o decimal</span>
+          <span class="kw">let</span> <span class="vr">precio</span>     <span class="op">=</span> <span class="num">9.99</span><span class="pun">;</span>            <span class="cmt">// Number  → número decimal (float)</span>
+          <span class="kw">let</span> <span class="vr">activo</span>     <span class="op">=</span> <span class="bool">true</span><span class="pun">;</span>            <span class="cmt">// Boolean → solo true o false</span>
+          <span class="kw">let</span> <span class="vr">sinValor</span>   <span class="op">=</span> <span class="bool">null</span><span class="pun">;</span>            <span class="cmt">// Null    → ausencia intencional de valor</span>
+          <span class="kw">let</span> <span class="vr">sinDef</span>     <span class="op">=</span> <span class="bool">undefined</span><span class="pun">;</span>       <span class="cmt">// Undefined → valor no asignado aún</span>
+          <span class="kw">let</span> <span class="vr">simbolo</span>    <span class="op">=</span> <span class="fn">Symbol</span><span class="pun">(</span><span class="str">"id"</span><span class="pun">);</span>    <span class="cmt">// Symbol  → identificador único e irrepetible</span>
+          <span class="kw">let</span> <span class="vr">grande</span>     <span class="op">=</span> <span class="num">9007199254740991n</span><span class="pun">;</span><span class="cmt">// BigInt  → entero de precisión arbitraria</span>
+          
+          <span class="cmt">// ── VALORES DE REFERENCIA (apuntan a objetos en memoria) ─────────────</span>
+          
+          <span class="kw">let</span> <span class="vr">lista</span>   <span class="op">=</span> <span class="pun">[</span><span class="num">1</span><span class="pun">,</span> <span class="num">2</span><span class="pun">,</span> <span class="num">3</span><span class="pun">];</span>           <span class="cmt">// Array  → colección ordenada de valores</span>
+          <span class="kw">let</span> <span class="vr">persona</span> <span class="op">=</span> <span class="pun">{</span> <span class="vr">nombre</span><span class="pun">:</span> <span class="str">"Ana"</span> <span class="pun">};</span>    <span class="cmt">// Object → colección de pares clave-valor</span>
+          
+          <span class="cmt">// Verificar el tipo de un valor con typeof</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="kw">typeof</span> <span class="vr">texto</span><span class="pun">);</span>          <span class="cmt">// → "string"</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="kw">typeof</span> <span class="vr">edad</span><span class="pun">);</span>           <span class="cmt">// → "number"</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="kw">typeof</span> <span class="vr">activo</span><span class="pun">);</span>         <span class="cmt">// → "boolean"</span></pre>
+          </div>
+      </section>
+
+      <!-- 03 LITERALES -->
+      <section class="section" id="literales">
+        <div class="section-header">
+          <span class="section-num">03</span>
+          <h2 class="section-title"><span class="tag c3"></span>Literales</h2>
+        </div>
+        <p class="section-def">// Representación directa y fija de un valor en el código fuente; es el valor en sí mismo
+          escrito explícitamente.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">03_literales.js</span>
+          </div>
+          <pre><span class="cmt">// LITERALES NUMÉRICOS → valor numérico escrito directamente</span>
+          <span class="kw">let</span> <span class="vr">entero</span>      <span class="op">=</span> <span class="num">42</span><span class="pun">;</span>
+          <span class="kw">let</span> <span class="vr">decimal</span>     <span class="op">=</span> <span class="num">3.14</span><span class="pun">;</span>
+          <span class="kw">let</span> <span class="vr">hexadecimal</span> <span class="op">=</span> <span class="num">0xFF</span><span class="pun">;</span>              <span class="cmt">// base 16 → 255</span>
+          <span class="kw">let</span> <span class="vr">binario</span>     <span class="op">=</span> <span class="num">0b1010</span><span class="pun">;</span>           <span class="cmt">// base 2  → 10</span>
+          <span class="kw">let</span> <span class="vr">octal</span>       <span class="op">=</span> <span class="num">0o17</span><span class="pun">;</span>             <span class="cmt">// base 8  → 15</span>
+          
+          <span class="cmt">// LITERALES DE CADENA → texto delimitado por comillas</span>
+          <span class="kw">let</span> <span class="vr">simple</span>    <span class="op">=</span> <span class="str">'comillas simples'</span><span class="pun">;</span>
+          <span class="kw">let</span> <span class="vr">doble</span>     <span class="op">=</span> <span class="str">"comillas dobles"</span><span class="pun">;</span>
+          <span class="kw">let</span> <span class="vr">plantilla</span> <span class="op">=</span> <span class="str">`template literal: ${<span class="vr">entero</span>}`</span><span class="pun">;</span> <span class="cmt">// permite expresiones con ${}</span>
+          
+          <span class="cmt">// LITERALES BOOLEANOS → solo dos valores posibles</span>
+          <span class="kw">let</span> <span class="vr">verdadero</span> <span class="op">=</span> <span class="bool">true</span><span class="pun">;</span>
+          <span class="kw">let</span> <span class="vr">falso</span>     <span class="op">=</span> <span class="bool">false</span><span class="pun">;</span>
+          
+          <span class="cmt">// LITERAL DE ARREGLO → lista de valores entre corchetes</span>
+          <span class="kw">let</span> <span class="vr">colores</span> <span class="op">=</span> <span class="pun">[</span><span class="str">"rojo"</span><span class="pun">,</span> <span class="str">"verde"</span><span class="pun">,</span> <span class="str">"azul"</span><span class="pun">];</span>
+          
+          <span class="cmt">// LITERAL DE OBJETO → pares clave:valor entre llaves</span>
+          <span class="kw">let</span> <span class="vr">auto</span> <span class="op">=</span> <span class="pun">{</span>
+            <span class="vr">marca</span><span class="pun">:</span> <span class="str">"Toyota"</span><span class="pun">,</span>                  <span class="cmt">// propiedad: valor</span>
+            <span class="vr">año</span><span class="pun">:</span>   <span class="num">2024</span><span class="pun">,</span>
+            <span class="vr">activo</span><span class="pun">:</span> <span class="bool">true</span>
+          <span class="pun">};</span>
+          
+          <span class="cmt">// LITERAL REGEX → patrón de búsqueda entre barras /pattern/</span>
+          <span class="kw">let</span> <span class="vr">patron</span> <span class="op">=</span> <span class="str">/[a-z]+/gi</span><span class="pun">;</span>           <span class="cmt">// coincide letras, global, insensible</span></pre>
+          </div>
+      </section>
+
+      <!-- 04 PALABRAS CLAVE -->
+      <section class="section" id="palabras">
+        <div class="section-header">
+          <span class="section-num">04</span>
+          <h2 class="section-title"><span class="tag c4"></span>Palabras Clave</h2>
+        </div>
+        <p class="section-def">// Palabras reservadas por el lenguaje con un significado especial predefinido; no pueden
+          usarse como nombres de variables.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">04_palabras_clave.js</span>
+          </div>
+          <pre><span class="cmt">// DECLARACIÓN DE VARIABLES</span>
+          <span class="kw">var</span>   <span class="vr">a</span> <span class="op">=</span> <span class="num">1</span><span class="pun">;</span>    <span class="cmt">// scope de función, hoisting, evitar su uso moderno</span>
+          <span class="kw">let</span>   <span class="vr">b</span> <span class="op">=</span> <span class="num">2</span><span class="pun">;</span>    <span class="cmt">// scope de bloque, reasignable</span>
+          <span class="kw">const</span> <span class="vr">c</span> <span class="op">=</span> <span class="num">3</span><span class="pun">;</span>    <span class="cmt">// scope de bloque, NO reasignable (constante)</span>
+          
+          <span class="cmt">// CONTROL DE FLUJO</span>
+          <span class="kw">if</span> <span class="pun">(</span><span class="vr">b</span> <span class="op">></span> <span class="vr">a</span><span class="pun">) {</span>     <span class="cmt">// evalúa una condición</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"mayor"</span><span class="pun">);</span>
+          <span class="pun">}</span> <span class="kw">else</span> <span class="pun">{</span>         <span class="cmt">// caso alternativo</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"menor o igual"</span><span class="pun">);</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// BUCLES (repetición)</span>
+          <span class="kw">for</span> <span class="pun">(</span><span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span><span class="pun">;</span> <span class="vr">i</span> <span class="op">&lt;</span> <span class="num">3</span><span class="pun">;</span> <span class="vr">i</span><span class="op">++</span><span class="pun">) {</span>    <span class="cmt">// repite N veces</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="vr">i</span><span class="pun">);</span>
+          <span class="pun">}</span>
+          
+          <span class="kw">while</span> <span class="pun">(</span><span class="vr">a</span> <span class="op">&lt;</span> <span class="num">5</span><span class="pun">) {</span>               <span class="cmt">// repite mientras condición sea true</span>
+            <span class="vr">a</span><span class="op">++</span><span class="pun">;</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// FUNCIONES</span>
+          <span class="kw">function</span> <span class="fn">saludar</span><span class="pun">()</span> <span class="pun">{</span>          <span class="cmt">// define un bloque reutilizable</span>
+            <span class="kw">return</span> <span class="str">"Hola"</span><span class="pun">;</span>              <span class="cmt">// retorna un valor</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// MANEJO DE ERRORES</span>
+          <span class="kw">try</span> <span class="pun">{</span>                          <span class="cmt">// intenta ejecutar código</span>
+            <span class="kw">throw</span> <span class="kw">new</span> <span class="fn">Error</span><span class="pun">(</span><span class="str">"Algo falló"</span><span class="pun">);</span>
+          <span class="pun">}</span> <span class="kw">catch</span> <span class="pun">(</span><span class="vr">error</span><span class="pun">) {</span>             <span class="cmt">// captura el error</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="vr">error</span><span class="pun">.</span><span class="vr">message</span><span class="pun">);</span>
+          <span class="pun">}</span> <span class="kw">finally</span> <span class="pun">{</span>                  <span class="cmt">// siempre se ejecuta</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"Fin del bloque"</span><span class="pun">);</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// OTRAS PALABRAS CLAVE IMPORTANTES</span>
+          <span class="kw">import</span> <span class="pun">{</span> <span class="fn">suma</span> <span class="pun">}</span> <span class="kw">from</span> <span class="str">'./utils.js'</span><span class="pun">;</span> <span class="cmt">// importar módulos</span>
+          <span class="kw">export</span> <span class="kw">default</span> <span class="fn">saludar</span><span class="pun">;</span>           <span class="cmt">// exportar para otros módulos</span>
+          <span class="kw">typeof</span><span class="pun">,</span> <span class="kw">instanceof</span><span class="pun">,</span> <span class="kw">in</span><span class="pun">,</span> <span class="kw">delete</span><span class="pun">,</span> <span class="kw">void</span><span class="pun">;</span> <span class="cmt">// operadores-palabra</span></pre>
+          </div>
+      </section>
+
+      <!-- 05 VARIABLES -->
+      <section class="section" id="variables">
+        <div class="section-header">
+          <span class="section-num">05</span>
+          <h2 class="section-title"><span class="tag c5"></span>Variables</h2>
+        </div>
+        <p class="section-def">// Contenedor con nombre que almacena un valor en memoria; ese valor puede ser leído o
+          modificado a lo largo del programa.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">05_variables.js</span>
+          </div>
+          <pre><span class="cmt">// ── var: scope de función, tiene hoisting (se eleva al inicio) ───────</span>
+          <span class="kw">var</span> <span class="vr">ciudad</span> <span class="op">=</span> <span class="str">"Bogotá"</span><span class="pun">;</span>
+          <span class="vr">ciudad</span> <span class="op">=</span> <span class="str">"Medellín"</span><span class="pun">;</span>               <span class="cmt">// se puede reasignar</span>
+          <span class="kw">var</span> <span class="vr">ciudad</span> <span class="op">=</span> <span class="str">"Cali"</span><span class="pun">;</span>               <span class="cmt">// incluso redeclarar (no recomendado)</span>
+          
+          <span class="cmt">// ── let: scope de bloque, no se puede redeclarar ─────────────────────</span>
+          <span class="kw">let</span> <span class="vr">pais</span> <span class="op">=</span> <span class="str">"Colombia"</span><span class="pun">;</span>
+          <span class="vr">pais</span> <span class="op">=</span> <span class="str">"Argentina"</span><span class="pun">;</span>               <span class="cmt">// reasignación: OK</span>
+          <span class="cmt">// let pais = "Chile"  → ERROR: ya fue declarada</span>
+          
+          <span class="cmt">// ── const: scope de bloque, valor inmutable (la referencia) ──────────</span>
+          <span class="kw">const</span> <span class="vr">PI</span> <span class="op">=</span> <span class="num">3.14159</span><span class="pun">;</span>
+          <span class="cmt">// PI = 3.14  → ERROR: no se puede reasignar</span>
+          
+          <span class="kw">const</span> <span class="vr">usuario</span> <span class="op">=</span> <span class="pun">{</span> <span class="vr">nombre</span><span class="pun">:</span> <span class="str">"Carlos"</span> <span class="pun">};</span>
+          <span class="vr">usuario</span><span class="pun">.</span><span class="vr">nombre</span> <span class="op">=</span> <span class="str">"María"</span><span class="pun">;</span>          <span class="cmt">// OK → el objeto es mutable, la referencia no</span>
+          
+          <span class="cmt">// ── Scope: donde vive la variable ─────────────────────────────────────</span>
+          <span class="kw">let</span> <span class="vr">global</span> <span class="op">=</span> <span class="str">"soy global"</span><span class="pun">;</span>         <span class="cmt">// accesible en todo el script</span>
+          
+          <span class="kw">function</span> <span class="fn">demo</span><span class="pun">() {</span>
+            <span class="kw">let</span> <span class="vr">local</span> <span class="op">=</span> <span class="str">"soy local"</span><span class="pun">;</span>         <span class="cmt">// solo accesible dentro de la función</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="vr">global</span><span class="pun">);</span>             <span class="cmt">// puede leer la global</span>
+          <span class="pun">}</span>
+          <span class="cmt">// console.log(local) → ERROR: no existe aquí</span>
+          
+          <span class="cmt">// ── Destructuring: extraer valores de objetos/arrays fácilmente ──────</span>
+          <span class="kw">const</span> <span class="pun">[</span><span class="vr">primero</span><span class="pun">,</span> <span class="vr">segundo</span><span class="pun">]</span> <span class="op">=</span> <span class="pun">[</span><span class="num">10</span><span class="pun">,</span> <span class="num">20</span><span class="pun">];</span>   <span class="cmt">// primero=10, segundo=20</span>
+          <span class="kw">const</span> <span class="pun">{</span> <span class="vr">nombre</span><span class="pun">,</span> <span class="vr">edad</span> <span class="pun">}</span> <span class="op">=</span> <span class="vr">usuario</span><span class="pun">;</span>    <span class="cmt">// extrae propiedades del objeto</span></pre>
+          </div>
+      </section>
+
+      <!-- 06 IDENTIFICADORES -->
+      <section class="section" id="identificadores">
+        <div class="section-header">
+          <span class="section-num">06</span>
+          <h2 class="section-title"><span class="tag c6"></span>Identificadores</h2>
+        </div>
+        <p class="section-def">// Nombre dado por el programador a una variable, función, clase u otro elemento; sigue
+          reglas estrictas de formato.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">06_identificadores.js</span>
+          </div>
+          <pre><span class="cmt">// ── REGLAS DE IDENTIFICADORES ────────────────────────────────────────</span>
+          <span class="cmt">// ✔ Pueden comenzar con: letra, _ (guion bajo), o $ (dólar)</span>
+          <span class="cmt">// ✔ Pueden contener: letras, dígitos, _, $</span>
+          <span class="cmt">// ✘ NO pueden empezar con un número</span>
+          <span class="cmt">// ✘ NO pueden ser palabras reservadas (let, for, if...)</span>
+          
+          <span class="cmt">// VÁLIDOS ✔</span>
+          <span class="kw">let</span> <span class="vr">nombre</span>          <span class="op">=</span> <span class="str">"Ana"</span><span class="pun">;</span>       <span class="cmt">// letras minúsculas</span>
+          <span class="kw">let</span> <span class="vr">nombreCompleto</span>  <span class="op">=</span> <span class="str">"Ana Ruiz"</span><span class="pun">;</span>  <span class="cmt">// camelCase (convención JS)</span>
+          <span class="kw">let</span> <span class="vr">_privado</span>        <span class="op">=</span> <span class="num">42</span><span class="pun">;</span>          <span class="cmt">// comienza con _</span>
+          <span class="kw">let</span> <span class="vr">$elemento</span>       <span class="op">=</span> <span class="bool">null</span><span class="pun">;</span>        <span class="cmt">// comienza con $ (usado en jQuery)</span>
+          <span class="kw">let</span> <span class="vr">valor2</span>          <span class="op">=</span> <span class="num">100</span><span class="pun">;</span>         <span class="cmt">// número al final: OK</span>
+          <span class="kw">const</span> <span class="vr">MAX_SIZE</span>      <span class="op">=</span> <span class="num">500</span><span class="pun">;</span>         <span class="cmt">// SCREAMING_SNAKE_CASE para constantes</span>
+          
+          <span class="cmt">// INVÁLIDOS ✘ (estos darían SyntaxError)</span>
+          <span class="cmt">// let 2valor   = ...  → empieza con número</span>
+          <span class="cmt">// let mi-variable     → guion medio no permitido</span>
+          <span class="cmt">// let let      = ...  → es palabra reservada</span>
+          <span class="cmt">// let mi var   = ...  → espacio no permitido</span>
+          
+          <span class="cmt">// ── CONVENCIONES DE NOMENCLATURA ─────────────────────────────────────</span>
+          <span class="kw">let</span>      <span class="vr">miVariable</span>       <span class="op">=</span> <span class="num">1</span><span class="pun">;</span>    <span class="cmt">// camelCase       → variables y funciones</span>
+          <span class="kw">const</span>    <span class="vr">MiClase</span>          <span class="op">=</span> <span class="pun">{};</span>   <span class="cmt">// PascalCase      → clases y constructores</span>
+          <span class="kw">const</span>    <span class="vr">LIMITE_MAX</span>       <span class="op">=</span> <span class="num">99</span><span class="pun">;</span>   <span class="cmt">// UPPER_SNAKE     → constantes globales</span>
+          <span class="kw">function</span> <span class="fn">_metodoInterno</span><span class="pun">()</span> <span class="pun">{}</span>     <span class="cmt">// _underscore     → "privado" por convención</span></pre>
+          </div>
+      </section>
+
+      <!-- 07 OPERADORES -->
+      <section class="section" id="operadores">
+        <div class="section-header">
+          <span class="section-num">07</span>
+          <h2 class="section-title"><span class="tag c7"></span>Operadores</h2>
+        </div>
+        <p class="section-def">// Símbolo especial que realiza una operación sobre uno o más valores (operandos) y
+          devuelve un resultado.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">07_operadores.js</span>
+          </div>
+          <pre><span class="cmt">// ── ARITMÉTICOS → operaciones matemáticas ────────────────────────────</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">10</span> <span class="op">+</span> <span class="num">3</span><span class="pun">);</span>   <span class="cmt">// 13  → suma</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">10</span> <span class="op">-</span> <span class="num">3</span><span class="pun">);</span>   <span class="cmt">// 7   → resta</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">10</span> <span class="op">*</span> <span class="num">3</span><span class="pun">);</span>   <span class="cmt">// 30  → multiplicación</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">10</span> <span class="op">/</span> <span class="num">3</span><span class="pun">);</span>   <span class="cmt">// 3.3 → división</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">10</span> <span class="op">%</span> <span class="num">3</span><span class="pun">);</span>   <span class="cmt">// 1   → módulo (resto)</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">2</span> <span class="op">**</span> <span class="num">8</span><span class="pun">);</span>   <span class="cmt">// 256 → exponenciación</span>
+          
+          <span class="cmt">// ── ASIGNACIÓN → guardar/actualizar valor ────────────────────────────</span>
+          <span class="kw">let</span> <span class="vr">n</span> <span class="op">=</span> <span class="num">10</span><span class="pun">;</span>
+          <span class="vr">n</span> <span class="op">+=</span> <span class="num">5</span><span class="pun">;</span>     <span class="cmt">// n = n + 5  → 15</span>
+          <span class="vr">n</span> <span class="op">-=</span> <span class="num">3</span><span class="pun">;</span>     <span class="cmt">// n = n - 3  → 12</span>
+          <span class="vr">n</span> <span class="op">*=</span> <span class="num">2</span><span class="pun">;</span>     <span class="cmt">// n = n * 2  → 24</span>
+          <span class="vr">n</span><span class="op">++</span><span class="pun">;</span>        <span class="cmt">// n = n + 1  → 25 (incremento)</span>
+          <span class="vr">n</span><span class="op">--</span><span class="pun">;</span>        <span class="cmt">// n = n - 1  → 24 (decremento)</span>
+          
+          <span class="cmt">// ── COMPARACIÓN → retornan true o false ──────────────────────────────</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">5</span> <span class="op">==</span>  <span class="str">"5"</span><span class="pun">);</span>  <span class="cmt">// true  → igual (convierte tipo)</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">5</span> <span class="op">===</span> <span class="str">"5"</span><span class="pun">);</span>  <span class="cmt">// false → estrictamente igual (tipo + valor)</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">5</span> <span class="op">!=</span>  <span class="num">3</span><span class="pun">);</span>    <span class="cmt">// true  → diferente</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">5</span> <span class="op">></span>   <span class="num">3</span><span class="pun">);</span>    <span class="cmt">// true  → mayor que</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="num">5</span> <span class="op">&lt;=</span>  <span class="num">5</span><span class="pun">);</span>    <span class="cmt">// true  → menor o igual que</span>
+          
+          <span class="cmt">// ── LÓGICOS → combinan condiciones ───────────────────────────────────</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="bool">true</span> <span class="op">&&</span> <span class="bool">false</span><span class="pun">);</span>  <span class="cmt">// false → AND (ambos deben ser true)</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="bool">true</span> <span class="op">||</span> <span class="bool">false</span><span class="pun">);</span>  <span class="cmt">// true  → OR (uno basta)</span>
+          <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="op">!</span><span class="bool">true</span><span class="pun">);</span>          <span class="cmt">// false → NOT (niega el valor)</span>
+          
+          <span class="cmt">// ── TERNARIO → if-else en una línea ──────────────────────────────────</span>
+          <span class="kw">const</span> <span class="vr">resultado</span> <span class="op">=</span> <span class="vr">n</span> <span class="op">></span> <span class="num">20</span> <span class="op">?</span> <span class="str">"grande"</span> <span class="op">:</span> <span class="str">"pequeño"</span><span class="pun">;</span> <span class="cmt">// condición ? si : no</span>
+          
+          <span class="cmt">// ── NULLISH COALESCING → valor por defecto si null/undefined ─────────</span>
+          <span class="kw">const</span> <span class="vr">valor</span> <span class="op">=</span> <span class="bool">null</span> <span class="op">??</span> <span class="str">"predeterminado"</span><span class="pun">;</span>      <span class="cmt">// "predeterminado"</span></pre>
+          </div>
+      </section>
+
+      <!-- 08 EXPRESIONES -->
+      <section class="section" id="expresiones">
+        <div class="section-header">
+          <span class="section-num">08</span>
+          <h2 class="section-title"><span class="tag c8"></span>Expresiones</h2>
+        </div>
+        <p class="section-def">// Fragmento de código que combina valores, variables y operadores para producir
+          (evaluar) un único valor de retorno.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">08_expresiones.js</span>
+          </div>
+          <pre><span class="cmt">// ── EXPRESIONES ARITMÉTICAS → producen un número ─────────────────────</span>
+          <span class="kw">let</span> <span class="vr">area</span> <span class="op">=</span> <span class="num">5</span> <span class="op">*</span> <span class="num">8</span><span class="pun">;</span>                      <span class="cmt">// evalúa → 40</span>
+          <span class="kw">let</span> <span class="vr">perimetro</span> <span class="op">=</span> <span class="num">2</span> <span class="op">*</span> <span class="pun">(</span><span class="num">5</span> <span class="op">+</span> <span class="num">8</span><span class="pun">);</span>           <span class="cmt">// evalúa → 26</span>
+          
+          <span class="cmt">// ── EXPRESIONES DE CADENA → producen texto ────────────────────────────</span>
+          <span class="kw">let</span> <span class="vr">saludo</span> <span class="op">=</span> <span class="str">"Hola"</span> <span class="op">+</span> <span class="str">" "</span> <span class="op">+</span> <span class="str">"Mundo"</span><span class="pun">;</span>    <span class="cmt">// → "Hola Mundo" (concatenación)</span>
+          <span class="kw">let</span> <span class="vr">info</span>   <span class="op">=</span> <span class="str">`Área = ${<span class="vr">area</span>}`</span><span class="pun">;</span>          <span class="cmt">// → "Área = 40" (template)</span>
+          
+          <span class="cmt">// ── EXPRESIONES LÓGICAS → producen booleano ──────────────────────────</span>
+          <span class="kw">let</span> <span class="vr">esMayor</span> <span class="op">=</span> <span class="vr">area</span> <span class="op">></span> <span class="num">30</span> <span class="op">&&</span> <span class="vr">area</span> <span class="op">&lt;</span> <span class="num">100</span><span class="pun">;</span> <span class="cmt">// → true</span>
+          
+          <span class="cmt">// ── EXPRESIÓN DE ASIGNACIÓN → devuelve el valor asignado ─────────────</span>
+          <span class="kw">let</span> <span class="vr">x</span><span class="pun">;</span>
+          <span class="kw">let</span> <span class="vr">y</span> <span class="op">=</span> <span class="pun">(</span><span class="vr">x</span> <span class="op">=</span> <span class="num">10</span><span class="pun">);</span>                      <span class="cmt">// x=10, y=10 (la asignación es una expr.)</span>
+          
+          <span class="cmt">// ── EXPRESIÓN DE FUNCIÓN → función como valor ─────────────────────────</span>
+          <span class="kw">const</span> <span class="vr">doble</span> <span class="op">=</span> <span class="kw">function</span><span class="pun">(</span><span class="vr">n</span><span class="pun">) {</span>
+            <span class="kw">return</span> <span class="vr">n</span> <span class="op">*</span> <span class="num">2</span><span class="pun">;</span>                         <span class="cmt">// función almacenada en variable</span>
+          <span class="pun">};</span>
+          
+          <span class="cmt">// ── ARROW FUNCTION (función flecha) → sintaxis compacta ──────────────</span>
+          <span class="kw">const</span> <span class="vr">triple</span> <span class="op">=</span> <span class="vr">n</span> <span class="op">=></span> <span class="vr">n</span> <span class="op">*</span> <span class="num">3</span><span class="pun">;</span>             <span class="cmt">// equivale a function(n){ return n*3; }</span>
+          
+          <span class="cmt">// ── EXPRESIÓN CONDICIONAL (ternaria) ─────────────────────────────────</span>
+          <span class="kw">const</span> <span class="vr">estado</span> <span class="op">=</span> <span class="vr">area</span> <span class="op">></span> <span class="num">50</span>
+            <span class="op">?</span> <span class="str">"área grande"</span>                       <span class="cmt">// si es verdadero</span>
+            <span class="op">:</span> <span class="str">"área pequeña"</span><span class="pun">;</span>                     <span class="cmt">// si es falso → "área pequeña"</span>
+          
+          <span class="cmt">// ── IIFE → expresión de función invocada inmediatamente ──────────────</span>
+          <span class="kw">const</span> <span class="vr">initData</span> <span class="op">=</span> <span class="pun">(()</span> <span class="op">=></span> <span class="pun">{</span>
+            <span class="kw">return</span> <span class="pun">{</span> <span class="vr">version</span><span class="pun">:</span> <span class="str">"1.0"</span> <span class="pun">};</span>           <span class="cmt">// se ejecuta al declararse</span>
+          <span class="pun">})();</span></pre>
+          </div>
+      </section>
+
+      <!-- 09 DECLARACIONES -->
+      <section class="section" id="declaraciones">
+        <div class="section-header">
+          <span class="section-num">09</span>
+          <h2 class="section-title"><span class="tag c9"></span>Declaraciones</h2>
+        </div>
+        <p class="section-def">// Instrucción completa que realiza una acción; a diferencia de la expresión, no produce
+          un valor de retorno directo.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">09_declaraciones.js</span>
+          </div>
+          <pre><span class="cmt">// ── DECLARACIÓN DE VARIABLE → crea un espacio en memoria ─────────────</span>
+          <span class="kw">let</span>   <span class="vr">contador</span> <span class="op">=</span> <span class="num">0</span><span class="pun">;</span>
+          <span class="kw">const</span> <span class="vr">LIMITE</span>   <span class="op">=</span> <span class="num">10</span><span class="pun">;</span>
+          
+          <span class="cmt">// ── DECLARACIÓN DE FUNCIÓN → define un bloque reutilizable ───────────</span>
+          <span class="kw">function</span> <span class="fn">incrementar</span><span class="pun">(</span><span class="vr">valor</span><span class="pun">,</span> <span class="vr">paso</span> <span class="op">=</span> <span class="num">1</span><span class="pun">) {</span>   <span class="cmt">// paso tiene valor por defecto</span>
+            <span class="kw">return</span> <span class="vr">valor</span> <span class="op">+</span> <span class="vr">paso</span><span class="pun">;</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// ── DECLARACIÓN DE CLASE → plantilla para crear objetos ──────────────</span>
+          <span class="kw">class</span> <span class="fn">Producto</span> <span class="pun">{</span>
+            <span class="fn">constructor</span><span class="pun">(</span><span class="vr">nombre</span><span class="pun">,</span> <span class="vr">precio</span><span class="pun">) {</span>        <span class="cmt">// inicializador al crear instancia</span>
+              <span class="kw">this</span><span class="pun">.</span><span class="vr">nombre</span> <span class="op">=</span> <span class="vr">nombre</span><span class="pun">;</span>
+              <span class="kw">this</span><span class="pun">.</span><span class="vr">precio</span> <span class="op">=</span> <span class="vr">precio</span><span class="pun">;</span>
+            <span class="pun">}</span>
+            <span class="fn">describir</span><span class="pun">() {</span>                        <span class="cmt">// método de la clase</span>
+              <span class="kw">return</span> <span class="str">`${<span class="kw">this</span>.<span class="vr">nombre</span>}: $${<span class="kw">this</span>.<span class="vr">precio</span>}`</span><span class="pun">;</span>
+            <span class="pun">}</span>
+          <span class="pun">}</span>
+          <span class="kw">const</span> <span class="vr">p1</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Producto</span><span class="pun">(</span><span class="str">"Zapatos"</span><span class="pun">,</span> <span class="num">59.99</span><span class="pun">);</span>
+          
+          <span class="cmt">// ── DECLARACIÓN IF/ELSE → bifurcación condicional ─────────────────────</span>
+          <span class="kw">if</span> <span class="pun">(</span><span class="vr">contador</span> <span class="op">&lt;</span> <span class="vr">LIMITE</span><span class="pun">) {</span>
+            <span class="vr">contador</span> <span class="op">=</span> <span class="fn">incrementar</span><span class="pun">(</span><span class="vr">contador</span><span class="pun">);</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// ── DECLARACIÓN SWITCH → múltiples casos ──────────────────────────────</span>
+          <span class="kw">switch</span> <span class="pun">(</span><span class="vr">contador</span><span class="pun">) {</span>
+            <span class="kw">case</span> <span class="num">0</span><span class="pun">:</span>  <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"cero"</span><span class="pun">);</span>  <span class="kw">break</span><span class="pun">;</span> <span class="cmt">// si es 0</span>
+            <span class="kw">case</span> <span class="num">1</span><span class="pun">:</span>  <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"uno"</span><span class="pun">);</span>   <span class="kw">break</span><span class="pun">;</span> <span class="cmt">// si es 1</span>
+            <span class="kw">default</span><span class="pun">:</span> <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="str">"otro"</span><span class="pun">);</span>        <span class="cmt">// ningún caso anterior</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// ── DECLARACIÓN FOR...OF → itera sobre iterables (arrays, strings) ────</span>
+          <span class="kw">const</span> <span class="vr">items</span> <span class="op">=</span> <span class="pun">[</span><span class="str">"a"</span><span class="pun">,</span> <span class="str">"b"</span><span class="pun">,</span> <span class="str">"c"</span><span class="pun">];</span>
+          <span class="kw">for</span> <span class="pun">(</span><span class="kw">const</span> <span class="vr">item</span> <span class="kw">of</span> <span class="vr">items</span><span class="pun">) {</span>
+            <span class="fn">console</span><span class="pun">.</span><span class="fn">log</span><span class="pun">(</span><span class="vr">item</span><span class="pun">);</span>                   <span class="cmt">// "a", "b", "c"</span>
+          <span class="pun">}</span></pre>
+          </div>
+      </section>
+
+      <!-- 10 COMENTARIOS -->
+      <section class="section" id="comentarios">
+        <div class="section-header">
+          <span class="section-num">10</span>
+          <h2 class="section-title"><span class="tag c10"></span>Comentarios</h2>
+        </div>
+        <p class="section-def">// Texto en el código que el motor JS ignora completamente; sirven para documentar,
+          explicar y organizar el código fuente.</p>
+        <div class="code-block">
+          <div class="code-header">
+            <div class="dots"><span></span><span></span><span></span></div>
+            <span class="filename">10_comentarios.js</span>
+          </div>
+          <pre><span class="cmt">// ── COMENTARIO DE UNA LÍNEA → desde // hasta el final de la línea ────</span>
+          <span class="kw">let</span> <span class="vr">base</span> <span class="op">=</span> <span class="num">100</span><span class="pun">;</span>  <span class="cmt">// valor base del cálculo</span>
+          
+          <span class="cmt">/* ── COMENTARIO MULTILÍNEA → entre /* y */ para bloques más largos ─ */</span>
+          <span class="cmt">/*
+            Función que calcula el descuento final.
+            Parámetros:
+              precio   → precio original del producto
+              pct      → porcentaje de descuento (0-100)
+            Retorna:
+              precio con descuento aplicado
+          */</span>
+          <span class="kw">function</span> <span class="fn">descuento</span><span class="pun">(</span><span class="vr">precio</span><span class="pun">,</span> <span class="vr">pct</span><span class="pun">) {</span>
+            <span class="kw">return</span> <span class="vr">precio</span> <span class="op">*</span> <span class="pun">(</span><span class="num">1</span> <span class="op">-</span> <span class="vr">pct</span> <span class="op">/</span> <span class="num">100</span><span class="pun">);</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// ── JSDOC → comentario estándar para documentación automatizada ───────</span>
+          <span class="cmt">/**
+           * Calcula el IVA de un precio dado.
+           * @param {number} precio  - Precio base sin impuesto
+           * @param {number} tasa    - Porcentaje IVA (ej. 19 para Colombia)
+           * @returns {number}       - Monto del IVA
+           */</span>
+          <span class="kw">function</span> <span class="fn">calcularIVA</span><span class="pun">(</span><span class="vr">precio</span><span class="pun">,</span> <span class="vr">tasa</span><span class="pun">) {</span>
+            <span class="kw">return</span> <span class="vr">precio</span> <span class="op">*</span> <span class="pun">(</span><span class="vr">tasa</span> <span class="op">/</span> <span class="num">100</span><span class="pun">);</span>         <span class="cmt">// resultado: ej. 1000 * 0.19 = 190</span>
+          <span class="pun">}</span>
+          
+          <span class="cmt">// ── USO PRÁCTICO: comentar código temporalmente ───────────────────────</span>
+          <span class="kw">let</span> <span class="vr">total</span> <span class="op">=</span> <span class="fn">descuento</span><span class="pun">(</span><span class="num">1000</span><span class="pun">,</span> <span class="num">10</span><span class="pun">);</span>      <span class="cmt">// → 900</span>
+          <span class="cmt">// let total = 1000;                 // versión anterior (desactivada)</span>
+          
+          <span class="cmt">// ── BUENAS PRÁCTICAS ─────────────────────────────────────────────────</span>
+          <span class="cmt">// ✔ Explicar el PORQUÉ, no el QUÉ (el código ya dice qué hace)</span>
+          <span class="cmt">// ✔ Mantener comentarios actualizados al modificar el código</span>
+          <span class="cmt">// ✔ Usar JSDoc en funciones públicas o de API</span>
+          <span class="cmt">// ✘ Evitar comentarios obvios: let x = 5; // asigna 5 a x</span></pre>
+          </div>
+      </section>
+
+    </main>
+
+    <footer>
+      <span class="footer-tag">
+        <a style="text-decoration: none;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing
+          Data</a> 2026
+      </span>
+      <span class="footer-tag">
+        ·By <a style="text-decoration: none;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/"
+          target="_blank">
+          Miguel Mauricio Rivera López</a>.
+      </span>
+    </footer>
+
+  </div><!-- /container -->
+
+  <script src="js/script.js"></script>
+</body>
+
+</html>
