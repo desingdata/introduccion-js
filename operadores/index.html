@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Operadores de JavaScript</title>
+  <link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="tag">// Introducción a JavaScript</div>
+  <h1>Operadores<br>de JavaScript</h1>
+  <p>Una guía práctica comentada con definiciones, ejemplos de código y demostraciones interactivas.</p>
+</header>
+
+<div class="sections">
+
+  <!-- 1. ARITMÉTICOS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">➕</div>
+      <div>
+        <div class="section-title">Operadores Aritméticos</div>
+        <div class="section-desc">Realizan cálculos matemáticos entre valores numéricos: suma, resta, multiplicación, división, módulo, exponenciación e incremento/decremento.</div>
+      </div>
+    </div>
+    <div class="code-wrap"><pre><span class="cm">// ─────────────────────────────────────────────</span>
+<span class="cm">// OPERADORES ARITMÉTICOS</span>
+<span class="cm">// Permiten realizar operaciones matemáticas</span>
+<span class="cm">// básicas entre valores de tipo número.</span>
+<span class="cm">// ─────────────────────────────────────────────</span>
+
+<span class="kw">let</span> <span class="va">a</span> <span class="op">=</span> <span class="nu">10</span><span class="pn">;</span>
+<span class="kw">let</span> <span class="va">b</span> <span class="op">=</span> <span class="nu">3</span><span class="pn">;</span>
+
+<span class="cm">// + Suma: une o suma dos valores</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span> <span class="op">+</span> <span class="va">b</span><span class="pn">);</span>          <span class="cm">// → 13</span>
+
+<span class="cm">// - Resta: calcula la diferencia entre dos valores</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span> <span class="op">-</span> <span class="va">b</span><span class="pn">);</span>          <span class="cm">// → 7</span>
+
+<span class="cm">// * Multiplicación: producto de dos valores</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span> <span class="op">*</span> <span class="va">b</span><span class="pn">);</span>          <span class="cm">// → 30</span>
+
+<span class="cm">// / División: cociente entre dos valores</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span> <span class="op">/</span> <span class="va">b</span><span class="pn">);</span>          <span class="cm">// → 3.333...</span>
+
+<span class="cm">// % Módulo (residuo): resto de la división entera</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span> <span class="op">%</span> <span class="va">b</span><span class="pn">);</span>          <span class="cm">// → 1</span>
+
+<span class="cm">// ** Exponenciación: eleva a la potencia indicada</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span> <span class="op">**</span> <span class="va">b</span><span class="pn">);</span>         <span class="cm">// → 1000  (10³)</span>
+
+<span class="cm">// ++ Incremento: aumenta el valor en 1</span>
+<span class="va">a</span><span class="op">++</span><span class="pn">;</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">a</span><span class="pn">);</span>              <span class="cm">// → 11</span>
+
+<span class="cm">// -- Decremento: disminuye el valor en 1</span>
+<span class="va">b</span><span class="op">--</span><span class="pn">;</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">b</span><span class="pn">);</span>              <span class="cm">// → 2</span></pre></div>
+    <div class="demo-wrap">
+      <label>a =</label>
+      <input type="number" id="ar-a" value="10"/>
+      <label>b =</label>
+      <input type="number" id="ar-b" value="3"/>
+      <button class="demo-btn" onclick="runArith()">▶ Ejecutar</button>
+      <div class="demo-output" id="ar-out">Presiona ejecutar...</div>
+    </div>
+  </div>
+
+  <!-- 2. ASIGNACIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📥</div>
+      <div>
+        <div class="section-title">Operadores de Asignación</div>
+        <div class="section-desc">Asignan un valor a una variable. Combinados con operadores aritméticos, actualizan el valor actual de forma abreviada.</div>
+      </div>
+    </div>
+    <div class="code-wrap"><pre><span class="cm">// ─────────────────────────────────────────────</span>
+<span class="cm">// OPERADORES DE ASIGNACIÓN</span>
+<span class="cm">// Guardan un valor en una variable.</span>
+<span class="cm">// Las formas combinadas son atajos de escritura.</span>
+<span class="cm">// ─────────────────────────────────────────────</span>
+
+<span class="kw">let</span> <span class="va">x</span> <span class="op">=</span> <span class="nu">20</span><span class="pn">;</span>   <span class="cm">// = Asignación simple: asigna 20 a x</span>
+
+<span class="va">x</span> <span class="op">+=</span> <span class="nu">5</span><span class="pn">;</span>       <span class="cm">// += Suma y asigna: x = x + 5  → 25</span>
+<span class="va">x</span> <span class="op">-=</span> <span class="nu">3</span><span class="pn">;</span>       <span class="cm">// -= Resta y asigna: x = x - 3  → 22</span>
+<span class="va">x</span> <span class="op">*=</span> <span class="nu">2</span><span class="pn">;</span>       <span class="cm">// *= Multiplica y asigna: x = x * 2  → 44</span>
+<span class="va">x</span> <span class="op">/=</span> <span class="nu">4</span><span class="pn">;</span>       <span class="cm">// /= Divide y asigna: x = x / 4  → 11</span>
+<span class="va">x</span> <span class="op">%=</span> <span class="nu">4</span><span class="pn">;</span>       <span class="cm">// %= Módulo y asigna: x = x % 4  → 3</span>
+<span class="va">x</span> <span class="op">**=</span> <span class="nu">3</span><span class="pn">;</span>      <span class="cm">// **= Potencia y asigna: x = x ** 3  → 27</span>
+
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="st">"Resultado final:"</span><span class="pn">,</span> <span class="va">x</span><span class="pn">);</span>  <span class="cm">// → 27</span>
+
+<span class="cm">// Asignación con destructuring (ES6+)</span>
+<span class="cm">// Extrae valores de arrays u objetos directamente</span>
+<span class="kw">const</span> <span class="pn">[</span><span class="va">primero</span><span class="pn">,</span> <span class="va">segundo</span><span class="pn">]</span> <span class="op">=</span> <span class="pn">[</span><span class="nu">100</span><span class="pn">,</span> <span class="nu">200</span><span class="pn">];</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">primero</span><span class="pn">,</span> <span class="va">segundo</span><span class="pn">);</span>       <span class="cm">// → 100  200</span></pre></div>
+    <div class="demo-wrap">
+      <label>x inicial =</label>
+      <input type="number" id="as-x" value="20"/>
+      <button class="demo-btn" onclick="runAssign()">▶ Ejecutar</button>
+      <div class="demo-output" id="as-out">Presiona ejecutar...</div>
+    </div>
+  </div>
+
+  <!-- 3. COMPARACIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">⚖️</div>
+      <div>
+        <div class="section-title">Operadores de Comparación</div>
+        <div class="section-desc">Comparan dos valores y devuelven un booleano (true / false). Es clave distinguir == (igual en valor) de === (igual en valor Y tipo).</div>
+      </div>
+    </div>
+    <div class="code-wrap"><pre><span class="cm">// ─────────────────────────────────────────────</span>
+<span class="cm">// OPERADORES DE COMPARACIÓN</span>
+<span class="cm">// Evalúan la relación entre dos valores.</span>
+<span class="cm">// Siempre retornan true o false.</span>
+<span class="cm">// ─────────────────────────────────────────────</span>
+
+<span class="kw">let</span> <span class="va">p</span> <span class="op">=</span> <span class="nu">5</span><span class="pn">;</span>
+<span class="kw">let</span> <span class="va">q</span> <span class="op">=</span> <span class="st">"5"</span><span class="pn">;</span>
+<span class="kw">let</span> <span class="va">r</span> <span class="op">=</span> <span class="nu">8</span><span class="pn">;</span>
+
+<span class="cm">// == Igualdad abstracta: compara valor, ignora tipo</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">p</span> <span class="op">==</span> <span class="va">q</span><span class="pn">);</span>          <span class="cm">// → true  (5 == "5")</span>
+
+<span class="cm">// === Igualdad estricta: compara valor Y tipo de dato</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">p</span> <span class="op">===</span> <span class="va">q</span><span class="pn">);</span>         <span class="cm">// → false (number ≠ string)</span>
+
+<span class="cm">// != Desigualdad abstracta</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">p</span> <span class="op">!=</span> <span class="va">r</span><span class="pn">);</span>          <span class="cm">// → true</span>
+
+<span class="cm">// !== Desigualdad estricta (valor o tipo diferente)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">p</span> <span class="op">!==</span> <span class="va">q</span><span class="pn">);</span>         <span class="cm">// → true  (tipos distintos)</span>
+
+<span class="cm">// > Mayor que</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">r</span> <span class="op">&gt;</span> <span class="va">p</span><span class="pn">);</span>           <span class="cm">// → true</span>
+
+<span class="cm">// < Menor que</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">p</span> <span class="op">&lt;</span> <span class="va">r</span><span class="pn">);</span>           <span class="cm">// → true</span>
+
+<span class="cm">// >= Mayor o igual que</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">p</span> <span class="op">&gt;=</span> <span class="nu">5</span><span class="pn">);</span>          <span class="cm">// → true</span>
+
+<span class="cm">// <= Menor o igual que</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">r</span> <span class="op">&lt;=</span> <span class="nu">8</span><span class="pn">);</span>          <span class="cm">// → true</span></pre></div>
+    <div class="demo-wrap">
+      <label>p =</label>
+      <input type="number" id="cmp-p" value="5"/>
+      <label>r =</label>
+      <input type="number" id="cmp-r" value="8"/>
+      <button class="demo-btn" onclick="runComp()">▶ Ejecutar</button>
+      <div class="demo-output" id="cmp-out">Presiona ejecutar...</div>
+    </div>
+  </div>
+
+  <!-- 4. LÓGICOS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">🔗</div>
+      <div>
+        <div class="section-title">Operadores Lógicos</div>
+        <div class="section-desc">Combinan o invierten expresiones booleanas. Son la base de toda lógica condicional en JavaScript.</div>
+      </div>
+    </div>
+    <div class="code-wrap"><pre><span class="cm">// ─────────────────────────────────────────────</span>
+<span class="cm">// OPERADORES LÓGICOS</span>
+<span class="cm">// Combinan condiciones y retornan boolean.</span>
+<span class="cm">// Fundamentales para estructuras if/else y bucles.</span>
+<span class="cm">// ─────────────────────────────────────────────</span>
+
+<span class="kw">let</span> <span class="va">esMayor</span>  <span class="op">=</span> <span class="bo">true</span><span class="pn">;</span>
+<span class="kw">let</span> <span class="va">tieneID</span>  <span class="op">=</span> <span class="bo">false</span><span class="pn">;</span>
+<span class="kw">let</span> <span class="va">esSocio</span>  <span class="op">=</span> <span class="bo">true</span><span class="pn">;</span>
+
+<span class="cm">// && AND lógico: ambas condiciones deben ser true</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">esMayor</span> <span class="op">&amp;&amp;</span> <span class="va">tieneID</span><span class="pn">);</span>   <span class="cm">// → false</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">esMayor</span> <span class="op">&amp;&amp;</span> <span class="va">esSocio</span><span class="pn">);</span>    <span class="cm">// → true</span>
+
+<span class="cm">// || OR lógico: al menos una condición debe ser true</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">esMayor</span> <span class="op">||</span> <span class="va">tieneID</span><span class="pn">);</span>   <span class="cm">// → true</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="bo">false</span>   <span class="op">||</span> <span class="bo">false</span><span class="pn">);</span>     <span class="cm">// → false</span>
+
+<span class="cm">// ! NOT lógico: invierte el valor booleano</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="op">!</span><span class="va">esMayor</span><span class="pn">);</span>             <span class="cm">// → false</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="op">!</span><span class="va">tieneID</span><span class="pn">);</span>             <span class="cm">// → true</span>
+
+<span class="cm">// ?? Nullish coalescing: usa valor derecho si el</span>
+<span class="cm">//    izquierdo es null o undefined</span>
+<span class="kw">let</span> <span class="va">nombre</span> <span class="op">=</span> <span class="kw">null</span><span class="pn">;</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">nombre</span> <span class="op">??</span> <span class="st">"Invitado"</span><span class="pn">);</span>  <span class="cm">// → "Invitado"</span>
+
+<span class="cm">// Operador ternario: condición ? valorSi : valorNo</span>
+<span class="kw">let</span> <span class="va">acceso</span> <span class="op">=</span> <span class="va">esMayor</span> <span class="op">&&</span> <span class="va">esSocio</span>
+             <span class="op">?</span> <span class="st">"Permitido"</span>
+             <span class="pn">:</span> <span class="st">"Denegado"</span><span class="pn">;</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="va">acceso</span><span class="pn">);</span>                <span class="cm">// → "Permitido"</span></pre></div>
+    <div class="demo-wrap">
+      <label>esMayor</label>
+      <input type="number" id="lo-a" value="1" min="0" max="1" title="1 = true, 0 = false"/>
+      <label>tieneID</label>
+      <input type="number" id="lo-b" value="0" min="0" max="1"/>
+      <label>esSocio</label>
+      <input type="number" id="lo-c" value="1" min="0" max="1"/>
+      <button class="demo-btn" onclick="runLogic()">▶ Ejecutar</button>
+      <div class="demo-output" id="lo-out">Presiona ejecutar...</div>
+    </div>
+  </div>
+
+  <!-- 5. ARITMÉTICA JS -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-icon">📐</div>
+      <div>
+        <div class="section-title">Aritmética de JavaScript</div>
+        <div class="section-desc">El objeto Math proporciona constantes y métodos matemáticos avanzados. Además, JS tiene comportamientos especiales como NaN, Infinity y la imprecisión de punto flotante.</div>
+      </div>
+    </div>
+    <div class="code-wrap"><pre><span class="cm">// ─────────────────────────────────────────────</span>
+<span class="cm">// ARITMÉTICA DE JAVASCRIPT</span>
+<span class="cm">// JS usa IEEE 754 (punto flotante de 64 bits).</span>
+<span class="cm">// El objeto Math ofrece funciones matemáticas.</span>
+<span class="cm">// ─────────────────────────────────────────────</span>
+
+<span class="cm">// Casos especiales del motor numérico</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="nu">0.1</span> <span class="op">+</span> <span class="nu">0.2</span><span class="pn">);</span>           <span class="cm">// → 0.30000000000000004 (float!)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="nu">1</span> <span class="op">/</span> <span class="nu">0</span><span class="pn">);</span>               <span class="cm">// → Infinity</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="st">"hola"</span> <span class="op">*</span> <span class="nu">2</span><span class="pn">);</span>         <span class="cm">// → NaN (Not a Number)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">isNaN</span><span class="pn">(</span><span class="st">"hola"</span> <span class="op">*</span> <span class="nu">2</span><span class="pn">));</span>   <span class="cm">// → true  (verifica NaN)</span>
+
+<span class="cm">// Constantes matemáticas útiles</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="va">PI</span><span class="pn">);</span>             <span class="cm">// → 3.14159...  (π)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="va">E</span><span class="pn">);</span>              <span class="cm">// → 2.71828...  (Euler)</span>
+
+<span class="cm">// Métodos del objeto Math</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">round</span><span class="pn">(</span><span class="nu">4.7</span><span class="pn">));</span>     <span class="cm">// → 5   (redondea al entero más cercano)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">floor</span><span class="pn">(</span><span class="nu">4.9</span><span class="pn">));</span>     <span class="cm">// → 4   (redondea hacia abajo)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">ceil</span><span class="pn">(</span><span class="nu">4.1</span><span class="pn">));</span>      <span class="cm">// → 5   (redondea hacia arriba)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">abs</span><span class="pn">(</span><span class="op">-</span><span class="nu">15</span><span class="pn">));</span>       <span class="cm">// → 15  (valor absoluto)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">sqrt</span><span class="pn">(</span><span class="nu">49</span><span class="pn">));</span>       <span class="cm">// → 7   (raíz cuadrada)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">pow</span><span class="pn">(</span><span class="nu">2</span><span class="pn">,</span> <span class="nu">10</span><span class="pn">));</span>    <span class="cm">// → 1024 (potencia)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">max</span><span class="pn">(</span><span class="nu">3</span><span class="pn">,</span><span class="nu">9</span><span class="pn">,</span><span class="nu">1</span><span class="pn">));</span>    <span class="cm">// → 9   (máximo de un conjunto)</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">min</span><span class="pn">(</span><span class="nu">3</span><span class="pn">,</span><span class="nu">9</span><span class="pn">,</span><span class="nu">1</span><span class="pn">));</span>    <span class="cm">// → 1   (mínimo de un conjunto)</span>
+
+<span class="cm">// Número aleatorio entre 1 y 100</span>
+<span class="kw">let</span> <span class="va">aleatorio</span> <span class="op">=</span> <span class="fn">Math</span><span class="pn">.</span><span class="fn">floor</span><span class="pn">(</span><span class="fn">Math</span><span class="pn">.</span><span class="fn">random</span><span class="pn">()</span> <span class="op">*</span> <span class="nu">100</span><span class="pn">)</span> <span class="op">+</span> <span class="nu">1</span><span class="pn">;</span>
+<span class="va">console</span><span class="pn">.</span><span class="fn">log</span><span class="pn">(</span><span class="st">"Aleatorio:"</span><span class="pn">,</span> <span class="va">aleatorio</span><span class="pn">);</span>  <span class="cm">// → número entre 1-100</span></pre></div>
+    <div class="demo-wrap">
+      <label>número =</label>
+      <input type="number" id="mt-n" value="49"/>
+      <button class="demo-btn" onclick="runMath()">▶ Math Demo</button>
+      <div class="demo-output" id="mt-out">Presiona ejecutar...</div>
+    </div>
+  </div>
+
+</div><!-- end sections -->
+
+<footer>
+  <p><span><span class="footer-tag">
+        <a style="text-decoration: none;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026
+    </span> 
+    <span class="footer-tag">
+         ·By <a style="text-decoration: none;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </span></span></p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
