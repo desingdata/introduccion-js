@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Variables en JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --card: #16161f;
+    --border: #2a2a3a;
+    --accent: #f0c040;
+    --accent2: #5eead4;
+    --accent3: #f87171;
+    --text: #e8e8f0;
+    --muted: #7070a0;
+    --code-bg: #0d0d16;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Fondo con patrón de cuadrícula */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(240,192,64,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(240,192,64,0.04) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 60px 24px;
+    position: relative;
+    z-index: 1;
+  }
+
+  /* HEADER */
+  header {
+    text-align: center;
+    margin-bottom: 64px;
+    animation: fadeDown 0.7s ease both;
+  }
+
+  .tag {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--accent);
+    padding: 5px 14px;
+    border-radius: 2px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -2px;
+    margin-bottom: 16px;
+  }
+
+  h1 span { color: var(--accent); }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* SECCIÓN */
+  .section {
+    margin-bottom: 40px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    animation: fadeUp 0.6s ease both;
+  }
+
+  .section:nth-child(1) { animation-delay: 0.1s; }
+  .section:nth-child(2) { animation-delay: 0.2s; }
+  .section:nth-child(3) { animation-delay: 0.3s; }
+  .section:nth-child(4) { animation-delay: 0.4s; }
+  .section:nth-child(5) { animation-delay: 0.5s; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--surface);
+  }
+
+  .section-number {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--accent);
+    background: rgba(240,192,64,0.1);
+    border: 1px solid rgba(240,192,64,0.3);
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .section-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.5px;
+  }
+
+  .section-keyword {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+  }
+
+  .kw-var   { color: var(--accent3); border-color: rgba(248,113,113,0.3); background: rgba(248,113,113,0.08); }
+  .kw-let   { color: var(--accent2); border-color: rgba(94,234,212,0.3); background: rgba(94,234,212,0.08); }
+  .kw-const { color: var(--accent);  border-color: rgba(240,192,64,0.3); background: rgba(240,192,64,0.08); }
+  .kw-id    { color: #a78bfa; border-color: rgba(167,139,250,0.3); background: rgba(167,139,250,0.08); }
+  .kw-decl  { color: #fb923c; border-color: rgba(251,146,60,0.3); background: rgba(251,146,60,0.08); }
+
+  .section-body {
+    padding: 24px 28px;
+  }
+
+  .definition {
+    font-size: 0.97rem;
+    color: var(--muted);
+    line-height: 1.7;
+    margin-bottom: 20px;
+    padding-left: 16px;
+    border-left: 3px solid var(--border);
+  }
+
+  /* CÓDIGO */
+  .code-block {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .code-bar {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .dot-r { background: #f87171; }
+  .dot-y { background: #fbbf24; }
+  .dot-g { background: #4ade80; }
+
+  .code-label {
+    margin-left: auto;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--muted);
+    letter-spacing: 1px;
+  }
+
+  pre {
+    padding: 20px 24px;
+    font-family: 'Space Mono', monospace;
+    font-size: 13px;
+    line-height: 1.85;
+    overflow-x: auto;
+    white-space: pre;
+  }
+
+  /* Colores de sintaxis */
+  .cm  { color: #5c5c80; font-style: italic; }   /* comentario */
+  .kw  { color: #f87171; }                         /* keyword */
+  .kw2 { color: var(--accent2); }                  /* let */
+  .kw3 { color: var(--accent); }                   /* const */
+  .id  { color: #93c5fd; }                         /* identificador */
+  .str { color: #86efac; }                         /* string */
+  .num { color: #fbbf24; }                         /* número */
+  .op  { color: var(--muted); }                    /* operador */
+  .bool { color: #c084fc; }                        /* boolean */
+
+  /* OUTPUT BADGE */
+  .output-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 16px;
+  }
+
+  .output-badge {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    padding: 6px 14px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid var(--border);
+    color: var(--text);
+  }
+
+  .output-badge span { color: var(--accent); }
+
+  /* TABLA COMPARATIVA */
+  .compare-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    margin-top: 8px;
+  }
+
+  .compare-table th {
+    background: var(--surface);
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 10px 16px;
+    text-align: left;
+    font-size: 10px;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .compare-table td {
+    padding: 12px 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+  }
+
+  .compare-table tr:last-child td { border-bottom: none; }
+  .compare-table tr:hover td { background: rgba(255,255,255,0.02); }
+
+  .yes { color: #4ade80; }
+  .no  { color: #f87171; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 32px;
+    border-top: 1px solid var(--border);
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--muted);
+    letter-spacing: 1px;
+    animation: fadeUp 0.6s 0.6s ease both;
+  }
+
+  /* ANIMACIONES */
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="tag">Proyecto Práctico</div>
+    <h1>Variables en<br><span>JavaScript</span></h1>
+    <p class="subtitle">// Fundamentos · Identificadores · Declaración · let · const</p>
+  </header>
+
+  <!-- 1. VARIABLES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">01</div>
+      <div class="section-title">Variables</div>
+      <span class="section-keyword kw-var">var</span>
+    </div>
+    <div class="section-body">
+      <p class="definition">
+        Una <strong>variable</strong> es un contenedor con nombre que almacena un valor en memoria.
+        Su contenido puede cambiar durante la ejecución del programa. En JS, toda variable apunta
+        a un espacio de memoria donde se guarda el dato asignado.
+      </p>
+      <div class="code-block">
+        <div class="code-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-label">variables.js</span>
+        </div>
+        <pre>
+<span class="cm">// Variable: espacio en memoria con nombre y valor</span>
+<span class="kw">var</span> <span class="id">ciudad</span> <span class="op">=</span> <span class="str">"Bogotá"</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">poblacion</span> <span class="op">=</span> <span class="num">8000000</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">esCapital</span> <span class="op">=</span> <span class="bool">true</span><span class="op">;</span>
+
+<span class="cm">// var tiene alcance de función (function scope)</span>
+<span class="cm">// y puede redeclararse en el mismo ámbito</span>
+<span class="kw">var</span> <span class="id">ciudad</span> <span class="op">=</span> <span class="str">"Medellín"</span><span class="op">;</span>  <span class="cm">// ✓ permitido con var</span>
+
+console<span class="op">.</span>log<span class="op">(</span><span class="id">ciudad</span><span class="op">);</span>      <span class="cm">// → "Medellín"</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">poblacion</span><span class="op">);</span>   <span class="cm">// → 8000000</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">esCapital</span><span class="op">);</span>   <span class="cm">// → true</span>
+        </pre>
+      </div>
+      <div class="output-row">
+        <div class="output-badge">ciudad → <span>"Medellín"</span></div>
+        <div class="output-badge">poblacion → <span>8000000</span></div>
+        <div class="output-badge">esCapital → <span>true</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. IDENTIFICADORES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">02</div>
+      <div class="section-title">Identificadores</div>
+      <span class="section-keyword kw-id">naming</span>
+    </div>
+    <div class="section-body">
+      <p class="definition">
+        Un <strong>identificador</strong> es el nombre que se le asigna a una variable, función o clase.
+        Debe comenzar con letra, <code>_</code> o <code>$</code>; no puede empezar con número ni contener
+        espacios. JavaScript distingue mayúsculas y minúsculas (<em>case-sensitive</em>).
+      </p>
+      <div class="code-block">
+        <div class="code-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-label">identificadores.js</span>
+        </div>
+        <pre>
+<span class="cm">// ✅ Identificadores VÁLIDOS</span>
+<span class="kw">var</span> <span class="id">nombre</span>         <span class="op">=</span> <span class="str">"Ana"</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">_privado</span>       <span class="op">=</span> <span class="num">42</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">$precio</span>        <span class="op">=</span> <span class="num">19.99</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">nombreCompleto</span> <span class="op">=</span> <span class="str">"Ana López"</span><span class="op">;</span>  <span class="cm">// camelCase ← convención JS</span>
+<span class="kw">var</span> <span class="id">edad2024</span>       <span class="op">=</span> <span class="num">30</span><span class="op">;</span>          <span class="cm">// número en medio: ✓</span>
+
+<span class="cm">// ❌ Identificadores INVÁLIDOS (causarían SyntaxError)</span>
+<span class="cm">// var 2nombre = "error";   ← empieza con número</span>
+<span class="cm">// var mi nombre = "error"; ← contiene espacio</span>
+<span class="cm">// var for = "error";       ← palabra reservada</span>
+
+<span class="cm">// ⚠️  Case-sensitive: estas son 3 variables DISTINTAS</span>
+<span class="kw">var</span> <span class="id">color</span>  <span class="op">=</span> <span class="str">"rojo"</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">Color</span>  <span class="op">=</span> <span class="str">"azul"</span><span class="op">;</span>
+<span class="kw">var</span> <span class="id">COLOR</span>  <span class="op">=</span> <span class="str">"verde"</span><span class="op">;</span>
+
+console<span class="op">.</span>log<span class="op">(</span><span class="id">color</span><span class="op">,</span> <span class="id">Color</span><span class="op">,</span> <span class="id">COLOR</span><span class="op">);</span>  <span class="cm">// → rojo azul verde</span>
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. DECLARACIÓN -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">03</div>
+      <div class="section-title">Declaración de Variables</div>
+      <span class="section-keyword kw-decl">declarar</span>
+    </div>
+    <div class="section-body">
+      <p class="definition">
+        <strong>Declarar</strong> una variable es anunciarle al motor de JS que existirá un espacio de
+        memoria con ese nombre. Se puede declarar sin valor inicial (el valor será <code>undefined</code>),
+        y luego asignar o reasignar el valor en cualquier momento.
+      </p>
+      <div class="code-block">
+        <div class="code-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-label">declaracion.js</span>
+        </div>
+        <pre>
+<span class="cm">// 1. Solo declaración (sin valor) → undefined</span>
+<span class="kw2">let</span> <span class="id">puntaje</span><span class="op">;</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">puntaje</span><span class="op">);</span>          <span class="cm">// → undefined</span>
+
+<span class="cm">// 2. Declaración + inicialización en una línea</span>
+<span class="kw2">let</span> <span class="id">nivel</span> <span class="op">=</span> <span class="num">1</span><span class="op">;</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">nivel</span><span class="op">);</span>             <span class="cm">// → 1</span>
+
+<span class="cm">// 3. Asignación posterior</span>
+<span class="id">puntaje</span> <span class="op">=</span> <span class="num">100</span><span class="op">;</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">puntaje</span><span class="op">);</span>          <span class="cm">// → 100</span>
+
+<span class="cm">// 4. Reasignación de valor</span>
+<span class="id">nivel</span> <span class="op">=</span> <span class="num">2</span><span class="op">;</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">nivel</span><span class="op">);</span>             <span class="cm">// → 2</span>
+
+<span class="cm">// 5. Declaración múltiple en una sola línea</span>
+<span class="kw2">let</span> <span class="id">x</span> <span class="op">=</span> <span class="num">10</span><span class="op">,</span> <span class="id">y</span> <span class="op">=</span> <span class="num">20</span><span class="op">,</span> <span class="id">z</span> <span class="op">=</span> <span class="num">30</span><span class="op">;</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">x</span> <span class="op">+</span> <span class="id">y</span> <span class="op">+</span> <span class="id">z</span><span class="op">);</span>        <span class="cm">// → 60</span>
+        </pre>
+      </div>
+      <div class="output-row">
+        <div class="output-badge">puntaje inicial → <span>undefined</span></div>
+        <div class="output-badge">puntaje final → <span>100</span></div>
+        <div class="output-badge">x+y+z → <span>60</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. LET -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">04</div>
+      <div class="section-title">Let</div>
+      <span class="section-keyword kw-let">let</span>
+    </div>
+    <div class="section-body">
+      <p class="definition">
+        <strong><code>let</code></strong> es la forma moderna y recomendada de declarar variables mutables.
+        A diferencia de <code>var</code>, tiene <em>block scope</em> (alcance de bloque <code>{ }</code>),
+        no puede redeclararse en el mismo ámbito y no está disponible antes de su declaración
+        (Temporal Dead Zone).
+      </p>
+      <div class="code-block">
+        <div class="code-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-label">let.js</span>
+        </div>
+        <pre>
+<span class="cm">// let → block scope: solo existe dentro de { }</span>
+<span class="kw2">let</span> <span class="id">temperatura</span> <span class="op">=</span> <span class="num">25</span><span class="op">;</span>
+
+<span class="kw">if</span> <span class="op">(</span><span class="bool">true</span><span class="op">) {</span>
+  <span class="kw2">let</span> <span class="id">temperatura</span> <span class="op">=</span> <span class="num">30</span><span class="op">;</span>          <span class="cm">// Variable diferente (bloque propio)</span>
+  console<span class="op">.</span>log<span class="op">(</span><span class="id">temperatura</span><span class="op">);</span>       <span class="cm">// → 30</span>
+<span class="op">}</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">temperatura</span><span class="op">);</span>         <span class="cm">// → 25 (la de afuera no cambia)</span>
+
+<span class="cm">// let en bucles: cada iteración tiene su propio scope</span>
+<span class="kw">for</span> <span class="op">(</span><span class="kw2">let</span> <span class="id">i</span> <span class="op">=</span> <span class="num">0</span><span class="op">;</span> <span class="id">i</span> <span class="op">&lt;</span> <span class="num">3</span><span class="op">;</span> <span class="id">i</span><span class="op">++) {</span>
+  console<span class="op">.</span>log<span class="op">(</span><span class="str">"iteración:"</span><span class="op">,</span> <span class="id">i</span><span class="op">);</span>  <span class="cm">// → 0, 1, 2</span>
+<span class="op">}</span>
+<span class="cm">// console.log(i); → ReferenceError: i no existe aquí</span>
+
+<span class="cm">// ✅ Reasignación permitida</span>
+<span class="kw2">let</span> <span class="id">contador</span> <span class="op">=</span> <span class="num">0</span><span class="op">;</span>
+<span class="id">contador</span><span class="op">++;</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">contador</span><span class="op">);</span>            <span class="cm">// → 1</span>
+
+<span class="cm">// ❌ Redeclaración NO permitida</span>
+<span class="cm">// let contador = 5; → SyntaxError</span>
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. CONSTANTES -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">05</div>
+      <div class="section-title">Constantes</div>
+      <span class="section-keyword kw-const">const</span>
+    </div>
+    <div class="section-body">
+      <p class="definition">
+        Una <strong>constante</strong> (<code>const</code>) es una variable cuya referencia no puede
+        reasignarse después de su declaración inicial. Tiene block scope igual que <code>let</code>.
+        Es obligatorio inicializarla al declararla. Si almacena un objeto o array, su contenido
+        interno sí puede modificarse.
+      </p>
+      <div class="code-block">
+        <div class="code-bar">
+          <div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div>
+          <span class="code-label">constantes.js</span>
+        </div>
+        <pre>
+<span class="cm">// const → valor inmutable (no reasignable)</span>
+<span class="kw3">const</span> <span class="id">PI</span>          <span class="op">=</span> <span class="num">3.14159</span><span class="op">;</span>
+<span class="kw3">const</span> <span class="id">PAIS</span>        <span class="op">=</span> <span class="str">"Colombia"</span><span class="op">;</span>
+<span class="kw3">const</span> <span class="id">MAX_INTENTOS</span> <span class="op">=</span> <span class="num">3</span><span class="op">;</span>
+
+console<span class="op">.</span>log<span class="op">(</span><span class="id">PI</span><span class="op">);</span>           <span class="cm">// → 3.14159</span>
+
+<span class="cm">// ❌ Reasignación NO permitida</span>
+<span class="cm">// PI = 3; → TypeError: Assignment to constant variable</span>
+
+<span class="cm">// ⚠️  Con objetos: la referencia es fija, pero el contenido NO</span>
+<span class="kw3">const</span> <span class="id">usuario</span> <span class="op">= {</span>
+  <span class="id">nombre</span><span class="op">:</span> <span class="str">"Carlos"</span><span class="op">,</span>
+  <span class="id">edad</span><span class="op">:</span> <span class="num">28</span>
+<span class="op">};</span>
+
+<span class="id">usuario</span><span class="op">.</span><span class="id">edad</span> <span class="op">=</span> <span class="num">29</span><span class="op">;</span>         <span class="cm">// ✅ Se puede modificar propiedad</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">usuario</span><span class="op">.</span><span class="id">edad</span><span class="op">);</span>  <span class="cm">// → 29</span>
+
+<span class="cm">// ⚠️  Con arrays: igual, se puede modificar el contenido</span>
+<span class="kw3">const</span> <span class="id">colores</span> <span class="op">= [</span><span class="str">"rojo"</span><span class="op">,</span> <span class="str">"azul"</span><span class="op">];</span>
+<span class="id">colores</span><span class="op">.</span>push<span class="op">(</span><span class="str">"verde"</span><span class="op">);</span>     <span class="cm">// ✅ permitido</span>
+console<span class="op">.</span>log<span class="op">(</span><span class="id">colores</span><span class="op">);</span>       <span class="cm">// → ["rojo", "azul", "verde"]</span>
+        </pre>
+      </div>
+    </div>
+  </div>
+
+  <!-- TABLA COMPARATIVA -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-number">⊞</div>
+      <div class="section-title">Tabla Comparativa</div>
+      <span class="section-keyword kw-id">resumen</span>
+    </div>
+    <div class="section-body">
+      <table class="compare-table">
+        <thead>
+          <tr>
+            <th>Característica</th>
+            <th>var</th>
+            <th>let</th>
+            <th>const</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Alcance (Scope)</td>
+            <td>Función</td>
+            <td>Bloque { }</td>
+            <td>Bloque { }</td>
+          </tr>
+          <tr>
+            <td>Reasignación</td>
+            <td class="yes">✓ Sí</td>
+            <td class="yes">✓ Sí</td>
+            <td class="no">✗ No</td>
+          </tr>
+          <tr>
+            <td>Redeclaración</td>
+            <td class="yes">✓ Sí</td>
+            <td class="no">✗ No</td>
+            <td class="no">✗ No</td>
+          </tr>
+          <tr>
+            <td>Hoisting</td>
+            <td>Sí (undefined)</td>
+            <td>TDZ</td>
+            <td>TDZ</td>
+          </tr>
+          <tr>
+            <td>Inicialización obligatoria</td>
+            <td class="no">✗ No</td>
+            <td class="no">✗ No</td>
+            <td class="yes">✓ Sí</td>
+          </tr>
+          <tr>
+            <td>Uso recomendado</td>
+            <td style="color:var(--muted)">Evitar</td>
+            <td style="color:var(--accent2)">Variables mutables</td>
+            <td style="color:var(--accent)">Valores fijos</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+     <span class="footer-tag">
+        <a style="text-decoration: none;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026
+    </span> 
+    <span class="footer-tag">
+         ·By <a style="text-decoration: none;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </span>
+  </footer>
+
+</div>
+</body>
+</html>
