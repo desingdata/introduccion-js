@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Condicionales en JavaScript</title>
+  <link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96"
+    type="image/png">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+
+<body>
+
+  <h1>🔀 Condicionales en JavaScript</h1>
+  <p class="subtitle">Proyecto práctico — código comentado + demos interactivos</p>
+
+  <div class="grid">
+
+    <!-- DECLARACIONES CONDICIONALES -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">Concepto</span>
+        <h2>Declaraciones Condicionales</h2>
+      </div>
+      <div class="definition">
+        <span>Condicional:</span> Estructura que permite ejecutar bloques de código
+        <em>solo si</em> se cumple una condición. Son la base de la lógica de decisiones en cualquier programa.
+      </div>
+      <pre><span class="cmt">// Las condicionales evalúan expresiones booleanas</span>
+<span class="cmt">// (true / false) para decidir qué código ejecutar.</span>
+
+<span class="kw">let</span> <span class="var">llueve</span> = <span class="kw">true</span>;   <span class="cmt">// ← condición</span>
+
+<span class="kw">if</span> (<span class="var">llueve</span>) {
+  console.<span class="fn">log</span>(<span class="str">"☂️ Lleva paraguas"</span>);
+} <span class="kw">else</span> {
+  console.<span class="fn">log</span>(<span class="str">"☀️ Día despejado"</span>);
+}
+<span class="cmt">// Resultado: "☂️ Lleva paraguas"</span></pre>
+    </div>
+
+    <!-- CUÁNDO USAR -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">Cuándo</span>
+        <h2>¿Cuándo usar condicionales?</h2>
+      </div>
+      <div class="definition">
+        Se usan cuando el programa debe <span>tomar decisiones</span> según el estado de variables,
+        entrada del usuario, resultados de operaciones u otras condiciones en tiempo de ejecución.
+      </div>
+      <pre><span class="cmt">// ✅ Validar formularios</span>
+<span class="kw">let</span> <span class="var">edad</span> = <span class="num">17</span>;
+<span class="kw">if</span> (<span class="var">edad</span> >= <span class="num">18</span>) { <span class="cmt">/* acceso permitido */</span> }
+
+<span class="cmt">// ✅ Controlar el flujo de la app</span>
+<span class="kw">let</span> <span class="var">logueado</span> = <span class="kw">false</span>;
+<span class="kw">if</span> (<span class="var">logueado</span>) { <span class="cmt">/* mostrar dashboard */</span> }
+
+<span class="cmt">// ✅ Comparar resultados</span>
+<span class="kw">let</span> <span class="var">puntaje</span> = <span class="num">85</span>;
+<span class="kw">if</span> (<span class="var">puntaje</span> >= <span class="num">60</span>) { <span class="cmt">/* aprobado */</span> }
+
+<span class="cmt">// ✅ Manejar distintos roles</span>
+<span class="kw">let</span> <span class="var">rol</span> = <span class="str">"admin"</span>;
+<span class="kw">if</span> (<span class="var">rol</span> === <span class="str">"admin"</span>) { <span class="cmt">/* acceso total */</span> }</pre>
+    </div>
+
+    <!-- IF -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">if</span>
+        <h2>La instrucción <code>if</code></h2>
+      </div>
+      <div class="definition">
+        <span>if:</span> Ejecuta un bloque de código <em>únicamente</em> cuando la condición
+        entre paréntesis evalúa a <code>true</code>. Si es <code>false</code>, el bloque se omite.
+      </div>
+      <pre><span class="cmt">// Sintaxis:  if (condición) { bloque }</span>
+
+<span class="kw">let</span> <span class="var">temperatura</span> = <span class="num">35</span>; <span class="cmt">// °C</span>
+
+<span class="kw">if</span> (<span class="var">temperatura</span> > <span class="num">30</span>) {
+  <span class="cmt">// Se ejecuta SOLO cuando temp > 30</span>
+  console.<span class="fn">log</span>(<span class="str">"🌡️ Hace calor"</span>);
+}
+
+<span class="cmt">// Condición compuesta con && (Y lógico)</span>
+<span class="kw">if</span> (<span class="var">temperatura</span> > <span class="num">30</span> <span class="op">&&</span> <span class="var">temperatura</span> < <span class="num">40</span>) {
+  console.<span class="fn">log</span>(<span class="str">"Calor moderado"</span>);
+}</pre>
+      <div class="demo-area">
+        <label>Temperatura (°C):</label>
+        <input type="number" id="tempInput" value="35" />
+        <button onclick="demoIf()">▶ Ejecutar if</button>
+        <div class="result" id="ifResult"></div>
+      </div>
+    </div>
+
+    <!-- ELSE -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">else</span>
+        <h2>La instrucción <code>else</code></h2>
+      </div>
+      <div class="definition">
+        <span>else:</span> Define un bloque alternativo que se ejecuta cuando la condición del
+        <code>if</code> es <code>false</code>. Garantiza que siempre haya una respuesta.
+      </div>
+      <pre><span class="cmt">// Sintaxis: if (cond) { ... } else { ... }</span>
+
+<span class="kw">let</span> <span class="var">nota</span> = <span class="num">55</span>;
+
+<span class="kw">if</span> (<span class="var">nota</span> >= <span class="num">60</span>) {
+  <span class="cmt">// Se ejecuta cuando nota ≥ 60</span>
+  console.<span class="fn">log</span>(<span class="str">"✅ Aprobado"</span>);
+} <span class="kw">else</span> {
+  <span class="cmt">// Se ejecuta cuando nota &lt; 60</span>
+  console.<span class="fn">log</span>(<span class="str">"❌ Reprobado"</span>);
+}
+<span class="cmt">// Resultado: "❌ Reprobado"</span></pre>
+      <div class="demo-area">
+        <label>Nota (0 - 100):</label>
+        <input type="number" id="notaInput" value="55" min="0" max="100" />
+        <button onclick="demoElse()">▶ Evaluar nota</button>
+        <div class="result" id="elseResult"></div>
+      </div>
+    </div>
+
+    <!-- ELSE IF -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">else if</span>
+        <h2>La declaración <code>else if</code></h2>
+      </div>
+      <div class="definition">
+        <span>else if:</span> Permite encadenar múltiples condiciones. Se evalúan en orden;
+        cuando una es <code>true</code>, las siguientes se omiten completamente.
+      </div>
+      <pre><span class="cmt">// Convierte nota numérica a calificación letra</span>
+<span class="kw">let</span> <span class="var">n</span> = <span class="num">78</span>;
+
+<span class="kw">if</span> (<span class="var">n</span> >= <span class="num">90</span>) {
+  console.<span class="fn">log</span>(<span class="str">"A — Excelente"</span>);
+} <span class="kw">else if</span> (<span class="var">n</span> >= <span class="num">80</span>) {
+  console.<span class="fn">log</span>(<span class="str">"B — Muy bueno"</span>);
+} <span class="kw">else if</span> (<span class="var">n</span> >= <span class="num">70</span>) {
+  console.<span class="fn">log</span>(<span class="str">"C — Bueno"</span>); <span class="cmt">// ← se ejecuta</span>
+} <span class="kw">else if</span> (<span class="var">n</span> >= <span class="num">60</span>) {
+  console.<span class="fn">log</span>(<span class="str">"D — Suficiente"</span>);
+} <span class="kw">else</span> {
+  console.<span class="fn">log</span>(<span class="str">"F — Reprobado"</span>);
+}</pre>
+      <div class="demo-area">
+        <label>Nota:</label>
+        <input type="number" id="notaLetraInput" value="78" min="0" max="100" />
+        <button onclick="demoElseIf()">▶ Ver calificación</button>
+        <div class="result" id="elseIfResult"></div>
+      </div>
+    </div>
+
+    <!-- SWITCH -->
+    <div class="card">
+      <div class="card-header">
+        <span class="badge">switch</span>
+        <h2>La instrucción <code>switch</code></h2>
+      </div>
+      <div class="definition">
+        <span>switch:</span> Evalúa una expresión y la compara con múltiples <code>case</code> usando <code>===</code>.
+        <code>break</code> impide la ejecución en cascada hacia los casos siguientes.
+        <code>default</code> se ejecuta si ningún case coincide.
+      </div>
+      <pre><span class="kw">let</span> <span class="var">dia</span> = <span class="num">3</span>; <span class="cmt">// 1=Lun … 7=Dom</span>
+
+<span class="kw">switch</span> (<span class="var">dia</span>) {
+  <span class="kw">case</span> <span class="num">1</span>:
+    console.<span class="fn">log</span>(<span class="str">"Lunes"</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="num">2</span>:
+    console.<span class="fn">log</span>(<span class="str">"Martes"</span>); <span class="kw">break</span>;
+  <span class="kw">case</span> <span class="num">3</span>:
+    console.<span class="fn">log</span>(<span class="str">"Miércoles"</span>); <span class="kw">break</span>; <span class="cmt">// ←</span>
+  <span class="kw">case</span> <span class="num">6</span>:
+  <span class="kw">case</span> <span class="num">7</span>:
+    <span class="cmt">// Cases agrupados = fin de semana</span>
+    console.<span class="fn">log</span>(<span class="str">"🎉 Fin de semana"</span>); <span class="kw">break</span>;
+  <span class="kw">default</span>:
+    console.<span class="fn">log</span>(<span class="str">"Día inválido"</span>);
+}</pre>
+      <div class="demo-area">
+        <label>Selecciona un día:</label>
+        <select id="diaSelect">
+          <option value="1">1 - Lunes</option>
+          <option value="2">2 - Martes</option>
+          <option value="3" selected>3 - Miércoles</option>
+          <option value="4">4 - Jueves</option>
+          <option value="5">5 - Viernes</option>
+          <option value="6">6 - Sábado</option>
+          <option value="7">7 - Domingo</option>
+        </select>
+        <button onclick="demoSwitch()">▶ Ejecutar switch</button>
+        <div class="result" id="switchResult"></div>
+      </div>
+    </div>
+
+    <!-- TERNARIO -->
+    <div class="card full-width">
+      <div class="card-header">
+        <span class="badge">? :</span>
+        <h2>Operador Ternario &nbsp;<code>condición ? valorTrue : valorFalse</code></h2>
+      </div>
+      <div class="definition">
+        <span>Operador ternario:</span> Versión compacta de <code>if/else</code> en una sola línea.
+        Si la condición es <code>true</code> devuelve el primer valor; si es <code>false</code>, el segundo.
+        Ideal para asignaciones simples; evitar para lógica compleja.
+      </div>
+      <pre><span class="cmt">// Sintaxis: condición ? valorSiTrue : valorSiFalse</span>
+
+<span class="kw">let</span> <span class="var">edad</span> = <span class="num">20</span>;
+
+<span class="cmt">// Equivale a un if/else en una sola línea:</span>
+<span class="kw">let</span> <span class="var">acceso</span> = <span class="var">edad</span> >= <span class="num">18</span>
+  <span class="op">?</span> <span class="str">"✅ Mayor de edad"</span>
+  <span class="op">:</span> <span class="str">"🚫 Menor de edad"</span>;
+
+console.<span class="fn">log</span>(<span class="var">acceso</span>); <span class="cmt">// "✅ Mayor de edad"</span>
+
+<span class="cmt">// Ternario anidado (con moderación)</span>
+<span class="kw">let</span> <span class="var">nota</span> = <span class="num">75</span>;
+<span class="kw">let</span> <span class="var">letra</span> = <span class="var">nota</span> >= <span class="num">90</span> <span class="op">?</span> <span class="str">"A"</span>
+           : <span class="var">nota</span> >= <span class="num">80</span> <span class="op">?</span> <span class="str">"B"</span>
+           : <span class="var">nota</span> >= <span class="num">70</span> <span class="op">?</span> <span class="str">"C"</span>    <span class="cmt">// ← se ejecuta</span>
+           : <span class="var">nota</span> >= <span class="num">60</span> <span class="op">?</span> <span class="str">"D"</span>
+           <span class="op">:</span>              <span class="str">"F"</span>;
+
+<span class="cmt">// Ternario en clases CSS dinámicas</span>
+<span class="kw">let</span> <span class="var">activo</span> = <span class="kw">true</span>;
+<span class="kw">let</span> <span class="var">clase</span> = <span class="var">activo</span> <span class="op">?</span> <span class="str">"btn-primary"</span> <span class="op">:</span> <span class="str">"btn-disabled"</span>;</pre>
+      <div class="demo-area two-col">
+        <div>
+          <label>Tu edad:</label>
+          <input type="number" id="edadInput" value="20" min="0" max="120" />
+          <button onclick="demoTernario()">▶ Verificar acceso</button>
+          <div class="result" id="ternarioResult"></div>
+        </div>
+        <div>
+          <label>Temperatura para vestimenta (°C):</label>
+          <input type="number" id="vestInput" value="22" />
+          <button onclick="demoVestimenta()">▶ ¿Qué llevar?</button>
+          <div class="result" id="vestResult"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+  <footer>
+    <span class="footer-tag">
+      <a style="text-decoration: none;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a>
+      2026
+    </span>
+    <span class="footer-tag">
+      ·By <a style="text-decoration: none;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/"
+        target="_blank">
+        Miguel Mauricio Rivera López</a>.
+    </span>
+  </footer>
+  <script src="js/script.js"></script>
+</body>
+
+</html>
