@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bucles en Introducción a JavaScript</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #111118;
+    --border: #1e1e2e;
+    --accent: #00ff88;
+    --accent2: #ff6b35;
+    --accent3: #7c6aff;
+    --text: #e8e8f0;
+    --muted: #6b6b8a;
+    --code-bg: #0d1117;
+    --keyword: #ff6b35;
+    --string: #00ff88;
+    --comment: #5a6a5a;
+    --number: #7c6aff;
+    --fn: #ffcc44;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: 
+      linear-gradient(rgba(0,255,136,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0,255,136,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+    position: relative;
+    z-index: 1;
+  }
+
+  header {
+    text-align: center;
+    margin-bottom: 60px;
+    padding-top: 20px;
+  }
+
+  .badge {
+    display: inline-block;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 20px;
+  }
+
+  h1 {
+    font-size: clamp(2.4rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, #fff 30%, var(--accent) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 16px;
+  }
+
+  .subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    font-weight: 400;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* Loop cards */
+  .loop-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    margin-bottom: 32px;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    animation: fadeUp 0.5s ease both;
+  }
+
+  .loop-card:hover {
+    border-color: rgba(0,255,136,0.3);
+    transform: translateY(-2px);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .loop-card:nth-child(1) { animation-delay: 0.1s; }
+  .loop-card:nth-child(2) { animation-delay: 0.2s; }
+  .loop-card:nth-child(3) { animation-delay: 0.3s; }
+  .loop-card:nth-child(4) { animation-delay: 0.4s; }
+  .loop-card:nth-child(5) { animation-delay: 0.5s; }
+  .loop-card:nth-child(6) { animation-delay: 0.6s; }
+  .loop-card:nth-child(7) { animation-delay: 0.7s; }
+
+  .card-header {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 20px 24px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.02);
+  }
+
+  .loop-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14px;
+    font-weight: 700;
+    flex-shrink: 0;
+  }
+
+  .icon-for    { background: rgba(0,255,136,0.15); color: var(--accent); border: 1px solid rgba(0,255,136,0.3); }
+  .icon-while  { background: rgba(255,107,53,0.15); color: var(--accent2); border: 1px solid rgba(255,107,53,0.3); }
+  .icon-do     { background: rgba(124,106,255,0.15); color: var(--accent3); border: 1px solid rgba(124,106,255,0.3); }
+  .icon-forin  { background: rgba(255,204,68,0.15); color: var(--fn); border: 1px solid rgba(255,204,68,0.3); }
+  .icon-forof  { background: rgba(0,200,255,0.15); color: #00c8ff; border: 1px solid rgba(0,200,255,0.3); }
+  .icon-break  { background: rgba(255,50,100,0.15); color: #ff3264; border: 1px solid rgba(255,50,100,0.3); }
+  .icon-cont   { background: rgba(100,220,100,0.15); color: #64dc64; border: 1px solid rgba(100,220,100,0.3); }
+
+  .card-title-area h2 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  .card-title-area p {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.4;
+    font-weight: 400;
+  }
+
+  .card-body {
+    padding: 20px 24px;
+  }
+
+  /* Code block */
+  pre {
+    background: var(--code-bg);
+    border: 1px solid rgba(255,255,255,0.06);
+    border-radius: 10px;
+    padding: 20px;
+    overflow-x: auto;
+    margin-bottom: 16px;
+    position: relative;
+  }
+
+  pre::before {
+    content: attr(data-lang);
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+  }
+
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+    white-space: pre;
+  }
+
+  .kw   { color: var(--keyword); font-weight: 700; }
+  .cm   { color: var(--comment); font-style: italic; }
+  .str  { color: var(--string); }
+  .num  { color: var(--number); }
+  .fn   { color: var(--fn); }
+  .op   { color: #aaa; }
+  .vr   { color: #c8d0e8; }
+
+  /* Run button */
+  .run-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(0,255,136,0.1);
+    border: 1px solid rgba(0,255,136,0.3);
+    color: var(--accent);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    padding: 8px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+    margin-bottom: 12px;
+  }
+
+  .run-btn:hover {
+    background: rgba(0,255,136,0.2);
+    border-color: var(--accent);
+  }
+
+  .run-btn svg { width: 14px; height: 14px; }
+
+  /* Output area */
+  .output {
+    background: rgba(0,255,136,0.04);
+    border: 1px solid rgba(0,255,136,0.15);
+    border-radius: 8px;
+    padding: 12px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--accent);
+    min-height: 40px;
+    white-space: pre-line;
+    line-height: 1.8;
+    display: none;
+  }
+
+  .output.active { display: block; animation: fadeIn 0.3s ease; }
+  @keyframes fadeIn { from { opacity: 0 } to { opacity: 1 } }
+
+  .output-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 2px;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    margin-top: 60px;
+    padding: 30px;
+    border-top: 1px solid var(--border);
+    color: var(--muted);
+    font-size: 0.8rem;
+  }
+
+  .tag-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .tag {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    padding: 4px 10px;
+    border-radius: 4px;
+    border: 1px solid;
+    letter-spacing: 1px;
+  }
+
+  .tag-green { color: var(--accent); border-color: rgba(0,255,136,0.3); background: rgba(0,255,136,0.07); }
+  .tag-orange { color: var(--accent2); border-color: rgba(255,107,53,0.3); background: rgba(255,107,53,0.07); }
+  .tag-purple { color: var(--accent3); border-color: rgba(124,106,255,0.3); background: rgba(124,106,255,0.07); }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge">Introducción a JavaScript </div>
+    <h1>Bucles en JavaScript</h1>
+    <p class="subtitle">Aprende las estructuras de iteración más importantes del lenguaje con ejemplos ejecutables y comentarios explicativos.</p>
+  </header>
+
+  <!-- 1. FOR -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-for">for</div>
+      <div class="card-title-area">
+        <h2>Bucle for</h2>
+        <p>Repite un bloque un número determinado de veces. Ideal cuando conocemos la cantidad de iteraciones de antemano.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// BUCLE FOR
+// Sintaxis: for(inicio; condición; actualización)
+// - inicio: se ejecuta una vez antes del bucle
+// - condición: se evalúa antes de cada iteración; si es false, el bucle termina
+// - actualización: se ejecuta al final de cada iteración</span>
+
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">1</span>; <span class="vr">i</span> <span class="op">&lt;=</span> <span class="num">5</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="cm">// El cuerpo del bucle se ejecuta mientras i &lt;= 5</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Iteración número: ${</span><span class="vr">i</span><span class="str">}`</span>);
+}
+
+<span class="cm">// Recorrer un array con for clásico
+// arr.length devuelve la cantidad de elementos del array</span>
+<span class="kw">const</span> <span class="vr">frutas</span> <span class="op">=</span> [<span class="str">'🍎 Manzana'</span>, <span class="str">'🍌 Banana'</span>, <span class="str">'🍊 Naranja'</span>];
+
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="vr">i</span> <span class="op">&lt;</span> <span class="vr">frutas</span>.<span class="vr">length</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Fruta [${</span><span class="vr">i</span><span class="str">}]: ${</span><span class="vr">frutas</span>[<span class="vr">i</span>]<span class="str">}`</span>);
+}</code></pre>
+      <button class="run-btn" onclick="runFor(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-for"></div>
+    </div>
+  </div>
+
+  <!-- 2. WHILE -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-while">while</div>
+      <div class="card-title-area">
+        <h2>Bucle while</h2>
+        <p>Repite un bloque mientras una condición sea verdadera. La condición se evalúa ANTES de cada iteración.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// BUCLE WHILE
+// Se usa cuando no sabemos cuántas iteraciones serán necesarias.
+// ¡Atención! Si la condición nunca se vuelve false → bucle infinito.</span>
+
+<span class="kw">let</span> <span class="vr">contador</span> <span class="op">=</span> <span class="num">1</span>;
+<span class="kw">let</span> <span class="vr">suma</span> <span class="op">=</span> <span class="num">0</span>;
+
+<span class="cm">// Mientras contador sea menor o igual a 10, seguimos sumando</span>
+<span class="kw">while</span> (<span class="vr">contador</span> <span class="op">&lt;=</span> <span class="num">10</span>) {
+  <span class="vr">suma</span> <span class="op">+=</span> <span class="vr">contador</span>; <span class="cm">// suma = suma + contador</span>
+  <span class="vr">contador</span><span class="op">++</span>;       <span class="cm">// incrementamos para evitar bucle infinito</span>
+}
+
+<span class="cm">// Resultado: suma de 1 a 10 = 55</span>
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Suma del 1 al 10 = ${</span><span class="vr">suma</span><span class="str">}`</span>);</code></pre>
+      <button class="run-btn" onclick="runWhile(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-while"></div>
+    </div>
+  </div>
+
+  <!-- 3. DO...WHILE -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-do">do</div>
+      <div class="card-title-area">
+        <h2>Bucle do...while</h2>
+        <p>Similar al while, pero la condición se evalúa DESPUÉS de ejecutar el bloque. Garantiza al menos una ejecución.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// BUCLE DO...WHILE
+// El bloque se ejecuta al menos UNA VEZ, sin importar la condición.
+// Útil para pedir datos al usuario hasta que sean válidos.</span>
+
+<span class="kw">let</span> <span class="vr">intentos</span> <span class="op">=</span> <span class="num">0</span>;
+<span class="kw">let</span> <span class="vr">numero</span>;
+
+<span class="kw">do</span> {
+  <span class="vr">intentos</span><span class="op">++</span>;
+  <span class="cm">// Simulamos un número aleatorio entre 1 y 10</span>
+  <span class="vr">numero</span> <span class="op">=</span> <span class="fn">Math</span>.<span class="fn">floor</span>(<span class="fn">Math</span>.<span class="fn">random</span>() <span class="op">*</span> <span class="num">10</span>) <span class="op">+</span> <span class="num">1</span>;
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Intento ${</span><span class="vr">intentos</span><span class="str">}: número = ${</span><span class="vr">numero</span><span class="str">}`</span>);
+} <span class="kw">while</span> (<span class="vr">numero</span> <span class="op">!==</span> <span class="num">7</span>); <span class="cm">// repite hasta obtener el 7</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`¡Encontré el 7 en ${</span><span class="vr">intentos</span><span class="str">} intento(s)!`</span>);</code></pre>
+      <button class="run-btn" onclick="runDoWhile(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-dowhile"></div>
+    </div>
+  </div>
+
+  <!-- 4. FOR...IN -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-forin">in</div>
+      <div class="card-title-area">
+        <h2>Bucle for...in</h2>
+        <p>Itera sobre las propiedades enumerables de un objeto. Devuelve las claves (keys), no los valores.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// BUCLE FOR...IN
+// Diseñado para objetos (no arrays). Itera sobre las PROPIEDADES (keys).
+// Para cada propiedad, podemos acceder a su valor con objeto[key].</span>
+
+<span class="kw">const</span> <span class="vr">estudiante</span> <span class="op">=</span> {
+  <span class="vr">nombre</span>: <span class="str">'Ana García'</span>,
+  <span class="vr">edad</span>: <span class="num">22</span>,
+  <span class="vr">carrera</span>: <span class="str">'Ingeniería'</span>,
+  <span class="vr">promedio</span>: <span class="num">9.5</span>
+};
+
+<span class="cm">// 'propiedad' toma el nombre de cada key en cada iteración</span>
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">propiedad</span> <span class="kw">in</span> <span class="vr">estudiante</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`${</span><span class="vr">propiedad</span><span class="str">}: ${</span><span class="vr">estudiante</span>[<span class="vr">propiedad</span>]<span class="str">}`</span>);
+  <span class="cm">// estudiante[propiedad] → acceso dinámico con notación de corchetes</span>
+}</code></pre>
+      <button class="run-btn" onclick="runForIn(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-forin"></div>
+    </div>
+  </div>
+
+  <!-- 5. FOR...OF -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-forof">of</div>
+      <div class="card-title-area">
+        <h2>Bucle for...of</h2>
+        <p>Itera sobre valores de objetos iterables: arrays, strings, Maps, Sets. La forma más moderna y limpia de recorrer colecciones.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// BUCLE FOR...OF (ES6+)
+// A diferencia de for...in, devuelve directamente los VALORES.
+// Funciona con cualquier objeto iterable.</span>
+
+<span class="kw">const</span> <span class="vr">lenguajes</span> <span class="op">=</span> [<span class="str">'JavaScript'</span>, <span class="str">'Python'</span>, <span class="str">'Rust'</span>, <span class="str">'Go'</span>];
+
+<span class="cm">// 'lenguaje' recibe cada VALOR del array directamente</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">lenguaje</span> <span class="kw">of</span> <span class="vr">lenguajes</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`→ ${</span><span class="vr">lenguaje</span><span class="str">}`</span>);
+}
+
+<span class="cm">// También funciona con strings: itera caracter por caracter</span>
+<span class="kw">const</span> <span class="vr">texto</span> <span class="op">=</span> <span class="str">'LOOP'</span>;
+<span class="kw">for</span> (<span class="kw">const</span> <span class="vr">letra</span> <span class="kw">of</span> <span class="vr">texto</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Letra: ${</span><span class="vr">letra</span><span class="str">}`</span>);
+}</code></pre>
+      <button class="run-btn" onclick="runForOf(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-forof"></div>
+    </div>
+  </div>
+
+  <!-- 6. BREAK -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-break">break</div>
+      <div class="card-title-area">
+        <h2>Sentencia break</h2>
+        <p>Interrumpe y sale completamente del bucle en el que se encuentra, sin importar si la condición aún es verdadera.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// SENTENCIA BREAK
+// Detiene la ejecución del bucle inmediatamente.
+// Muy útil en búsquedas: cuando encontramos lo que buscamos, salimos.</span>
+
+<span class="kw">const</span> <span class="vr">numeros</span> <span class="op">=</span> [<span class="num">3</span>, <span class="num">7</span>, <span class="num">12</span>, <span class="num">5</span>, <span class="num">8</span>, <span class="num">20</span>];
+<span class="kw">const</span> <span class="vr">buscar</span> <span class="op">=</span> <span class="num">12</span>;
+
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">0</span>; <span class="vr">i</span> <span class="op">&lt;</span> <span class="vr">numeros</span>.<span class="vr">length</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`Revisando: ${</span><span class="vr">numeros</span>[<span class="vr">i</span>]<span class="str">}`</span>);
+
+  <span class="kw">if</span> (<span class="vr">numeros</span>[<span class="vr">i</span>] <span class="op">===</span> <span class="vr">buscar</span>) {
+    <span class="cm">// Encontramos el número → salimos del bucle inmediatamente</span>
+    <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`✓ Encontrado ${</span><span class="vr">buscar</span><span class="str">} en índice [${</span><span class="vr">i</span><span class="str">}]`</span>);
+    <span class="kw">break</span>; <span class="cm">// el bucle termina aquí</span>
+  }
+}
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">'Búsqueda finalizada.'</span>);</code></pre>
+      <button class="run-btn" onclick="runBreak(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-break"></div>
+    </div>
+  </div>
+
+  <!-- 7. CONTINUE -->
+  <div class="loop-card">
+    <div class="card-header">
+      <div class="loop-icon icon-cont">cont</div>
+      <div class="card-title-area">
+        <h2>Sentencia continue</h2>
+        <p>Salta la iteración actual y pasa a la siguiente, sin salir del bucle. Útil para filtrar o ignorar ciertos valores.</p>
+      </div>
+    </div>
+    <div class="card-body">
+      <pre data-lang="JS"><code><span class="cm">// SENTENCIA CONTINUE
+// No sale del bucle, solo "salta" la iteración actual.
+// El bucle continúa con el siguiente ciclo normalmente.</span>
+
+<span class="fn">console</span>.<span class="fn">log</span>(<span class="str">'Números impares del 1 al 10:'</span>);
+
+<span class="kw">for</span> (<span class="kw">let</span> <span class="vr">i</span> <span class="op">=</span> <span class="num">1</span>; <span class="vr">i</span> <span class="op">&lt;=</span> <span class="num">10</span>; <span class="vr">i</span><span class="op">++</span>) {
+  <span class="kw">if</span> (<span class="vr">i</span> <span class="op">%</span> <span class="num">2</span> <span class="op">===</span> <span class="num">0</span>) {
+    <span class="cm">// Si el número es par, saltamos esta iteración</span>
+    <span class="kw">continue</span>; <span class="cm">// vuelve al inicio del for con i++</span>
+  }
+  <span class="cm">// Solo llegamos aquí si el número es IMPAR</span>
+  <span class="fn">console</span>.<span class="fn">log</span>(<span class="str">`  → ${</span><span class="vr">i</span><span class="str">}`</span>);
+}</code></pre>
+      <button class="run-btn" onclick="runContinue(this)">
+        <svg viewBox="0 0 24 24" fill="currentColor"><polygon points="5,3 19,12 5,21"/></svg>
+        Ejecutar
+      </button>
+      <div class="output-label">// output</div>
+      <div class="output" id="out-continue"></div>
+    </div>
+  </div>
+
+  <!-- Tags -->
+  <div class="tag-row">
+    <span class="tag tag-green">for</span>
+    <span class="tag tag-orange">while</span>
+    <span class="tag tag-purple">do...while</span>
+    <span class="tag tag-green">for...in</span>
+    <span class="tag tag-orange">for...of</span>
+    <span class="tag tag-purple">break</span>
+    <span class="tag tag-green">continue</span>
+  </div>
+
+  <footer>
+  · <a style="text-decoration: none;" href="https://desingdata.github.io/desingdata/" target="_blank"><code>Desing
+        Data</code> </a> 2026 |
+    · By <a style="text-decoration: none;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/"
+      target="_blank"><code>Miguel Mauricio Rivera López</code></a>
+</footer>
+</div>
+
+<script>
+function showOutput(id, lines) {
+  const el = document.getElementById(id);
+  el.textContent = lines.join('\n');
+  el.classList.add('active');
+}
+
+function runFor(btn) {
+  const lines = [];
+  for (let i = 1; i <= 5; i++) {
+    lines.push(`Iteración número: ${i}`);
+  }
+  const frutas = ['🍎 Manzana', '🍌 Banana', '🍊 Naranja'];
+  for (let i = 0; i < frutas.length; i++) {
+    lines.push(`Fruta [${i}]: ${frutas[i]}`);
+  }
+  showOutput('out-for', lines);
+}
+
+function runWhile(btn) {
+  let contador = 1, suma = 0;
+  while (contador <= 10) { suma += contador; contador++; }
+  showOutput('out-while', [`Suma del 1 al 10 = ${suma}`]);
+}
+
+function runDoWhile(btn) {
+  const lines = [];
+  let intentos = 0, numero;
+  do {
+    intentos++;
+    numero = Math.floor(Math.random() * 10) + 1;
+    lines.push(`Intento ${intentos}: número = ${numero}`);
+    if (intentos > 30) break; // safety
+  } while (numero !== 7);
+  lines.push(`¡Encontré el 7 en ${intentos} intento(s)!`);
+  showOutput('out-dowhile', lines);
+}
+
+function runForIn(btn) {
+  const estudiante = { nombre: 'Ana García', edad: 22, carrera: 'Ingeniería', promedio: 9.5 };
+  const lines = [];
+  for (let prop in estudiante) { lines.push(`${prop}: ${estudiante[prop]}`); }
+  showOutput('out-forin', lines);
+}
+
+function runForOf(btn) {
+  const lines = [];
+  const lenguajes = ['JavaScript', 'Python', 'Rust', 'Go'];
+  for (const l of lenguajes) { lines.push(`→ ${l}`); }
+  for (const letra of 'LOOP') { lines.push(`Letra: ${letra}`); }
+  showOutput('out-forof', lines);
+}
+
+function runBreak(btn) {
+  const lines = [];
+  const numeros = [3, 7, 12, 5, 8, 20];
+  const buscar = 12;
+  for (let i = 0; i < numeros.length; i++) {
+    lines.push(`Revisando: ${numeros[i]}`);
+    if (numeros[i] === buscar) {
+      lines.push(`✓ Encontrado ${buscar} en índice [${i}]`);
+      break;
+    }
+  }
+  lines.push('Búsqueda finalizada.');
+  showOutput('out-break', lines);
+}
+
+function runContinue(btn) {
+  const lines = ['Números impares del 1 al 10:'];
+  for (let i = 1; i <= 10; i++) {
+    if (i % 2 === 0) continue;
+    lines.push(`  → ${i}`);
+  }
+  showOutput('out-continue', lines);
+}
+</script>
+</body>
+</html>
