@@ -1,0 +1,189 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #0f0f1a;
+    color: #e2e8f0;
+}
+
+header {
+    background: linear-gradient(135deg, #1e1b4b, #312e81);
+    padding: 2rem;
+    text-align: center;
+    border-bottom: 2px solid #6366f1;
+}
+
+header h1 {
+    font-size: 2rem;
+    color: #a5b4fc;
+}
+
+header p {
+    color: #818cf8;
+    margin-top: 0.4rem;
+}
+
+.container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 2rem;
+    display: grid;
+    gap: 1.5rem;
+}
+
+.card {
+    background: #1e1e2e;
+    border: 1px solid #2d2d4e;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.card-header {
+    background: #16213e;
+    padding: 0.8rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 0.7rem;
+    border-bottom: 1px solid #2d2d4e;
+}
+
+.badge {
+    background: #6366f1;
+    color: #fff;
+    font-size: 0.7rem;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 20px;
+}
+
+.card-header h2 {
+    color: #c7d2fe;
+    font-size: 1rem;
+}
+
+.card-body {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media(max-width:700px) {
+    .card-body {
+        grid-template-columns: 1fr;
+    }
+}
+
+.code-section {
+    background: #11111b;
+    padding: 1.2rem;
+    border-right: 1px solid #2d2d4e;
+    overflow-x: auto;
+}
+
+pre {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: #cdd6f4;
+    white-space: pre;
+}
+
+.kw {
+    color: #cba6f7;
+}
+
+.fn {
+    color: #89b4fa;
+}
+
+.str {
+    color: #a6e3a1;
+}
+
+.num {
+    color: #fab387;
+}
+
+.cmt {
+    color: #6c7086;
+    font-style: italic;
+}
+
+.op {
+    color: #89dceb;
+}
+
+.vr {
+    color: #f38ba8;
+}
+
+.result-section {
+    padding: 1.2rem;
+    background: #181825;
+}
+
+.result-section h3 {
+    font-size: 0.72rem;
+    color: #6c7086;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 0.8rem;
+}
+
+.output {
+    font-family: 'Fira Code', monospace;
+    font-size: 0.82rem;
+    line-height: 1.8;
+}
+
+.label {
+    color: #89b4fa;
+    font-weight: bold;
+}
+
+.val {
+    color: #f9e2af;
+}
+
+.definition {
+    font-size: 0.79rem;
+    color: #585b70;
+    margin-top: 0.8rem;
+    border-top: 1px solid #2d2d4e;
+    padding-top: 0.6rem;
+    font-style: italic;
+    line-height: 1.5;
+}
+
+.run-btn {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0.7rem 1.2rem;
+    background: #181825;
+    border-top: 1px solid #2d2d4e;
+}
+
+button {
+    background: #6366f1;
+    color: #fff;
+    border: none;
+    padding: 6px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+button:hover {
+    background: #818cf8;
+}
+
+footer {
+    text-align: center;
+    padding: 2rem;
+    color: #45475a;
+    font-size: 0.8rem;
+    border-top: 1px solid #2d2d4e;
+}

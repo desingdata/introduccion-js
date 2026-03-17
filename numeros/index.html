@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Métodos Numéricos en JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header>
+  <div class="tag">// Introducción a JavaScript</div>
+  <h1>Métodos Numéricos<br>en JavaScript</h1>
+  <p>Proyecto práctico interactivo — explora cada concepto con código comentado y ejecución en tiempo real</p>
+</header>
+
+<nav id="mainNav">
+  <button class="active" onclick="showSection('conceptos')">Conceptos Base</button>
+  <button onclick="showSection('basicos')">Métodos Básicos</button>
+  <button onclick="showSection('estaticos')">Métodos Estáticos</button>
+  <button onclick="showSection('propiedades')">Propiedades</button>
+</nav>
+
+<main>
+
+<!-- SECCIÓN 1: CONCEPTOS BASE -->
+<section id="conceptos" class="active">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(0,212,255,0.1); border:1px solid rgba(0,212,255,0.2)">🔢</div>
+    <div class="section-title">
+      <h2>Conceptos Base</h2>
+      <p>Fundamentos de números en JavaScript: tipos, comportamientos especiales y representaciones</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <!-- Precisión Entera -->
+    <div class="card">
+      <div class="card-label">01 · Integer</div>
+      <h3>Precisión Entera</h3>
+      <p class="definition">Los enteros en JS son precisos hasta 15 dígitos. Más allá de ese límite, los valores pueden ser inexactos.</p>
+      <div class="code-block">
+<span class="comment">// Precisión entera: exacta hasta 15 dígitos</span>
+<span class="keyword">let</span> exacto = <span class="number">999999999999999</span>;    <span class="comment">// ✅ 15 dígitos</span>
+<span class="keyword">let</span> inexacto = <span class="number">9999999999999999</span>;  <span class="comment">// ⚠️ 16 dígitos</span>
+
+console.<span class="method">log</span>(exacto);    <span class="output">// 999999999999999</span>
+console.<span class="method">log</span>(inexacto);  <span class="output">// 10000000000000000</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let exacto = 999999999999999;
+let inexacto = 9999999999999999;
+return '15 dígitos: ' + exacto + '\\n16 dígitos: ' + inexacto;
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- Precisión Flotante -->
+    <div class="card">
+      <div class="card-label">02 · Float</div>
+      <h3>Precisión Flotante</h3>
+      <p class="definition">JS usa punto flotante de doble precisión (IEEE 754). Algunos decimales no pueden representarse exactamente en binario.</p>
+      <div class="code-block">
+<span class="comment">// Aritmética flotante: resultado inesperado</span>
+<span class="keyword">let</span> a = <span class="number">0.1</span>;
+<span class="keyword">let</span> b = <span class="number">0.2</span>;
+console.<span class="method">log</span>(a + b);         <span class="output">// 0.30000000000000004</span>
+
+<span class="comment">// Solución: usar toFixed para redondear</span>
+console.<span class="method">log</span>((a + b).<span class="method">toFixed</span>(<span class="number">1</span>));  <span class="output">// "0.3"</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let a = 0.1, b = 0.2;
+return 'Crudo: ' + (a + b) + '\\ntoFixed(1): ' + (a+b).toFixed(1);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- Agregar Números y Cadenas -->
+    <div class="card">
+      <div class="card-label">03 · Coerción</div>
+      <h3>Números + Cadenas</h3>
+      <p class="definition">El operador + con cadenas concatena en lugar de sumar. El orden de los operandos importa.</p>
+      <div class="code-block">
+<span class="comment">// + con strings: concatenación</span>
+<span class="keyword">let</span> r1 = <span class="number">10</span> + <span class="number">20</span>;         <span class="output">// 30  (número)</span>
+<span class="keyword">let</span> r2 = <span class="number">10</span> + <span class="string">"20"</span>;       <span class="output">// "1020" (cadena)</span>
+<span class="keyword">let</span> r3 = <span class="string">"10"</span> + <span class="number">20</span>;       <span class="output">// "1020" (cadena)</span>
+<span class="keyword">let</span> r4 = <span class="number">10</span> + <span class="number">20</span> + <span class="string">"30"</span>; <span class="output">// "3030"</span>
+<span class="keyword">let</span> r5 = <span class="string">"10"</span> + <span class="number">20</span> + <span class="number">30</span>; <span class="output">// "102030"</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [10+20, 10+'20', '10'+20, 10+20+'30', '10'+20+30].join('\\n');
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- Cadenas Numéricas -->
+    <div class="card">
+      <div class="card-label">04 · Strings</div>
+      <h3>Cadenas Numéricas</h3>
+      <p class="definition">JS intenta convertir strings a número en operaciones aritméticas (excepto +). Si no puede, devuelve NaN.</p>
+      <div class="code-block">
+<span class="comment">// Operaciones con cadenas numéricas</span>
+<span class="keyword">let</span> s = <span class="string">"100"</span>;
+console.<span class="method">log</span>(s * <span class="number">2</span>);   <span class="output">// 200  ✅ convierte</span>
+console.<span class="method">log</span>(s - <span class="number">10</span>);  <span class="output">// 90   ✅ convierte</span>
+console.<span class="method">log</span>(s / <span class="number">4</span>);   <span class="output">// 25   ✅ convierte</span>
+console.<span class="method">log</span>(s + <span class="number">5</span>);   <span class="output">// "1005" ⚠️ concatena</span>
+
+<span class="comment">// Conversión explícita</span>
+console.<span class="method">log</span>(<span class="method">Number</span>(s) + <span class="number">5</span>); <span class="output">// 105</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let s = '100';
+return s*2 + '\\n' + (s-10) + '\\n' + (s/4) + '\\n' + (s+5) + '\\nNumber(s)+5: ' + (Number(s)+5);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- NaN -->
+    <div class="card">
+      <div class="card-label">05 · NaN</div>
+      <h3>NaN — No es un Número</h3>
+      <p class="definition">NaN (Not a Number) es el resultado de operaciones matemáticas inválidas. Es de tipo number, pero no es igual a sí mismo.</p>
+      <div class="code-block">
+<span class="comment">// NaN: resultado de operación inválida</span>
+<span class="keyword">let</span> n1 = <span class="number">100</span> / <span class="string">"texto"</span>;  <span class="output">// NaN</span>
+<span class="keyword">let</span> n2 = <span class="method">parseInt</span>(<span class="string">"hola"</span>);  <span class="output">// NaN</span>
+
+<span class="comment">// NaN es "contagioso"</span>
+console.<span class="method">log</span>(n1 + <span class="number">5</span>);     <span class="output">// NaN</span>
+
+<span class="comment">// typeof NaN === "number" (!)  </span>
+console.<span class="method">log</span>(<span class="keyword">typeof</span> n1);  <span class="output">// "number"</span>
+
+<span class="comment">// Detectar NaN correctamente</span>
+console.<span class="method">log</span>(<span class="method">isNaN</span>(n1));           <span class="output">// true</span>
+console.<span class="method">log</span>(Number.<span class="method">isNaN</span>(n1));  <span class="output">// true</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let n = 100 / 'texto';
+return 'Valor: ' + n + '\\ntypeof: ' + typeof n + '\\nisNaN: ' + isNaN(n) + '\\nContagioso: ' + (n+5);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- Infinito -->
+    <div class="card">
+      <div class="card-label">06 · Infinity</div>
+      <h3>Infinito</h3>
+      <p class="definition">JS representa valores más allá del rango del tipo Number como Infinity (positivo) o -Infinity (negativo).</p>
+      <div class="code-block">
+<span class="comment">// División entre cero → Infinity</span>
+console.<span class="method">log</span>(<span class="number">1</span> / <span class="number">0</span>);     <span class="output">// Infinity</span>
+console.<span class="method">log</span>(-<span class="number">1</span> / <span class="number">0</span>);    <span class="output">// -Infinity</span>
+
+<span class="comment">// Desbordamiento numérico</span>
+<span class="keyword">let</span> big = Number.<span class="method">MAX_VALUE</span> * <span class="number">2</span>;
+console.<span class="method">log</span>(big);        <span class="output">// Infinity</span>
+
+<span class="comment">// Verificar infinito</span>
+console.<span class="method">log</span>(<span class="method">isFinite</span>(<span class="number">100</span>));    <span class="output">// true</span>
+console.<span class="method">log</span>(<span class="method">isFinite</span>(big));    <span class="output">// false</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return '1/0 = ' + (1/0) + '\\n-1/0 = ' + (-1/0) + '\\nMAX*2 = ' + (Number.MAX_VALUE*2) + '\\nisFinite(100): ' + isFinite(100);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- Hexadecimal -->
+    <div class="card">
+      <div class="card-label">07 · Hex</div>
+      <h3>Hexadecimal</h3>
+      <p class="definition">JS admite literales en base 16 (prefijo 0x), base 8 (prefijo 0o) y base 2 (prefijo 0b). Útil para colores, permisos, etc.</p>
+      <div class="code-block">
+<span class="comment">// Diferentes bases numéricas</span>
+<span class="keyword">let</span> hex = <span class="number">0xFF</span>;     <span class="comment">// Hexadecimal → 255</span>
+<span class="keyword">let</span> oct = <span class="number">0o377</span>;   <span class="comment">// Octal       → 255</span>
+<span class="keyword">let</span> bin = <span class="number">0b11111111</span>; <span class="comment">// Binario   → 255</span>
+
+console.<span class="method">log</span>(hex, oct, bin); <span class="output">// 255 255 255</span>
+
+<span class="comment">// Convertir a hexadecimal</span>
+console.<span class="method">log</span>((<span class="number">255</span>).<span class="method">toString</span>(<span class="number">16</span>)); <span class="output">// "ff"</span>
+console.<span class="method">log</span>((<span class="number">255</span>).<span class="method">toString</span>(<span class="number">2</span>));  <span class="output">// "11111111"</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let hex=0xFF, oct=0o377, bin=0b11111111;
+return 'hex:' + hex + ' oct:' + oct + ' bin:' + bin + '\\n→base16: ' + (255).toString(16) + '\\n→base2: ' + (255).toString(2);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <!-- Números como Objetos -->
+    <div class="card">
+      <div class="card-label">08 · Object</div>
+      <h3>Números como Objetos</h3>
+      <p class="definition">Con new Number() se crea un objeto Number (no recomendado). Complica comparaciones y ralentiza el código.</p>
+      <div class="code-block">
+<span class="comment">// Primitivo vs Objeto Number</span>
+<span class="keyword">let</span> primitivo = <span class="number">42</span>;
+<span class="keyword">let</span> objeto = <span class="keyword">new</span> <span class="method">Number</span>(<span class="number">42</span>);
+
+<span class="comment">// typeof diferente</span>
+console.<span class="method">log</span>(<span class="keyword">typeof</span> primitivo); <span class="output">// "number"</span>
+console.<span class="method">log</span>(<span class="keyword">typeof</span> objeto);    <span class="output">// "object"</span>
+
+<span class="comment">// == convierte, === distingue tipo</span>
+console.<span class="method">log</span>(primitivo == objeto);   <span class="output">// true</span>
+console.<span class="method">log</span>(primitivo === objeto);  <span class="output">// false ⚠️</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let p = 42, o = new Number(42);
+return 'typeof p: ' + typeof p + '\\ntypeof o: ' + typeof o + '\\np==o: ' + (p==o) + '\\np===o: ' + (p===o);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECCIÓN 2: MÉTODOS BÁSICOS -->
+<section id="basicos">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(124,58,237,0.1); border:1px solid rgba(124,58,237,0.2)">⚙️</div>
+    <div class="section-title">
+      <h2>Métodos Básicos</h2>
+      <p>Disponibles en cualquier instancia numérica — se llaman sobre el número directamente</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-label">toString()</div>
+      <h3>toString(base)</h3>
+      <p class="definition">Convierte un número a cadena de texto. Acepta una base opcional (2–36) para cambiar el sistema numérico.</p>
+      <div class="code-block">
+<span class="keyword">let</span> n = <span class="number">255</span>;
+<span class="comment">// Sin argumento → base 10</span>
+n.<span class="method">toString</span>();        <span class="output">// "255"</span>
+<span class="comment">// Con base 16 → hexadecimal</span>
+n.<span class="method">toString</span>(<span class="number">16</span>);     <span class="output">// "ff"</span>
+<span class="comment">// Con base 2 → binario</span>
+n.<span class="method">toString</span>(<span class="number">2</span>);      <span class="output">// "11111111"</span>
+<span class="comment">// Con base 8 → octal</span>
+n.<span class="method">toString</span>(<span class="number">8</span>);      <span class="output">// "377"</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let n=255;
+return 'Dec: '+n.toString()+' | Hex: '+n.toString(16)+' | Bin: '+n.toString(2)+' | Oct: '+n.toString(8);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">toExponential()</div>
+      <h3>toExponential(dígitos)</h3>
+      <p class="definition">Devuelve el número en notación exponencial (científica) como cadena. Indica cuántos decimales mostrar.</p>
+      <div class="code-block">
+<span class="keyword">let</span> n = <span class="number">123456.789</span>;
+<span class="comment">// Notación exponencial automática</span>
+n.<span class="method">toExponential</span>();    <span class="output">// "1.23456789e+5"</span>
+<span class="comment">// Con 2 decimales</span>
+n.<span class="method">toExponential</span>(<span class="number">2</span>);  <span class="output">// "1.23e+5"</span>
+<span class="comment">// Útil para números muy grandes o pequeños</span>
+(<span class="number">0.0000045</span>).<span class="method">toExponential</span>(<span class="number">2</span>); <span class="output">// "4.50e-6"</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let n=123456.789;
+return n.toExponential()+'\\n'+n.toExponential(2)+'\\n'+(0.0000045).toExponential(2);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">toFixed()</div>
+      <h3>toFixed(decimales)</h3>
+      <p class="definition">Formatea el número con un número fijo de decimales y lo devuelve como cadena. Muy usado para monedas y precios.</p>
+      <div class="code-block">
+<span class="keyword">let</span> precio = <span class="number">9.8</span>;
+<span class="comment">// 2 decimales (moneda)</span>
+precio.<span class="method">toFixed</span>(<span class="number">2</span>);    <span class="output">// "9.80"</span>
+
+<span class="keyword">let</span> pi = <span class="number">3.14159265</span>;
+pi.<span class="method">toFixed</span>(<span class="number">0</span>);       <span class="output">// "3"</span>
+pi.<span class="method">toFixed</span>(<span class="number">4</span>);       <span class="output">// "3.1416" (redondea)</span>
+
+<span class="comment">// Corrige el problema flotante</span>
+(<span class="number">0.1</span> + <span class="number">0.2</span>).<span class="method">toFixed</span>(<span class="number">1</span>); <span class="output">// "0.3" ✅</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return (9.8).toFixed(2)+'\\n'+(3.14159265).toFixed(4)+'\\n'+(0.1+0.2).toFixed(1);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">toPrecision()</div>
+      <h3>toPrecision(dígitos)</h3>
+      <p class="definition">Devuelve el número con una cantidad específica de dígitos significativos en total (no solo decimales).</p>
+      <div class="code-block">
+<span class="keyword">let</span> n = <span class="number">123.456</span>;
+<span class="comment">// 4 dígitos significativos</span>
+n.<span class="method">toPrecision</span>(<span class="number">4</span>);   <span class="output">// "123.5"</span>
+<span class="comment">// 6 dígitos significativos</span>
+n.<span class="method">toPrecision</span>(<span class="number">6</span>);   <span class="output">// "123.456"</span>
+<span class="comment">// 2 dígitos → notación exponencial</span>
+n.<span class="method">toPrecision</span>(<span class="number">2</span>);   <span class="output">// "1.2e+2"</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let n=123.456;
+return n.toPrecision(4)+'\\n'+n.toPrecision(6)+'\\n'+n.toPrecision(2);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">valueOf()</div>
+      <h3>valueOf()</h3>
+      <p class="definition">Devuelve el valor primitivo de un objeto Number. JS lo llama internamente; raramente se usa de forma explícita.</p>
+      <div class="code-block">
+<span class="keyword">let</span> objetoNum = <span class="keyword">new</span> <span class="method">Number</span>(<span class="number">42</span>);
+
+<span class="comment">// Recupera el primitivo del objeto</span>
+objetoNum.<span class="method">valueOf</span>();      <span class="output">// 42 (number)</span>
+
+<span class="comment">// JS lo llama automáticamente en operaciones</span>
+objetoNum + <span class="number">8</span>;           <span class="output">// 50</span>
+
+<span class="comment">// Primitivos también tienen valueOf</span>
+(<span class="number">99</span>).<span class="method">valueOf</span>();           <span class="output">// 99</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+let o = new Number(42);
+return 'valueOf: '+o.valueOf()+'\\ntipo: '+typeof o.valueOf()+'\\no+8: '+(o+8);
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECCIÓN 3: MÉTODOS ESTÁTICOS -->
+<section id="estaticos">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(16,185,129,0.1); border:1px solid rgba(16,185,129,0.2)">🛡️</div>
+    <div class="section-title">
+      <h2>Métodos Estáticos</h2>
+      <p>Se llaman sobre <code style="color:var(--accent3); font-family: 'JetBrains Mono', monospace;">Number</code> directamente, no sobre una instancia</p>
+    </div>
+  </div>
+
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-label">Number.isFinite()</div>
+      <h3>Number.isFinite()</h3>
+      <p class="definition">Comprueba si un valor es un número finito real. Más estricto que el global isFinite() ya que NO convierte el tipo.</p>
+      <div class="code-block">
+Number.<span class="method">isFinite</span>(<span class="number">42</span>);         <span class="output">// true</span>
+Number.<span class="method">isFinite</span>(<span class="method">Infinity</span>); <span class="output">// false</span>
+Number.<span class="method">isFinite</span>(-<span class="method">Infinity</span>);<span class="output">// false</span>
+Number.<span class="method">isFinite</span>(<span class="method">NaN</span>);      <span class="output">// false</span>
+
+<span class="comment">// Diferencia: isFinite() global convierte</span>
+<span class="method">isFinite</span>(<span class="string">"42"</span>);           <span class="output">// true ⚠️ convierte</span>
+Number.<span class="method">isFinite</span>(<span class="string">"42"</span>);   <span class="output">// false ✅ estricto</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [Number.isFinite(42), Number.isFinite(Infinity), Number.isFinite(NaN), isFinite('42'), Number.isFinite('42')].join('\\n');
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Number.isInteger()</div>
+      <h3>Number.isInteger()</h3>
+      <p class="definition">Verifica si un valor es un número entero (sin parte decimal). No realiza conversión de tipo.</p>
+      <div class="code-block">
+Number.<span class="method">isInteger</span>(<span class="number">10</span>);      <span class="output">// true</span>
+Number.<span class="method">isInteger</span>(<span class="number">10.0</span>);    <span class="output">// true (= 10)</span>
+Number.<span class="method">isInteger</span>(<span class="number">10.5</span>);    <span class="output">// false</span>
+Number.<span class="method">isInteger</span>(<span class="string">"10"</span>);   <span class="output">// false (string)</span>
+Number.<span class="method">isInteger</span>(<span class="method">NaN</span>);     <span class="output">// false</span>
+Number.<span class="method">isInteger</span>(<span class="method">Infinity</span>);<span class="output">// false</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [Number.isInteger(10), Number.isInteger(10.0), Number.isInteger(10.5), Number.isInteger('10')].join('\\n');
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Number.isNaN()</div>
+      <h3>Number.isNaN()</h3>
+      <p class="definition">Comprueba si el valor es exactamente NaN. Más confiable que isNaN() global porque NO convierte el argumento.</p>
+      <div class="code-block">
+Number.<span class="method">isNaN</span>(<span class="method">NaN</span>);        <span class="output">// true</span>
+Number.<span class="method">isNaN</span>(<span class="number">100</span>/<span class="string">"abc"</span>);<span class="output">// true</span>
+Number.<span class="method">isNaN</span>(<span class="number">42</span>);        <span class="output">// false</span>
+
+<span class="comment">// isNaN global convierte: ¡peligroso!</span>
+<span class="method">isNaN</span>(<span class="string">"hola"</span>);          <span class="output">// true ⚠️ string→NaN</span>
+Number.<span class="method">isNaN</span>(<span class="string">"hola"</span>);   <span class="output">// false ✅ no convierte</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return 'Number.isNaN(NaN): '+Number.isNaN(NaN)+'\\nNumber.isNaN("hola"): '+Number.isNaN("hola")+'\\nisNaN("hola"): '+isNaN("hola");
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Number.isSafeInteger()</div>
+      <h3>Number.isSafeInteger()</h3>
+      <p class="definition">Verifica si el número es un entero seguro, es decir, representable exactamente en IEEE 754 (entre ±2⁵³−1).</p>
+      <div class="code-block">
+Number.<span class="method">isSafeInteger</span>(<span class="number">42</span>);              <span class="output">// true</span>
+Number.<span class="method">isSafeInteger</span>(Number.MAX_SAFE_INTEGER); <span class="output">// true</span>
+
+<span class="comment">// 2^53 NO es seguro</span>
+Number.<span class="method">isSafeInteger</span>(Math.<span class="method">pow</span>(<span class="number">2</span>,<span class="number">53</span>)); <span class="output">// false</span>
+Number.<span class="method">isSafeInteger</span>(<span class="number">10.5</span>);           <span class="output">// false (decimal)</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [Number.isSafeInteger(42), Number.isSafeInteger(Number.MAX_SAFE_INTEGER), Number.isSafeInteger(Math.pow(2,53)), Number.isSafeInteger(10.5)].join('\\n');
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Number.parseInt()</div>
+      <h3>Number.parseInt()</h3>
+      <p class="definition">Convierte una cadena en entero. Lee hasta el primer carácter no numérico. Acepta una base (radix) opcional.</p>
+      <div class="code-block">
+Number.<span class="method">parseInt</span>(<span class="string">"42"</span>);       <span class="output">// 42</span>
+Number.<span class="method">parseInt</span>(<span class="string">"42.9"</span>);     <span class="output">// 42 (trunca)</span>
+Number.<span class="method">parseInt</span>(<span class="string">"42px"</span>);     <span class="output">// 42 (ignora px)</span>
+Number.<span class="method">parseInt</span>(<span class="string">"abc"</span>);      <span class="output">// NaN</span>
+
+<span class="comment">// Con base (hexadecimal)</span>
+Number.<span class="method">parseInt</span>(<span class="string">"ff"</span>, <span class="number">16</span>);   <span class="output">// 255</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [Number.parseInt('42'), Number.parseInt('42.9'), Number.parseInt('42px'), Number.parseInt('abc'), Number.parseInt('ff',16)].join('\\n');
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+    <div class="card">
+      <div class="card-label">Number.parseFloat()</div>
+      <h3>Number.parseFloat()</h3>
+      <p class="definition">Convierte una cadena en número de punto flotante. Preserva la parte decimal, a diferencia de parseInt.</p>
+      <div class="code-block">
+Number.<span class="method">parseFloat</span>(<span class="string">"3.14"</span>);    <span class="output">// 3.14</span>
+Number.<span class="method">parseFloat</span>(<span class="string">"3.14abc"</span>); <span class="output">// 3.14 (ignora)</span>
+Number.<span class="method">parseFloat</span>(<span class="string">"10"</span>);      <span class="output">// 10</span>
+Number.<span class="method">parseFloat</span>(<span class="string">"abc"</span>);     <span class="output">// NaN</span>
+
+<span class="comment">// vs parseInt</span>
+Number.<span class="method">parseInt</span>(<span class="string">"3.99"</span>);     <span class="output">// 3</span>
+Number.<span class="method">parseFloat</span>(<span class="string">"3.99"</span>);  <span class="output">// 3.99</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [Number.parseFloat('3.14'), Number.parseFloat('3.14abc'), Number.parseFloat('abc'), Number.parseInt('3.99'), Number.parseFloat('3.99')].join('\\n');
+      `)">▶ Ejecutar</button>
+      <div class="output-box"></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- SECCIÓN 4: PROPIEDADES -->
+<section id="propiedades">
+  <div class="section-header">
+    <div class="section-icon" style="background:rgba(245,158,11,0.1); border:1px solid rgba(245,158,11,0.2)">📐</div>
+    <div class="section-title">
+      <h2>Propiedades Numéricas</h2>
+      <p>Constantes del objeto <code style="color:var(--warn); font-family: 'JetBrains Mono', monospace;">Number</code> — valores límite y especiales del sistema</p>
+    </div>
+  </div>
+
+  <div class="prop-grid" id="propGrid"></div>
+
+  <div style="margin-top:30px">
+    <div class="full-card">
+      <h3>Código completo de propiedades <span class="badge badge-warn">ejecutable</span></h3>
+      <p class="definition">Visualiza todas las propiedades en una sola ejecución</p>
+      <div class="code-block">
+<span class="comment">// ── EPSILON ─────────────────────────────</span>
+<span class="comment">// La diferencia mínima entre dos floats distintos</span>
+console.<span class="method">log</span>(Number.<span class="keyword">EPSILON</span>); <span class="output">// 2.220446049250313e-16</span>
+
+<span class="comment">// ── MAX_VALUE / MIN_VALUE ────────────────</span>
+<span class="comment">// El mayor y menor positivo representable</span>
+console.<span class="method">log</span>(Number.<span class="keyword">MAX_VALUE</span>); <span class="output">// 1.7976931348623157e+308</span>
+console.<span class="method">log</span>(Number.<span class="keyword">MIN_VALUE</span>); <span class="output">// 5e-324</span>
+
+<span class="comment">// ── MAX_SAFE / MIN_SAFE INTEGER ──────────</span>
+<span class="comment">// Rango seguro para operaciones enteras exactas</span>
+console.<span class="method">log</span>(Number.<span class="keyword">MAX_SAFE_INTEGER</span>); <span class="output">// 9007199254740991</span>
+console.<span class="method">log</span>(Number.<span class="keyword">MIN_SAFE_INTEGER</span>); <span class="output">// -9007199254740991</span>
+
+<span class="comment">// ── POSITIVE/NEGATIVE INFINITY ──────────</span>
+console.<span class="method">log</span>(Number.<span class="keyword">POSITIVE_INFINITY</span>); <span class="output">// Infinity</span>
+console.<span class="method">log</span>(Number.<span class="keyword">NEGATIVE_INFINITY</span>); <span class="output">// -Infinity</span>
+
+<span class="comment">// ── NaN ──────────────────────────────────</span>
+<span class="comment">// Propiedad estática del objeto Number</span>
+console.<span class="method">log</span>(Number.<span class="keyword">NaN</span>); <span class="output">// NaN</span>
+      </div>
+      <button class="run-btn" onclick="runCode(this, `
+return [
+  'EPSILON: '+Number.EPSILON,
+  'MAX_VALUE: '+Number.MAX_VALUE,
+  'MIN_VALUE: '+Number.MIN_VALUE,
+  'MAX_SAFE_INTEGER: '+Number.MAX_SAFE_INTEGER,
+  'MIN_SAFE_INTEGER: '+Number.MIN_SAFE_INTEGER,
+  'POSITIVE_INFINITY: '+Number.POSITIVE_INFINITY,
+  'NEGATIVE_INFINITY: '+Number.NEGATIVE_INFINITY,
+  'NaN: '+Number.NaN
+].join('\\n');
+      `)">▶ Ejecutar todo</button>
+      <div class="output-box"></div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>
