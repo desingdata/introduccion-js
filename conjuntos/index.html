@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conjuntos en Introducción a JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  @import url('./css/style.css');
+</style>
+</head>
+<body>
+
+<header>
+  <div class="tag">Proyecto Práctico · ES6+</div>
+  <h1>Conjuntos en <span>JavaScript</span></h1>
+  <p>// Estructura Set — colección de valores únicos sin duplicados</p>
+</header>
+
+<div class="container">
+
+  <!-- 1. Creación -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">01</div>
+      <div>
+        <div class="section-title">Creación de un Set</div>
+        <div class="section-def">// Un Set almacena valores únicos de cualquier tipo. Los duplicados se ignoran automáticamente.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="code-panel">
+        <div class="panel-label"><span class="dot"></span> código</div>
+        <pre>
+<span class="cm">// new Set() — crea un conjunto vacío o desde iterable</span>
+<span class="kw">const</span> <span class="cn">frutas</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([
+  <span class="st">'manzana'</span>, <span class="st">'pera'</span>, <span class="st">'mango'</span>,
+  <span class="st">'manzana'</span>, <span class="st">'pera'</span>  <span class="cm">// ← duplicados</span>
+]);
+
+<span class="cm">// .size — propiedad que retorna el número de elementos</span>
+console.<span class="fn">log</span>(frutas.<span class="cn">size</span>);
+
+<span class="cm">// El Set elimina automáticamente los duplicados</span>
+console.<span class="fn">log</span>(frutas);
+        </pre>
+      </div>
+      <div class="output-panel">
+        <div class="panel-label"><span class="dot out"></span> salida</div>
+        <div class="output-line">3</div>
+        <div class="output-line">Set(3) { 'manzana', 'pera', 'mango' }</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Métodos básicos -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">02</div>
+      <div>
+        <div class="section-title">Métodos: add, has, delete, clear</div>
+        <div class="section-def">// Operaciones básicas para gestionar los elementos del conjunto.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="code-panel">
+        <div class="panel-label"><span class="dot"></span> código</div>
+        <pre>
+<span class="kw">const</span> <span class="cn">nums</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([<span class="nm">1</span>, <span class="nm">2</span>, <span class="nm">3</span>]);
+
+<span class="cm">// .add(valor) — agrega un elemento; retorna el mismo Set</span>
+nums.<span class="fn">add</span>(<span class="nm">4</span>).<span class="fn">add</span>(<span class="nm">5</span>);
+
+<span class="cm">// .has(valor) — verifica si el elemento existe (boolean)</span>
+console.<span class="fn">log</span>(nums.<span class="fn">has</span>(<span class="nm">3</span>));  <span class="cm">// true</span>
+console.<span class="fn">log</span>(nums.<span class="fn">has</span>(<span class="nm">9</span>));  <span class="cm">// false</span>
+
+<span class="cm">// .delete(valor) — elimina un elemento específico</span>
+nums.<span class="fn">delete</span>(<span class="nm">2</span>);
+console.<span class="fn">log</span>(nums);
+
+<span class="cm">// .clear() — vacía todo el conjunto</span>
+<span class="kw">const</span> <span class="cn">temp</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([<span class="nm">10</span>, <span class="nm">20</span>]);
+temp.<span class="fn">clear</span>();
+console.<span class="fn">log</span>(temp.<span class="cn">size</span>);
+        </pre>
+      </div>
+      <div class="output-panel">
+        <div class="panel-label"><span class="dot out"></span> salida</div>
+        <div class="output-line">true</div>
+        <div class="output-line">false</div>
+        <div class="output-line">Set(4) { 1, 3, 4, 5 }</div>
+        <div class="output-line">0</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Iteración -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">03</div>
+      <div>
+        <div class="section-title">Iteración: for...of, forEach, spread</div>
+        <div class="section-def">// Un Set es iterable; se puede recorrer o convertir a array fácilmente.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="code-panel">
+        <div class="panel-label"><span class="dot"></span> código</div>
+        <pre>
+<span class="kw">const</span> <span class="cn">colores</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([<span class="st">'rojo'</span>,<span class="st">'verde'</span>,<span class="st">'azul'</span>]);
+
+<span class="cm">// for...of — recorre cada valor del conjunto</span>
+<span class="kw">for</span> (<span class="kw">const</span> <span class="cn">color</span> <span class="kw">of</span> colores) {
+  console.<span class="fn">log</span>(<span class="st">`Color: </span>${<span class="cn">color</span>}<span class="st">`</span>);
+}
+
+<span class="cm">// .forEach(callback) — igual que en arrays</span>
+colores.<span class="fn">forEach</span>(<span class="cn">c</span> <span class="op">=></span> console.<span class="fn">log</span>(c.<span class="fn">toUpperCase</span>()));
+
+<span class="cm">// Spread operator [...set] — convierte Set a Array</span>
+<span class="kw">const</span> <span class="cn">arr</span> <span class="op">=</span> [...colores];
+console.<span class="fn">log</span>(arr);
+
+<span class="cm">// Array.from(set) — otra forma de convertir</span>
+<span class="kw">const</span> <span class="cn">arr2</span> <span class="op">=</span> Array.<span class="fn">from</span>(colores);
+console.<span class="fn">log</span>(arr2[<span class="nm">0</span>]);
+        </pre>
+      </div>
+      <div class="output-panel">
+        <div class="panel-label"><span class="dot out"></span> salida</div>
+        <div class="output-line">Color: rojo</div>
+        <div class="output-line">Color: verde</div>
+        <div class="output-line">Color: azul</div>
+        <div class="output-line">ROJO  VERDE  AZUL</div>
+        <div class="output-line">['rojo', 'verde', 'azul']</div>
+        <div class="output-line">'rojo'</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Eliminar duplicados -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">04</div>
+      <div>
+        <div class="section-title">Caso de uso: Eliminar duplicados de un Array</div>
+        <div class="section-def">// El Set es la forma más elegante y eficiente de limpiar arrays con repetidos.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="code-panel">
+        <div class="panel-label"><span class="dot"></span> código</div>
+        <pre>
+<span class="kw">const</span> <span class="cn">datos</span> <span class="op">=</span> [<span class="nm">5</span>,<span class="nm">3</span>,<span class="nm">8</span>,<span class="nm">3</span>,<span class="nm">1</span>,<span class="nm">5</span>,<span class="nm">9</span>,<span class="nm">8</span>,<span class="nm">2</span>];
+
+<span class="cm">// Conversión: Array → Set → Array</span>
+<span class="cm">// El Set descarta los repetidos al construirse</span>
+<span class="kw">const</span> <span class="cn">sinDuplicados</span> <span class="op">=</span> [...<span class="kw">new</span> <span class="fn">Set</span>(datos)];
+console.<span class="fn">log</span>(sinDuplicados);
+
+<span class="cm">// Función genérica reutilizable</span>
+<span class="kw">const</span> <span class="cn">unique</span> <span class="op">=</span> <span class="cn">arr</span> <span class="op">=></span> [...<span class="kw">new</span> <span class="fn">Set</span>(arr)];
+
+<span class="kw">const</span> <span class="cn">tags</span> <span class="op">=</span> [<span class="st">'js'</span>,<span class="st">'css'</span>,<span class="st">'js'</span>,<span class="st">'html'</span>,<span class="st">'css'</span>];
+console.<span class="fn">log</span>(<span class="fn">unique</span>(tags));
+        </pre>
+      </div>
+      <div class="output-panel">
+        <div class="panel-label"><span class="dot out"></span> salida</div>
+        <div class="output-line">[5, 3, 8, 1, 9, 2]</div>
+        <div class="output-line">['js', 'css', 'html']</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Operaciones de conjuntos -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">05</div>
+      <div>
+        <div class="section-title">Operaciones matemáticas: Unión, Intersección, Diferencia</div>
+        <div class="section-def">// Algebra de conjuntos: combinar, intersectar o restar dos Sets como en matemáticas.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="code-panel">
+        <div class="panel-label"><span class="dot"></span> código</div>
+        <pre>
+<span class="kw">const</span> <span class="cn">A</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([<span class="nm">1</span>,<span class="nm">2</span>,<span class="nm">3</span>,<span class="nm">4</span>]);
+<span class="kw">const</span> <span class="cn">B</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([<span class="nm">3</span>,<span class="nm">4</span>,<span class="nm">5</span>,<span class="nm">6</span>]);
+
+<span class="cm">// UNIÓN — todos los elementos de A y B (sin repetir)</span>
+<span class="kw">const</span> <span class="cn">union</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>([...A, ...B]);
+console.<span class="fn">log</span>(<span class="st">'Unión:'</span>, union);
+
+<span class="cm">// INTERSECCIÓN — solo elementos en ambos conjuntos</span>
+<span class="kw">const</span> <span class="cn">interseccion</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>(
+  [...A].<span class="fn">filter</span>(<span class="cn">x</span> <span class="op">=></span> B.<span class="fn">has</span>(x))
+);
+console.<span class="fn">log</span>(<span class="st">'Intersección:'</span>, interseccion);
+
+<span class="cm">// DIFERENCIA — elementos de A que NO están en B</span>
+<span class="kw">const</span> <span class="cn">diferencia</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">Set</span>(
+  [...A].<span class="fn">filter</span>(<span class="cn">x</span> <span class="op">=></span> !B.<span class="fn">has</span>(x))
+);
+console.<span class="fn">log</span>(<span class="st">'Diferencia A-B:'</span>, diferencia);
+        </pre>
+      </div>
+      <div class="output-panel">
+        <div class="panel-label"><span class="dot out"></span> salida</div>
+        <div class="output-line">Unión: Set(6) { 1, 2, 3, 4, 5, 6 }</div>
+        <div class="output-line">Intersección: Set(2) { 3, 4 }</div>
+        <div class="output-line">Diferencia A-B: Set(2) { 1, 2 }</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. WeakSet -->
+  <div class="section">
+    <div class="section-header">
+      <div class="section-num">06</div>
+      <div>
+        <div class="section-title">WeakSet: referencias débiles a objetos</div>
+        <div class="section-def">// WeakSet solo acepta objetos y no impide que sean eliminados por el Garbage Collector.</div>
+      </div>
+    </div>
+    <div class="section-body">
+      <div class="code-panel">
+        <div class="panel-label"><span class="dot"></span> código</div>
+        <pre>
+<span class="cm">// WeakSet — conjunto de objetos con referencias débiles</span>
+<span class="cm">// No tiene .size ni es iterable (por diseño)</span>
+<span class="kw">const</span> <span class="cn">visitados</span> <span class="op">=</span> <span class="kw">new</span> <span class="fn">WeakSet</span>();
+
+<span class="kw">let</span> <span class="cn">nodo1</span> <span class="op">=</span> { <span class="cn">id</span>: <span class="nm">1</span>, <span class="cn">nombre</span>: <span class="st">'Home'</span> };
+<span class="kw">let</span> <span class="cn">nodo2</span> <span class="op">=</span> { <span class="cn">id</span>: <span class="nm">2</span>, <span class="cn">nombre</span>: <span class="st">'About'</span> };
+
+<span class="cm">// .add() solo acepta objetos</span>
+visitados.<span class="fn">add</span>(nodo1);
+visitados.<span class="fn">add</span>(nodo2);
+
+<span class="cm">// .has() — verifica si el objeto fue agregado</span>
+console.<span class="fn">log</span>(visitados.<span class="fn">has</span>(nodo1)); <span class="cm">// true</span>
+
+<span class="cm">// Si nodo1 = null, el GC puede liberarlo</span>
+<span class="cm">// El WeakSet no bloquea la recolección de basura</span>
+nodo1 <span class="op">=</span> <span class="kw">null</span>;
+console.<span class="fn">log</span>(<span class="st">'nodo2 visitado:'</span>, visitados.<span class="fn">has</span>(nodo2));
+        </pre>
+      </div>
+      <div class="output-panel">
+        <div class="panel-label"><span class="dot out"></span> salida</div>
+        <div class="output-line">true</div>
+        <div class="output-line">nodo2 visitado: true</div>
+        <div class="output-line" style="color:var(--muted);font-size:0.7rem;margin-top:0.5rem">// nodo1 queda disponible para GC</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLAYGROUND -->
+  <div class="playground">
+    <div class="playground-header">
+      <h2>Playground interactivo</h2>
+      <div class="playground-controls">
+        <button class="btn btn-primary" onclick="runCode()">▶ Ejecutar</button>
+        <button class="btn btn-secondary" onclick="clearOutput()">✕ Limpiar</button>
+        <button class="btn btn-secondary" onclick="loadExample()">↺ Ejemplo</button>
+      </div>
+    </div>
+    <div class="playground-body">
+      <textarea id="editor" spellcheck="false">// Escribe tu código aquí y experimenta con Sets
+const miSet = new Set([10, 20, 30, 20, 10]);
+
+miSet.add(40).add(50);
+miSet.delete(20);
+
+console.log('Tamaño:', miSet.size);
+console.log('¿Tiene 30?', miSet.has(30));
+console.log('Como array:', [...miSet]);
+
+// Prueba las operaciones matemáticas:
+const X = new Set([1,2,3,4,5]);
+const Y = new Set([4,5,6,7,8]);
+const union = new Set([...X,...Y]);
+console.log('Unión X∪Y:', [...union]);</textarea>
+      <div id="output-console">
+        <div class="log-line info">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Resumen de métodos -->
+  <div class="summary-grid">
+    <div class="summary-card">
+      <div class="method">new Set([iter])</div>
+      <div class="desc">Crea un conjunto, opcionalmente desde un iterable. Elimina duplicados.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">.add(valor)</div>
+      <div class="desc">Agrega un elemento. Si ya existe, no hace nada. Retorna el Set.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">.has(valor)</div>
+      <div class="desc">Devuelve true si el elemento pertenece al conjunto.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">.delete(valor)</div>
+      <div class="desc">Elimina el elemento indicado. Retorna true si existía.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">.clear()</div>
+      <div class="desc">Vacía completamente el conjunto.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">.size</div>
+      <div class="desc">Propiedad (no método) con la cantidad de elementos únicos.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">.forEach(cb)</div>
+      <div class="desc">Itera cada valor ejecutando el callback, igual que en Array.</div>
+    </div>
+    <div class="summary-card">
+      <div class="method">[...set]</div>
+      <div class="desc">Spread operator: convierte el Set en un Array estándar.</div>
+    </div>
+  </div>
+
+</div>
+
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+
+<script>
+  function runCode() {
+    const code = document.getElementById('editor').value;
+    const console_div = document.getElementById('output-console');
+    console_div.innerHTML = '';
+
+    const logs = [];
+    const fakeConsole = {
+      log: (...args) => logs.push({ type: 'log', msg: args.map(formatVal).join(' ') }),
+      error: (...args) => logs.push({ type: 'err', msg: args.map(formatVal).join(' ') }),
+      warn: (...args) => logs.push({ type: 'log', msg: '⚠ ' + args.map(formatVal).join(' ') }),
+    };
+
+    function formatVal(v) {
+      if (v instanceof Set) {
+        return `Set(${v.size}) { ${[...v].map(formatVal).join(', ')} }`;
+      }
+      if (Array.isArray(v)) return `[${v.map(formatVal).join(', ')}]`;
+      if (typeof v === 'string') return `'${v}'`;
+      return String(v);
+    }
+
+    try {
+      const fn = new Function('console', code);
+      fn(fakeConsole);
+    } catch (e) {
+      logs.push({ type: 'err', msg: '❌ ' + e.message });
+    }
+
+    if (logs.length === 0) {
+      console_div.innerHTML = '<div class="log-line info">// Sin salida. ¿Olvidaste console.log()?</div>';
+      return;
+    }
+
+    logs.forEach(l => {
+      const d = document.createElement('div');
+      d.className = 'log-line' + (l.type === 'err' ? ' err' : '');
+      d.textContent = l.msg;
+      console_div.appendChild(d);
+    });
+  }
+
+  function clearOutput() {
+    document.getElementById('output-console').innerHTML =
+      '<div class="log-line info">// Consola limpiada...</div>';
+  }
+
+  function loadExample() {
+    document.getElementById('editor').value =
+`// Operación: encontrar emails únicos suscriptos
+const suscripciones = [
+  'ana@mail.com', 'pedro@mail.com',
+  'ana@mail.com', 'luis@mail.com',
+  'pedro@mail.com', 'sofia@mail.com'
+];
+
+const unicos = new Set(suscripciones);
+console.log('Total recibidos:', suscripciones.length);
+console.log('Únicos:', unicos.size);
+console.log(unicos);
+
+// Verificar si un email está suscripto
+const buscar = 'sofia@mail.com';
+console.log(\`\${buscar} suscripto:\`, unicos.has(buscar));`;
+    runCode();
+  }
+
+  // Ejecutar al cargar
+  document.addEventListener('DOMContentLoaded', runCode);
+</script>
+</body>
+</html>
