@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Expresiones Regulares en Introducción al JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ── Variables de tema (cambio de color) ── */
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --border: #2a2a2a;
+    --text: #f0ece6;
+    --muted: #888;
+    --accent: #f7c948;
+    --accent2: #e8533a;
+    --code-bg: #1a1a1a;
+    --nav-bg: rgba(13,13,13,0.95);
+    --shadow: 0 4px 30px rgba(0,0,0,0.5);
+    --result-ok: #4caf82;
+    --result-no: #e8533a;
+  }
+  [data-theme="light"] {
+    --bg: #f5f0e8;
+    --surface: #fffdf7;
+    --border: #ddd8cc;
+    --text: #1a1a1a;
+    --muted: #777;
+    --accent: #d4930a;
+    --accent2: #c1391f;
+    --code-bg: #eee9de;
+    --nav-bg: rgba(245,240,232,0.96);
+    --shadow: 0 4px 30px rgba(0,0,0,0.12);
+  }
+  [data-theme="ocean"] {
+    --bg: #0a1628;
+    --surface: #0f1e36;
+    --border: #1e3a5f;
+    --text: #cde0ff;
+    --muted: #6b91c1;
+    --accent: #38c9e8;
+    --accent2: #a78bfa;
+    --code-bg: #0d1a2e;
+    --nav-bg: rgba(10,22,40,0.96);
+    --shadow: 0 4px 30px rgba(0,0,0,0.6);
+  }
+  [data-theme="forest"] {
+    --bg: #0c1a0e;
+    --surface: #121f14;
+    --border: #1f3822;
+    --text: #d4edda;
+    --muted: #6a9b70;
+    --accent: #6dd67a;
+    --accent2: #f0c040;
+    --code-bg: #101a12;
+    --nav-bg: rgba(12,26,14,0.96);
+    --shadow: 0 4px 30px rgba(0,0,0,0.6);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    transition: background .3s, color .3s;
+    line-height: 1.6;
+  }
+
+  /* ── NAV HAMBURGUESA ── */
+  nav {
+    position: fixed; top: 0; left: 0; width: 100%;
+    background: var(--nav-bg);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    z-index: 1000;
+    padding: 0 1.5rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+    transition: background .3s;
+  }
+  .nav-logo {
+    font-weight: 800; font-size: 1.1rem; letter-spacing: -0.5px;
+    color: var(--accent); text-decoration: none;
+  }
+  .nav-logo span { color: var(--text); }
+
+  /* Botones derecha */
+  .nav-right { display: flex; align-items: center; gap: .75rem; }
+
+  /* Selector de tema */
+  .theme-selector { display: flex; gap: .4rem; }
+  .theme-dot {
+    width: 20px; height: 20px; border-radius: 50%; border: 2px solid transparent;
+    cursor: pointer; transition: transform .2s, border-color .2s;
+  }
+  .theme-dot:hover { transform: scale(1.25); }
+  .theme-dot.active { border-color: var(--text); }
+  .theme-dot[data-t="dark"]   { background: #f7c948; }
+  .theme-dot[data-t="light"]  { background: #d4930a; }
+  .theme-dot[data-t="ocean"]  { background: #38c9e8; }
+  .theme-dot[data-t="forest"] { background: #6dd67a; }
+
+  /* Hamburguesa */
+  .hamburger {
+    display: none; flex-direction: column; gap: 5px;
+    cursor: pointer; background: none; border: none; padding: 4px;
+  }
+  .hamburger span {
+    display: block; width: 24px; height: 2px;
+    background: var(--text); border-radius: 2px;
+    transition: transform .3s, opacity .3s;
+  }
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  .nav-links {
+    display: flex; gap: 1.5rem; align-items: center;
+  }
+  .nav-links a {
+    color: var(--muted); text-decoration: none;
+    font-size: .9rem; font-weight: 700; letter-spacing: .5px;
+    transition: color .2s;
+  }
+  .nav-links a:hover { color: var(--accent); }
+
+  /* Mobile nav */
+  @media (max-width: 768px) {
+    .hamburger { display: flex; }
+    .nav-links {
+      position: fixed; top: 60px; left: 0; width: 100%;
+      background: var(--nav-bg); border-bottom: 1px solid var(--border);
+      flex-direction: column; gap: 0; align-items: stretch;
+      max-height: 0; overflow: hidden; transition: max-height .35s ease;
+    }
+    .nav-links.open { max-height: 300px; }
+    .nav-links a { padding: .85rem 1.5rem; border-bottom: 1px solid var(--border); }
+    .theme-selector { gap: .3rem; }
+  }
+
+  /* ── LAYOUT ── */
+  main { max-width: 900px; margin: 0 auto; padding: 80px 1.5rem 3rem; }
+
+  .hero {
+    text-align: center; padding: 3.5rem 0 2rem;
+    border-bottom: 1px solid var(--border); margin-bottom: 3rem;
+  }
+  .hero-tag {
+    display: inline-block; background: var(--accent); color: #000;
+    font-size: .75rem; font-weight: 700; letter-spacing: 2px;
+    padding: .25rem .75rem; border-radius: 2px; margin-bottom: 1rem; text-transform: uppercase;
+  }
+  .hero h1 { font-size: clamp(2rem, 5vw, 3.2rem); font-weight: 800; line-height: 1.1; }
+  .hero h1 em { color: var(--accent); font-style: normal; }
+  .hero p { color: var(--muted); margin-top: .75rem; font-size: 1.05rem; }
+
+  /* ── SECCIÓN ── */
+  .section { margin-bottom: 3.5rem; }
+  .section-header {
+    display: flex; align-items: baseline; gap: 1rem;
+    margin-bottom: 1.25rem; padding-bottom: .5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-num {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent); font-size: .9rem; font-weight: 700;
+  }
+  .section-title { font-size: 1.35rem; font-weight: 800; }
+  .section-def {
+    background: var(--surface); border-left: 3px solid var(--accent);
+    padding: .75rem 1rem; border-radius: 0 6px 6px 0;
+    color: var(--muted); font-size: .9rem; margin-bottom: 1.25rem;
+    font-style: italic;
+  }
+
+  /* ── CÓDIGO ── */
+  .code-block {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 8px; overflow: hidden; margin-bottom: 1rem;
+  }
+  .code-label {
+    background: var(--border); padding: .3rem .85rem;
+    font-family: 'JetBrains Mono', monospace; font-size: .75rem;
+    color: var(--muted); letter-spacing: 1px;
+  }
+  pre {
+    padding: 1rem 1.25rem; overflow-x: auto;
+    font-family: 'JetBrains Mono', monospace; font-size: .85rem;
+    line-height: 1.65; color: var(--text);
+  }
+  .kw  { color: var(--accent2); }
+  .fn  { color: var(--accent); }
+  .str { color: #a8d8a8; }
+  .rx  { color: #c9b1ff; }
+  .cm  { color: var(--muted); font-style: italic; }
+  .num { color: #f4a95b; }
+
+  /* ── PLAYGROUND ── */
+  .playground {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem; margin-top: 1rem;
+  }
+  .playground h3 { font-size: .9rem; font-weight: 700; margin-bottom: 1rem; color: var(--accent); }
+  .pg-row { display: flex; gap: .75rem; flex-wrap: wrap; margin-bottom: .75rem; }
+  .pg-row label { font-size: .8rem; color: var(--muted); display: block; margin-bottom: .3rem; }
+  .pg-input {
+    flex: 1; min-width: 160px;
+    background: var(--code-bg); border: 1px solid var(--border);
+    color: var(--text); padding: .5rem .75rem; border-radius: 6px;
+    font-family: 'JetBrains Mono', monospace; font-size: .85rem;
+    outline: none; transition: border-color .2s;
+  }
+  .pg-input:focus { border-color: var(--accent); }
+  .pg-btn {
+    background: var(--accent); color: #000; border: none;
+    padding: .5rem 1.25rem; border-radius: 6px; cursor: pointer;
+    font-family: 'Syne', sans-serif; font-weight: 700; font-size: .85rem;
+    transition: opacity .2s, transform .1s;
+  }
+  .pg-btn:hover { opacity: .88; }
+  .pg-btn:active { transform: scale(.97); }
+  .pg-result {
+    font-family: 'JetBrains Mono', monospace; font-size: .85rem;
+    padding: .6rem .85rem; border-radius: 6px; min-height: 2.4rem;
+    background: var(--code-bg); border: 1px solid var(--border);
+    word-break: break-all;
+  }
+  .ok  { color: var(--result-ok); }
+  .err { color: var(--result-no); }
+
+  /* ── TABLA FLAGS ── */
+  table { width: 100%; border-collapse: collapse; font-size: .88rem; margin-top: .75rem; }
+  th, td { padding: .55rem .9rem; border: 1px solid var(--border); text-align: left; }
+  th { background: var(--code-bg); color: var(--accent); font-family: 'JetBrains Mono', monospace; }
+  td code { font-family: 'JetBrains Mono', monospace; color: #c9b1ff; }
+  tr:hover td { background: var(--code-bg); }
+
+  /* ── CHEATSHEET ── */
+  .cheat-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: .6rem; margin-top: .75rem;
+  }
+  .cheat-item {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: .6rem .85rem;
+    display: flex; gap: .75rem; align-items: flex-start;
+  }
+  .cheat-item code { color: var(--accent); font-family: 'JetBrains Mono', monospace; font-size: .9rem; min-width: 40px; }
+  .cheat-item span { color: var(--muted); font-size: .8rem; }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .pg-row { flex-direction: column; }
+    .cheat-grid { grid-template-columns: 1fr 1fr; }
+    table { font-size: .78rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ════════════════════ NAV HAMBURGUESA ════════════════════ -->
+<nav>
+  <a class="nav-logo" href="#"><em>/</em>Regex<span>JS</span></a>
+
+  <!-- Links de navegación (colapsan en mobile) -->
+  <ul class="nav-links" id="navLinks">
+    <a href="#sintaxis">Sintaxis</a>
+    <a href="#flags">Flags</a>
+    <a href="#metodos">Métodos</a>
+    <a href="#grupos">Grupos</a>
+    <a href="#lookahead">Lookahead</a>
+    <a href="#playground">Playground</a>
+  </ul>
+
+  <div class="nav-right">
+    <!-- Selector de tema: 4 colores -->
+    <div class="theme-selector" title="Cambiar tema">
+      <div class="theme-dot active" data-t="dark"   title="Oscuro"></div>
+      <div class="theme-dot"       data-t="light"  title="Claro"></div>
+      <div class="theme-dot"       data-t="ocean"  title="Océano"></div>
+      <div class="theme-dot"       data-t="forest" title="Bosque"></div>
+    </div>
+    <!-- Botón hamburguesa -->
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ════════════════════ CONTENIDO ════════════════════ -->
+<main>
+
+  <div class="hero">
+    <div class="hero-tag">Introducción</div>
+    <h1>Expresiones Regulares<br>en <em>JavaScript</em></h1>
+    <p>Guía comentada con ejemplos interactivos · ES2024</p>
+  </div>
+
+  <!-- ── 1. ¿QUÉ ES UNA REGEX? ── -->
+  <section class="section" id="sintaxis">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2 class="section-title">Sintaxis y Creación</h2>
+    </div>
+    <p class="section-def">
+      Una <strong>expresión regular</strong> es un patrón de búsqueda que describe un conjunto de cadenas.
+      En JS se puede crear con literal <code>/patrón/flags</code> o con el constructor <code>new RegExp()</code>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-label">JavaScript</div>
+      <pre>
+<span class="cm">// ── Forma literal (preferida para patrones fijos) ──</span>
+<span class="kw">const</span> regex1 = <span class="rx">/hola/i</span>;          <span class="cm">// busca "hola" sin importar mayúsculas</span>
+
+<span class="cm">// ── Forma con constructor (útil para patrones dinámicos) ──</span>
+<span class="kw">const</span> patron = <span class="str">"hola"</span>;
+<span class="kw">const</span> regex2 = <span class="kw">new</span> <span class="fn">RegExp</span>(patron, <span class="str">"i"</span>); <span class="cm">// mismo efecto, patrón como string</span>
+
+<span class="cm">// ── Estructura: /  patrón  /  flags ──</span>
+<span class="cm">//               ↑ delimitadores, no van en el patrón</span>
+      </pre>
+    </div>
+
+    <!-- Mini playground: test básico -->
+    <div class="playground" id="pg-basic">
+      <h3>⚡ Prueba rápida — test()</h3>
+      <div class="pg-row">
+        <div style="flex:1;min-width:130px">
+          <label>Patrón (sin /…/)</label>
+          <input class="pg-input" id="pg1-pat" value="^hola" placeholder="patrón">
+        </div>
+        <div style="min-width:80px">
+          <label>Flags</label>
+          <input class="pg-input" id="pg1-flag" value="i" placeholder="i g m...">
+        </div>
+        <div style="flex:2;min-width:160px">
+          <label>Cadena de prueba</label>
+          <input class="pg-input" id="pg1-str" value="Hola mundo" placeholder="texto...">
+        </div>
+        <div style="align-self:flex-end">
+          <button class="pg-btn" onclick="runTest()">Probar</button>
+        </div>
+      </div>
+      <div class="pg-result" id="pg1-res">— resultado aquí —</div>
+    </div>
+  </section>
+
+  <!-- ── 2. FLAGS ── -->
+  <section class="section" id="flags">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2 class="section-title">Flags (Modificadores)</h2>
+    </div>
+    <p class="section-def">
+      Los <strong>flags</strong> modifican el comportamiento de la búsqueda. Se colocan después del segundo <code>/</code>.
+    </p>
+
+    <div class="code-block">
+      <div class="code-label">JavaScript</div>
+      <pre>
+<span class="kw">const</span> texto = <span class="str">"Hola hola HOLA"</span>;
+
+<span class="cm">// g → global: no para en la primera coincidencia</span>
+console.<span class="fn">log</span>(texto.<span class="fn">match</span>(<span class="rx">/hola/g</span>));     <span class="cm">// ["hola"]</span>
+
+<span class="cm">// i → insensible a mayúsculas</span>
+console.<span class="fn">log</span>(texto.<span class="fn">match</span>(<span class="rx">/hola/gi</span>));    <span class="cm">// ["Hola", "hola", "HOLA"]</span>
+
+<span class="cm">// m → multilinea: ^ y $ afectan cada línea</span>
+<span class="kw">const</span> ml = <span class="str">"línea1\nlínea2"</span>;
+console.<span class="fn">log</span>(ml.<span class="fn">match</span>(<span class="rx">/^línea/gm</span>));   <span class="cm">// ["línea", "línea"]</span>
+
+<span class="cm">// s → dotAll: el punto "." también captura saltos de línea</span>
+console.<span class="fn">log</span>(<span class="rx">/a.b/s</span>.<span class="fn">test</span>(<span class="str">"a\nb"</span>));      <span class="cm">// true</span>
+
+<span class="cm">// d → índices: agrega indices de inicio/fin al resultado (ES2022)</span>
+<span class="kw">const</span> m = <span class="rx">/cat/d</span>.<span class="fn">exec</span>(<span class="str">"concatenar"</span>);
+console.<span class="fn">log</span>(m.indices[<span class="num">0</span>]);          <span class="cm">// [3, 6]</span>
+      </pre>
+    </div>
+
+    <table>
+      <tr><th>Flag</th><th>Nombre</th><th>Descripción</th></tr>
+      <tr><td><code>g</code></td><td>global</td><td>Busca todas las coincidencias</td></tr>
+      <tr><td><code>i</code></td><td>ignoreCase</td><td>No distingue mayúsculas/minúsculas</td></tr>
+      <tr><td><code>m</code></td><td>multiline</td><td><code>^</code> y <code>$</code> aplican a cada línea</td></tr>
+      <tr><td><code>s</code></td><td>dotAll</td><td>El <code>.</code> captura <code>\n</code></td></tr>
+      <tr><td><code>u</code></td><td>unicode</td><td>Soporte completo Unicode</td></tr>
+      <tr><td><code>v</code></td><td>unicodeSets</td><td>Unicode con conjuntos (ES2024)</td></tr>
+      <tr><td><code>d</code></td><td>hasIndices</td><td>Índices de cada grupo (ES2022)</td></tr>
+    </table>
+  </section>
+
+  <!-- ── 3. MÉTODOS ── -->
+  <section class="section" id="metodos">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2 class="section-title">Métodos de String y RegExp</h2>
+    </div>
+    <p class="section-def">
+      JS ofrece métodos tanto en <code>RegExp</code> como en <code>String</code> para ejecutar una regex sobre texto.
+    </p>
+
+    <div class="code-block">
+      <div class="code-label">JavaScript</div>
+      <pre>
+<span class="kw">const</span> str = <span class="str">"precio: $99, descuento: $15"</span>;
+
+<span class="cm">// test() → devuelve true/false (más rápido para validar)</span>
+<span class="rx">/\$\d+/</span>.<span class="fn">test</span>(str);                        <span class="cm">// true</span>
+
+<span class="cm">// exec() → devuelve el primer match con metadatos</span>
+<span class="rx">/\$(\d+)/</span>.<span class="fn">exec</span>(str);                     <span class="cm">// ["$99", "99", index:8, ...]</span>
+
+<span class="cm">// match() → igual que exec() sin flag g; con g retorna array simple</span>
+str.<span class="fn">match</span>(<span class="rx">/\$\d+/g</span>);                     <span class="cm">// ["$99", "$15"]</span>
+
+<span class="cm">// matchAll() → iterador con TODOS los matches + grupos (requiere flag g)</span>
+[...<span class="str">str</span>.<span class="fn">matchAll</span>(<span class="rx">/\$(\d+)/g</span>)].<span class="fn">forEach</span>(m =>
+  console.<span class="fn">log</span>(m[<span class="num">1</span>])                      <span class="cm">// "99", "15"</span>
+);
+
+<span class="cm">// search() → índice del primer match, -1 si no hay</span>
+str.<span class="fn">search</span>(<span class="rx">/\$\d+/</span>);                     <span class="cm">// 8</span>
+
+<span class="cm">// replace() / replaceAll() → sustituir coincidencias</span>
+str.<span class="fn">replace</span>(<span class="rx">/\$(\d+)/g</span>, <span class="str">"€$1"</span>);        <span class="cm">// "precio: €99, descuento: €15"</span>
+
+<span class="cm">// split() → dividir cadena usando regex como separador</span>
+<span class="str">"uno1dos2tres"</span>.<span class="fn">split</span>(<span class="rx">/\d/</span>);            <span class="cm">// ["uno", "dos", "tres"]</span>
+      </pre>
+    </div>
+
+    <!-- Playground: replace -->
+    <div class="playground">
+      <h3>⚡ Playground — replace()</h3>
+      <div class="pg-row">
+        <div style="flex:1;min-width:130px">
+          <label>Patrón</label>
+          <input class="pg-input" id="pg2-pat" value="\$(\d+)" placeholder="patrón">
+        </div>
+        <div style="min-width:60px">
+          <label>Flags</label>
+          <input class="pg-input" id="pg2-flag" value="g" placeholder="flags">
+        </div>
+        <div style="flex:1;min-width:120px">
+          <label>Texto</label>
+          <input class="pg-input" id="pg2-str" value="precio: $99, descuento: $15">
+        </div>
+        <div style="flex:1;min-width:100px">
+          <label>Reemplazar con</label>
+          <input class="pg-input" id="pg2-rep" value="€$1">
+        </div>
+        <div style="align-self:flex-end">
+          <button class="pg-btn" onclick="runReplace()">Reemplazar</button>
+        </div>
+      </div>
+      <div class="pg-result" id="pg2-res">— resultado aquí —</div>
+    </div>
+  </section>
+
+  <!-- ── 4. CARACTERES ESPECIALES ── -->
+  <section class="section" id="cheatsheet">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2 class="section-title">Caracteres Especiales</h2>
+    </div>
+    <p class="section-def">
+      Los <strong>metacaracteres</strong> representan clases o posiciones genéricas dentro del patrón.
+    </p>
+    <div class="cheat-grid">
+      <div class="cheat-item"><code>.</code>  <span>Cualquier carácter (excepto \n sin /s)</span></div>
+      <div class="cheat-item"><code>\d</code> <span>Dígito [0-9]</span></div>
+      <div class="cheat-item"><code>\D</code> <span>No dígito</span></div>
+      <div class="cheat-item"><code>\w</code> <span>Palabra [a-zA-Z0-9_]</span></div>
+      <div class="cheat-item"><code>\W</code> <span>No palabra</span></div>
+      <div class="cheat-item"><code>\s</code> <span>Espacio en blanco</span></div>
+      <div class="cheat-item"><code>\S</code> <span>No espacio</span></div>
+      <div class="cheat-item"><code>^</code>  <span>Inicio de cadena / línea</span></div>
+      <div class="cheat-item"><code>$</code>  <span>Fin de cadena / línea</span></div>
+      <div class="cheat-item"><code>\b</code> <span>Límite de palabra</span></div>
+      <div class="cheat-item"><code>*</code>  <span>0 o más veces</span></div>
+      <div class="cheat-item"><code>+</code>  <span>1 o más veces</span></div>
+      <div class="cheat-item"><code>?</code>  <span>0 o 1 vez (opcional)</span></div>
+      <div class="cheat-item"><code>{n,m}</code><span>Entre n y m veces</span></div>
+      <div class="cheat-item"><code>[abc]</code><span>Conjunto: a, b ó c</span></div>
+      <div class="cheat-item"><code>[^abc]</code><span>Negación del conjunto</span></div>
+      <div class="cheat-item"><code>a|b</code><span>Alternativa: a ó b</span></div>
+      <div class="cheat-item"><code>(?:…)</code><span>Grupo no capturador</span></div>
+    </div>
+  </section>
+
+  <!-- ── 5. GRUPOS DE CAPTURA ── -->
+  <section class="section" id="grupos">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2 class="section-title">Grupos de Captura</h2>
+    </div>
+    <p class="section-def">
+      Los <strong>grupos</strong> <code>(…)</code> capturan sub-partes del match accesibles por índice o por nombre.
+    </p>
+
+    <div class="code-block">
+      <div class="code-label">JavaScript</div>
+      <pre>
+<span class="kw">const</span> fecha = <span class="str">"2024-07-15"</span>;
+
+<span class="cm">// ── Grupos numerados: $1 $2 $3 ──</span>
+<span class="kw">const</span> rxFecha = <span class="rx">/(\d{4})-(\d{2})-(\d{2})/</span>;
+<span class="kw">const</span> [, año, mes, dia] = rxFecha.<span class="fn">exec</span>(fecha);
+console.<span class="fn">log</span>(`${dia}/${mes}/${año}`);          <span class="cm">// "15/07/2024"</span>
+
+<span class="cm">// ── Grupos nombrados: (?&lt;nombre&gt;…) → accedidos por .groups ──</span>
+<span class="kw">const</span> rxNamed = <span class="rx">/(?&lt;año&gt;\d{4})-(?&lt;mes&gt;\d{2})-(?&lt;dia&gt;\d{2})/</span>;
+<span class="kw">const</span> { groups } = rxNamed.<span class="fn">exec</span>(fecha);
+console.<span class="fn">log</span>(groups.mes);                      <span class="cm">// "07"</span>
+
+<span class="cm">// ── Reemplazar usando grupos nombrados ──</span>
+fecha.<span class="fn">replace</span>(rxNamed, <span class="str">"$&lt;dia&gt;/$&lt;mes&gt;/$&lt;año&gt;"</span>); <span class="cm">// "15/07/2024"</span>
+
+<span class="cm">// ── Grupo no capturador (?:…): agrupa sin crear captura ──</span>
+<span class="rx">/(?:https?):\/\/([\w.]+)/</span>.<span class="fn">exec</span>(<span class="str">"https://example.com"</span>)[<span class="num">1</span>];
+<span class="cm">// → "example.com" (sin capturar "https")</span>
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── 6. LOOKAHEAD / LOOKBEHIND ── -->
+  <section class="section" id="lookahead">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2 class="section-title">Lookahead y Lookbehind</h2>
+    </div>
+    <p class="section-def">
+      Las <strong>aserciones de posición</strong> verifican lo que hay antes o después sin consumir caracteres (zero-width).
+    </p>
+
+    <div class="code-block">
+      <div class="code-label">JavaScript</div>
+      <pre>
+<span class="cm">// ── Lookahead positivo (?=…): lo que sigue debe coincidir ──</span>
+<span class="str">"100€ 200$"</span>.<span class="fn">match</span>(<span class="rx">/\d+(?=€)/g</span>);        <span class="cm">// ["100"]</span>
+
+<span class="cm">// ── Lookahead negativo (?!…): lo que sigue NO debe coincidir ──</span>
+<span class="str">"100€ 200$"</span>.<span class="fn">match</span>(<span class="rx">/\d+(?!€)/g</span>);        <span class="cm">// ["10", "200"]  ← parcial</span>
+
+<span class="cm">// ── Lookbehind positivo (?&lt;=…): lo que precede debe coincidir ──</span>
+<span class="str">"precio: $99 costo: €45"</span>.<span class="fn">match</span>(<span class="rx">/(?&lt;=\$)\d+/g</span>); <span class="cm">// ["99"]</span>
+
+<span class="cm">// ── Lookbehind negativo (?&lt;!…): lo que precede NO debe coincidir ──</span>
+<span class="str">"abc123def456"</span>.<span class="fn">match</span>(<span class="rx">/(?&lt;![a-z])\d+/g</span>); <span class="cm">// ["456"]</span>
+
+<span class="cm">// Uso práctico: validar contraseña con lookaheads múltiples</span>
+<span class="kw">const</span> validarPass = <span class="rx">/^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%]).{8,}$/</span>;
+<span class="cm">// Requiere: ≥1 mayúscula, ≥1 dígito, ≥1 símbolo, mínimo 8 chars</span>
+console.<span class="fn">log</span>(validarPass.<span class="fn">test</span>(<span class="str">"Segur0!pass"</span>));  <span class="cm">// true</span>
+console.<span class="fn">log</span>(validarPass.<span class="fn">test</span>(<span class="str">"debil"</span>));        <span class="cm">// false</span>
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── 7. CASOS REALES ── -->
+  <section class="section" id="casos">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <h2 class="section-title">Casos de Uso Reales</h2>
+    </div>
+    <p class="section-def">
+      Patrones comunes listos para usar: validación de email, URL, teléfono, tarjeta de crédito y más.
+    </p>
+
+    <div class="code-block">
+      <div class="code-label">JavaScript</div>
+      <pre>
+<span class="cm">// ── Email ──</span>
+<span class="kw">const</span> rxEmail = <span class="rx">/^[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}$/</span>;
+rxEmail.<span class="fn">test</span>(<span class="str">"user@example.com"</span>);         <span class="cm">// true</span>
+
+<span class="cm">// ── URL (http / https) ──</span>
+<span class="kw">const</span> rxUrl = <span class="rx">/^https?:\/\/[\w-]+(\.[\w-]+)+(\/\S*)?$/</span>;
+rxUrl.<span class="fn">test</span>(<span class="str">"https://example.com/path?q=1"</span>); <span class="cm">// true</span>
+
+<span class="cm">// ── Teléfono Colombia (+57 seguido de 10 dígitos) ──</span>
+<span class="kw">const</span> rxTel = <span class="rx">/^(\+57)?[3][0-9]{9}$/</span>;
+rxTel.<span class="fn">test</span>(<span class="str">"3001234567"</span>);                 <span class="cm">// true</span>
+
+<span class="cm">// ── Tarjeta de crédito (16 dígitos, grupos de 4) ──</span>
+<span class="kw">const</span> rxCard = <span class="rx">/^(\d{4}[\s-]?){4}$/</span>;
+rxCard.<span class="fn">test</span>(<span class="str">"1234 5678 9012 3456"</span>);          <span class="cm">// true</span>
+
+<span class="cm">// ── Extraer hashtags ──</span>
+<span class="str">"Aprende #JavaScript y #Regex hoy"</span>.<span class="fn">match</span>(<span class="rx">/#\w+/g</span>);
+<span class="cm">// → ["#JavaScript", "#Regex"]</span>
+
+<span class="cm">// ── Slug URL amigable ──</span>
+<span class="str">"¡Hola Mundo! Expresiones Regulares"</span>
+  .<span class="fn">normalize</span>(<span class="str">"NFD"</span>).<span class="fn">replace</span>(<span class="rx">/[\u0300-\u036f]/g</span>, <span class="str">""</span>)
+  .<span class="fn">toLowerCase</span>().<span class="fn">replace</span>(<span class="rx">/[^a-z0-9]+/g</span>, <span class="str">"-"</span>);
+<span class="cm">// → "hola-mundo-expresiones-regulares"</span>
+      </pre>
+    </div>
+  </section>
+
+  <!-- ── 8. PLAYGROUND COMPLETO ── -->
+  <section class="section" id="playground">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <h2 class="section-title">Playground — Validador en Vivo</h2>
+    </div>
+    <p class="section-def">
+      Escribe tu propio patrón y pruébalo en tiempo real con <code>matchAll()</code>.
+    </p>
+
+    <div class="playground">
+      <h3>⚡ matchAll() en tiempo real</h3>
+      <div class="pg-row">
+        <div style="flex:1;min-width:160px">
+          <label>Patrón</label>
+          <input class="pg-input" id="live-pat" value="[\w.+-]+@[\w-]+\.[a-zA-Z]{2,}" oninput="runLive()">
+        </div>
+        <div style="min-width:70px">
+          <label>Flags</label>
+          <input class="pg-input" id="live-flag" value="gi" oninput="runLive()">
+        </div>
+      </div>
+      <div class="pg-row">
+        <div style="flex:1">
+          <label>Texto de prueba</label>
+          <textarea class="pg-input" id="live-str" rows="3" style="resize:vertical;width:100%" oninput="runLive()">Contactos: juan@gmail.com, soporte@empresa.co, info@test.org, no_es_email, otro@correo.net</textarea>
+        </div>
+      </div>
+      <div class="pg-result" id="live-res">— escribe arriba para ver resultados —</div>
+    </div>
+  </section>
+
+  <footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+</main>
+
+<!-- ════════════════════ SCRIPTS ════════════════════ -->
+<script>
+  // ── HAMBURGUESA: toggle del menú móvil ──
+  const ham = document.getElementById('hamburger');
+  const navLinks = document.getElementById('navLinks');
+
+  ham.addEventListener('click', () => {
+    ham.classList.toggle('open');      // anima las 3 líneas
+    navLinks.classList.toggle('open'); // despliega el menú
+  });
+
+  // Cerrar menú al hacer click en un link (mobile UX)
+  navLinks.querySelectorAll('a').forEach(a =>
+    a.addEventListener('click', () => {
+      ham.classList.remove('open');
+      navLinks.classList.remove('open');
+    })
+  );
+
+  // ── CAMBIO DE TEMA: setea atributo data-theme en <html> ──
+  document.querySelectorAll('.theme-dot').forEach(dot => {
+    dot.addEventListener('click', () => {
+      document.documentElement.setAttribute('data-theme', dot.dataset.t);
+      document.querySelectorAll('.theme-dot').forEach(d => d.classList.remove('active'));
+      dot.classList.add('active');
+    });
+  });
+
+  // ── PLAYGROUND 1: test() ──
+  function runTest() {
+    const pat  = document.getElementById('pg1-pat').value;
+    const flag = document.getElementById('pg1-flag').value;
+    const str  = document.getElementById('pg1-str').value;
+    const res  = document.getElementById('pg1-res');
+    try {
+      const rx = new RegExp(pat, flag);
+      const ok = rx.test(str);
+      res.innerHTML = ok
+        ? `<span class="ok">✔ COINCIDE</span>`
+        : `<span class="err">✘ NO COINCIDE</span>`;
+    } catch(e) {
+      res.innerHTML = `<span class="err">Error: ${e.message}</span>`;
+    }
+  }
+
+  // ── PLAYGROUND 2: replace() ──
+  function runReplace() {
+    const pat = document.getElementById('pg2-pat').value;
+    const fl  = document.getElementById('pg2-flag').value;
+    const str = document.getElementById('pg2-str').value;
+    const rep = document.getElementById('pg2-rep').value;
+    const res = document.getElementById('pg2-res');
+    try {
+      const rx = new RegExp(pat, fl);
+      res.textContent = str.replace(rx, rep);
+    } catch(e) {
+      res.innerHTML = `<span class="err">Error: ${e.message}</span>`;
+    }
+  }
+
+  // ── PLAYGROUND 3: matchAll() en tiempo real ──
+  function runLive() {
+    const pat = document.getElementById('live-pat').value;
+    const fl  = document.getElementById('live-flag').value;
+    const str = document.getElementById('live-str').value;
+    const res = document.getElementById('live-res');
+    try {
+      // matchAll requiere flag 'g'
+      const flags = fl.includes('g') ? fl : fl + 'g';
+      const rx = new RegExp(pat, flags);
+      const matches = [...str.matchAll(rx)].map(m => m[0]);
+      if (matches.length === 0) {
+        res.innerHTML = `<span class="err">Sin coincidencias</span>`;
+      } else {
+        res.innerHTML = matches
+          .map(m => `<span class="ok">${escHtml(m)}</span>`)
+          .join(' &nbsp; ');
+      }
+    } catch(e) {
+      res.innerHTML = `<span class="err">Error: ${e.message}</span>`;
+    }
+  }
+
+  // Escapar HTML para mostrar resultados de forma segura
+  function escHtml(s) {
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  // Ejecutar live playground al cargar para mostrar resultado inicial
+  runLive();
+</script>
+</body>
+</html>

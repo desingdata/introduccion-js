@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Mapas en Introducción a JavaScript</title>
+  <link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet"/>
+  <style>
+    @import url('./css/style.css');
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <!-- ══════════════ HEADER ══════════════ -->
+  <header>
+    <div class="tag">Introducción</div>
+    <h1>Mapas en <span>JavaScript</span></h1>
+    <p class="subtitle">Estructura, conceptos y demo interactiva paso a paso</p>
+  </header>
+
+  <!-- ══════════════ CONCEPTO 1: ¿Qué es Map? ══════════════ -->
+  <div class="concept-block">
+    <div class="concept-label">Concepto 01</div>
+    <div class="concept-title">¿Qué es un Map?</div>
+    <p class="concept-desc">
+      Un <strong>Map</strong> es una estructura de datos que almacena pares <em>clave → valor</em>. 
+      A diferencia de los objetos literales, las claves pueden ser de <em>cualquier tipo</em> 
+      (string, número, objeto, función…) y el orden de inserción se preserva.
+    </p>
+    <pre>
+<span class="cm">// Map: colección de pares clave-valor con claves de cualquier tipo</span>
+<span class="ck">const</span> <span class="cv">mapa</span> = <span class="ck">new</span> <span class="cv">Map</span>();
+
+<span class="cm">// Las claves pueden ser strings, números, objetos, etc.</span>
+<span class="ck">const</span> <span class="cv">claveObjeto</span> = { <span class="cs">id</span>: <span class="cn">1</span> };
+<span class="cv">mapa</span>.<span class="cv">set</span>(<span class="cs">'nombre'</span>,  <span class="cs">'Ana'</span>);      <span class="cm">// clave string</span>
+<span class="cv">mapa</span>.<span class="cv">set</span>(<span class="cn">42</span>,         <span class="cs">'respuesta'</span>); <span class="cm">// clave número</span>
+<span class="cv">mapa</span>.<span class="cv">set</span>(<span class="cv">claveObjeto</span>, <span class="cs">'datos'</span>);    <span class="cm">// clave objeto</span></pre>
+  </div>
+
+  <!-- ══════════════ CONCEPTO 2: Creación e inicialización ══════════════ -->
+  <div class="concept-block">
+    <div class="concept-label">Concepto 02</div>
+    <div class="concept-title">Creación e inicialización</div>
+    <p class="concept-desc">
+      Un Map puede crearse vacío o inicializarse con un <strong>iterable de pares [clave, valor]</strong>, 
+      como un array de arrays de dos elementos.
+    </p>
+    <pre>
+<span class="cm">// Inicialización desde un array de pares [clave, valor]</span>
+<span class="ck">const</span> <span class="cv">precios</span> = <span class="ck">new</span> <span class="cv">Map</span>([
+  [<span class="cs">'manzana'</span>, <span class="cn">1.5</span>],
+  [<span class="cs">'naranja'</span>, <span class="cn">2.0</span>],
+  [<span class="cs">'uva'</span>,     <span class="cn">3.5</span>]
+]);
+
+<span class="cm">// También desde Object.entries() para convertir objetos a Map</span>
+<span class="ck">const</span> <span class="cv">obj</span>       = { a: <span class="cn">1</span>, b: <span class="cn">2</span>, c: <span class="cn">3</span> };
+<span class="ck">const</span> <span class="cv">desdeObj</span>  = <span class="ck">new</span> <span class="cv">Map</span>(<span class="cv">Object</span>.<span class="cv">entries</span>(<span class="cv">obj</span>));
+console.<span class="cv">log</span>(<span class="cv">desdeObj</span>.<span class="cv">get</span>(<span class="cs">'b'</span>)); <span class="cm">// → 2</span></pre>
+  </div>
+
+  <!-- ══════════════ CONCEPTO 3: Métodos principales ══════════════ -->
+  <div class="concept-block">
+    <div class="concept-label">Concepto 03</div>
+    <div class="concept-title">Métodos principales</div>
+    <p class="concept-desc">
+      Los métodos esenciales de Map permiten <strong>agregar</strong>, <strong>leer</strong>, 
+      <strong>verificar</strong> y <strong>eliminar</strong> entradas de manera eficiente.
+    </p>
+    <pre>
+<span class="ck">const</span> <span class="cv">m</span> = <span class="ck">new</span> <span class="cv">Map</span>();
+
+<span class="cm">// .set(clave, valor) → agrega o actualiza una entrada, retorna el Map</span>
+<span class="cv">m</span>.<span class="cv">set</span>(<span class="cs">'usuario'</span>, <span class="cs">'Carlos'</span>);
+
+<span class="cm">// .get(clave) → devuelve el valor asociado o undefined si no existe</span>
+<span class="cv">m</span>.<span class="cv">get</span>(<span class="cs">'usuario'</span>);       <span class="cm">// → 'Carlos'</span>
+
+<span class="cm">// .has(clave) → comprueba si existe la clave (boolean)</span>
+<span class="cv">m</span>.<span class="cv">has</span>(<span class="cs">'usuario'</span>);       <span class="cm">// → true</span>
+<span class="cv">m</span>.<span class="cv">has</span>(<span class="cs">'email'</span>);         <span class="cm">// → false</span>
+
+<span class="cm">// .delete(clave) → elimina la entrada (retorna true si existía)</span>
+<span class="cv">m</span>.<span class="cv">delete</span>(<span class="cs">'usuario'</span>);
+
+<span class="cm">// .size → propiedad (no método) con el número de entradas</span>
+console.<span class="cv">log</span>(<span class="cv">m</span>.<span class="cv">size</span>);    <span class="cm">// → 0</span>
+
+<span class="cm">// .clear() → elimina TODAS las entradas del Map</span>
+<span class="cv">m</span>.<span class="cv">clear</span>();</pre>
+  </div>
+
+  <!-- ══════════════ DEMO INTERACTIVA ══════════════ -->
+  <div class="section-title">Demo Interactiva</div>
+
+  <div class="demo-section">
+    <div class="demo-header">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="demo-title">mapa_demo.js — Map en vivo</span>
+    </div>
+
+    <!-- Visualizador del Map -->
+    <div id="mapVisual" class="map-visual">
+      <span class="empty-state">// El mapa está vacío. Agrega entradas abajo ↓</span>
+    </div>
+
+    <!-- Controles -->
+    <div class="interactive">
+      <div class="ctrl-group">
+        <label>// clave (string)</label>
+        <input id="inKey" type="text" placeholder="ej: nombre, edad, ciudad…" />
+        <label>// valor</label>
+        <input id="inVal" type="text" placeholder="ej: Ana, 25, Bogotá…" />
+        <div style="display:flex;gap:.5rem;flex-wrap:wrap;">
+          <button onclick="opSet()">set()</button>
+          <button class="info" onclick="opGet()">get()</button>
+          <button class="danger" onclick="opDelete()">delete()</button>
+          <button onclick="opHas()">has()</button>
+          <button class="danger" onclick="opClear()">clear()</button>
+        </div>
+      </div>
+
+      <div>
+        <label>// consola de salida</label>
+        <div id="output" class="output-box"><span class="out-info">// Los resultados aparecerán aquí…</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ CONCEPTO 4: Iteración ══════════════ -->
+  <div class="concept-block">
+    <div class="concept-label">Concepto 04</div>
+    <div class="concept-title">Iteración sobre un Map</div>
+    <p class="concept-desc">
+      Map es <strong>iterable</strong>: podemos recorrerlo con <code>for...of</code> o sus métodos 
+      <code>.keys()</code>, <code>.values()</code> y <code>.entries()</code>.
+    </p>
+    <pre>
+<span class="ck">const</span> <span class="cv">capitales</span> = <span class="ck">new</span> <span class="cv">Map</span>([
+  [<span class="cs">'Colombia'</span>, <span class="cs">'Bogotá'</span>],
+  [<span class="cs">'Perú'</span>,     <span class="cs">'Lima'</span>],
+  [<span class="cs">'Chile'</span>,    <span class="cs">'Santiago'</span>]
+]);
+
+<span class="cm">// for...of con destructuring → accede a [clave, valor] directamente</span>
+<span class="ck">for</span> (<span class="ck">const</span> [<span class="cv">país</span>, <span class="cv">capital</span>] <span class="ck">of</span> <span class="cv">capitales</span>) {
+  console.<span class="cv">log</span>(<span class="cs">`<span class="cn">${país}</span> → <span class="cn">${capital}</span>`</span>);
+}
+
+<span class="cm">// .keys()   → iterador de claves</span>
+<span class="cm">// .values() → iterador de valores</span>
+<span class="cm">// .entries()→ iterador de [clave, valor] (equivale al for...of anterior)</span>
+[...<span class="cv">capitales</span>.<span class="cv">keys</span>()]    <span class="cm">// ['Colombia', 'Perú', 'Chile']</span>
+[...<span class="cv">capitales</span>.<span class="cv">values</span>()]  <span class="cm">// ['Bogotá', 'Lima', 'Santiago']</span>
+
+<span class="cm">// .forEach() → callback (valor, clave, mapa)</span>
+<span class="cv">capitales</span>.<span class="cv">forEach</span>((<span class="cv">capital</span>, <span class="cv">país</span>) <span class="co">=></span> {
+  console.<span class="cv">log</span>(<span class="cv">país</span>, <span class="cv">capital</span>);
+});</pre>
+  </div>
+
+  <!-- Demo Iteración -->
+  <div class="demo-section">
+    <div class="demo-header">
+      <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+      <span class="demo-title">iteracion_demo.js — Recorrer el Map</span>
+    </div>
+    <div class="interactive">
+      <div class="ctrl-group">
+        <label>// método de iteración</label>
+        <select id="iterMethod">
+          <option value="forof">for...of (clave, valor)</option>
+          <option value="keys">.keys()</option>
+          <option value="values">.values()</option>
+          <option value="entries">.entries()</option>
+          <option value="foreach">.forEach()</option>
+        </select>
+        <button onclick="runIteration()">Ejecutar iteración</button>
+      </div>
+      <div>
+        <label>// resultado</label>
+        <div id="iterOutput" class="output-box"><span class="out-info">// Selecciona un método y ejecuta…</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════ CONCEPTO 5: WeakMap ══════════════ -->
+  <div class="concept-block">
+    <div class="concept-label">Concepto 05</div>
+    <div class="concept-title">WeakMap</div>
+    <p class="concept-desc">
+      Un <strong>WeakMap</strong> solo acepta <em>objetos como claves</em>. Las referencias son 
+      "débiles": si el objeto clave ya no tiene otras referencias, el garbage collector puede 
+      liberarlo automáticamente. Útil para datos privados asociados a objetos sin crear fugas de memoria.
+    </p>
+    <pre>
+<span class="cm">// WeakMap: solo claves objeto, no iterable, sin .size</span>
+<span class="ck">const</span> <span class="cv">metadatos</span> = <span class="ck">new</span> <span class="cv">WeakMap</span>();
+
+<span class="ck">let</span> <span class="cv">nodo</span> = { <span class="cs">id</span>: <span class="cn">5</span> }; <span class="cm">// objeto usado como clave</span>
+<span class="cv">metadatos</span>.<span class="cv">set</span>(<span class="cv">nodo</span>, { <span class="cs">visitas</span>: <span class="cn">42</span>, <span class="cs">activo</span>: <span class="ck">true</span> });
+
+console.<span class="cv">log</span>(<span class="cv">metadatos</span>.<span class="cv">get</span>(<span class="cv">nodo</span>)); <span class="cm">// → { visitas: 42, activo: true }</span>
+
+<span class="cm">// Si nodo se descarta, el GC puede limpiar la entrada automáticamente</span>
+<span class="cv">nodo</span> = <span class="ck">null</span>; <span class="cm">// la entrada puede ser recogida por el garbage collector</span>
+
+<span class="cm">// WeakMap NO tiene: .size, .keys(), .values(), .forEach()</span></pre>
+  </div>
+
+  <!-- ══════════════ CONCEPTO 6: Casos de uso prácticos ══════════════ -->
+  <div class="concept-block">
+    <div class="concept-label">Concepto 06</div>
+    <div class="concept-title">Casos de uso prácticos</div>
+    <p class="concept-desc">
+      Map brilla cuando se necesita un <em>diccionario</em> con claves dinámicas, 
+      para <strong>memoización</strong>, contar frecuencias, cachés de funciones o 
+      asociar datos extra a objetos DOM.
+    </p>
+    <pre>
+<span class="cm">// 1. FRECUENCIA DE PALABRAS — contar ocurrencias</span>
+<span class="ck">function</span> <span class="cv">contarPalabras</span>(<span class="cv">texto</span>) {
+  <span class="ck">const</span> <span class="cv">frecuencia</span> = <span class="ck">new</span> <span class="cv">Map</span>();
+  <span class="ck">for</span> (<span class="ck">const</span> <span class="cv">palabra</span> <span class="ck">of</span> <span class="cv">texto</span>.<span class="cv">split</span>(<span class="cs">' '</span>)) {
+    <span class="cv">frecuencia</span>.<span class="cv">set</span>(<span class="cv">palabra</span>, (<span class="cv">frecuencia</span>.<span class="cv">get</span>(<span class="cv">palabra</span>) ?? <span class="cn">0</span>) <span class="co">+</span> <span class="cn">1</span>);
+  }
+  <span class="ck">return</span> <span class="cv">frecuencia</span>;
+}
+
+<span class="cm">// 2. MEMOIZACIÓN — caché de resultados costosos</span>
+<span class="ck">function</span> <span class="cv">memoize</span>(<span class="cv">fn</span>) {
+  <span class="ck">const</span> <span class="cv">cache</span> = <span class="ck">new</span> <span class="cv">Map</span>();
+  <span class="ck">return</span> (<span class="cv">n</span>) <span class="co">=></span> {
+    <span class="ck">if</span> (<span class="cv">cache</span>.<span class="cv">has</span>(<span class="cv">n</span>)) <span class="ck">return</span> <span class="cv">cache</span>.<span class="cv">get</span>(<span class="cv">n</span>); <span class="cm">// hit</span>
+    <span class="ck">const</span> <span class="cv">res</span> = <span class="cv">fn</span>(<span class="cv">n</span>);
+    <span class="cv">cache</span>.<span class="cv">set</span>(<span class="cv">n</span>, <span class="cv">res</span>);                     <span class="cm">// guarda en caché</span>
+    <span class="ck">return</span> <span class="cv">res</span>;
+  };
+}
+
+<span class="ck">const</span> <span class="cv">fibonacci</span> = <span class="cv">memoize</span>(<span class="cv">n</span> <span class="co">=></span> <span class="cv">n</span> <span class="co"><=</span> <span class="cn">1</span> ? <span class="cv">n</span> : <span class="cv">fibonacci</span>(<span class="cv">n</span><span class="co">-</span><span class="cn">1</span>) <span class="co">+</span> <span class="cv">fibonacci</span>(<span class="cv">n</span><span class="co">-</span><span class="cn">2</span>));
+console.<span class="cv">log</span>(<span class="cv">fibonacci</span>(<span class="cn">40</span>)); <span class="cm">// rápido gracias al caché</span></pre>
+  </div>
+
+  <!-- ══════════════ TABLA COMPARATIVA ══════════════ -->
+  <div class="section-title">Map vs Objeto vs WeakMap</div>
+
+  <div class="demo-section" style="padding:1.2rem">
+    <table class="comparison-table">
+      <thead>
+        <tr>
+          <th>Característica</th>
+          <th>Object</th>
+          <th>Map</th>
+          <th>WeakMap</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tipo de clave</td>
+          <td>String / Symbol</td>
+          <td>Cualquier tipo</td>
+          <td>Solo objetos</td>
+        </tr>
+        <tr>
+          <td>Orden garantizado</td>
+          <td><span class="badge no">Parcial</span></td>
+          <td><span class="badge yes">Inserción</span></td>
+          <td><span class="badge no">No</span></td>
+        </tr>
+        <tr>
+          <td>Propiedad .size</td>
+          <td><span class="badge no">No</span></td>
+          <td><span class="badge yes">Sí</span></td>
+          <td><span class="badge no">No</span></td>
+        </tr>
+        <tr>
+          <td>Iterable</td>
+          <td><span class="badge no">Indirecto</span></td>
+          <td><span class="badge yes">Sí</span></td>
+          <td><span class="badge no">No</span></td>
+        </tr>
+        <tr>
+          <td>Garbage collection</td>
+          <td><span class="badge no">Manual</span></td>
+          <td><span class="badge no">Manual</span></td>
+          <td><span class="badge yes">Automático</span></td>
+        </tr>
+        <tr>
+          <td>Prototipo heredado</td>
+          <td><span class="badge no">Sí (riesgo)</span></td>
+          <td><span class="badge yes">No</span></td>
+          <td><span class="badge yes">No</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <footer>
+   <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+  </footer>
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>

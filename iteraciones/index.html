@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Iteraciones en JavaScript</title>
+  <link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f0f1a; color: #e2e8f0; padding: 30px 20px; }
+    h1 { text-align: center; font-size: 2rem; color: #a78bfa; margin-bottom: 8px; }
+    .subtitle { text-align: center; color: #64748b; margin-bottom: 40px; }
+    .section { background: #1e1e2e; border-left: 4px solid #a78bfa; border-radius: 10px; padding: 24px; margin-bottom: 30px; }
+    h2 { color: #a78bfa; margin-bottom: 6px; }
+    .definition { font-size: 0.85rem; color: #94a3b8; margin-bottom: 14px; font-style: italic; border-left: 2px solid #7c3aed; padding-left: 10px; }
+    pre { background: #0d1117; border-radius: 8px; padding: 16px; overflow-x: auto; font-size: 0.85rem; line-height: 1.7; color: #e6edf3; margin-bottom: 12px; }
+    button { background: #7c3aed; color: white; border: none; padding: 8px 18px; border-radius: 6px; cursor: pointer; }
+    button:hover { background: #6d28d9; }
+    .output { background: #0d1117; border-radius: 6px; padding: 12px 16px; margin-top: 10px; font-size: 0.85rem; color: #3fb950; min-height: 40px; font-family: monospace; white-space: pre-wrap; }
+  </style>
+</head>
+<body>
+
+<h1>🔁 Iteraciones en JavaScript</h1>
+<p class="subtitle">Proyecto práctico comentado — definición, código y demo en vivo</p>
+
+<!-- 01. FOR -->
+<div class="section">
+  <h2>01 — Bucle <code>for</code></h2>
+  <p class="definition">Repite un bloque un número determinado de veces. Tiene tres partes: inicialización, condición y actualización.</p>
+  <pre>
+// for (inicialización; condición; actualización)
+for (let i = 1; i <= 5; i++) {
+  // Se ejecuta mientras i <= 5
+  console.log(`Iteración número: ${i}`);
+}
+  </pre>
+  <button onclick="runFor()">▶ Ejecutar</button>
+  <div class="output" id="out-for">— presiona ejecutar —</div>
+</div>
+
+<!-- 02. WHILE -->
+<div class="section">
+  <h2>02 — Bucle <code>while</code></h2>
+  <p class="definition">Ejecuta un bloque mientras una condición sea verdadera. La condición se evalúa <strong>antes</strong> de cada iteración.</p>
+  <pre>
+let contador = 0;
+
+while (contador < 4) {
+  // Se repite mientras contador < 4
+  console.log(`Contador: ${contador}`);
+  contador++; // evita un bucle infinito
+}
+  </pre>
+  <button onclick="runWhile()">▶ Ejecutar</button>
+  <div class="output" id="out-while">— presiona ejecutar —</div>
+</div>
+
+<!-- 03. DO...WHILE -->
+<div class="section">
+  <h2>03 — Bucle <code>do...while</code></h2>
+  <p class="definition">La condición se evalúa <strong>después</strong> de ejecutar el bloque. Siempre corre al menos una vez.</p>
+  <pre>
+let n = 0;
+
+do {
+  // Ejecuta primero, luego verifica la condición
+  console.log(`Valor: ${n}`);
+  n++;
+} while (n < 3);
+  </pre>
+  <button onclick="runDoWhile()">▶ Ejecutar</button>
+  <div class="output" id="out-dowhile">— presiona ejecutar —</div>
+</div>
+
+<!-- 04. FOR...OF -->
+<div class="section">
+  <h2>04 — Bucle <code>for...of</code></h2>
+  <p class="definition">Recorre los <em>valores</em> de iterables (arrays, strings, Sets). Más legible que el for clásico para colecciones.</p>
+  <pre>
+const frutas = ["🍎 Manzana", "🍌 Banano", "🍇 Uva"];
+
+for (const fruta of frutas) {
+  // fruta toma cada valor del array
+  console.log(`Fruta: ${fruta}`);
+}
+  </pre>
+  <button onclick="runForOf()">▶ Ejecutar</button>
+  <div class="output" id="out-forof">— presiona ejecutar —</div>
+</div>
+
+<!-- 05. FOR...IN -->
+<div class="section">
+  <h2>05 — Bucle <code>for...in</code></h2>
+  <p class="definition">Recorre las <em>claves (propiedades)</em> de un objeto. Ideal para objetos literales.</p>
+  <pre>
+const persona = {
+  nombre: "Carlos",
+  edad: 28,
+  ciudad: "Pereira"
+};
+
+for (const clave in persona) {
+  // clave toma el nombre de cada propiedad
+  console.log(`${clave}: ${persona[clave]}`);
+}
+  </pre>
+  <button onclick="runForIn()">▶ Ejecutar</button>
+  <div class="output" id="out-forin">— presiona ejecutar —</div>
+</div>
+
+<!-- 06. FOREACH -->
+<div class="section">
+  <h2>06 — Método <code>forEach()</code></h2>
+  <p class="definition">Ejecuta una función por cada elemento del array. No retorna un nuevo array; se usa para efectos secundarios.</p>
+  <pre>
+const numeros = [10, 20, 30, 40];
+
+// Recibe: valor, índice, array completo
+numeros.forEach((num, indice) => {
+  console.log(`[${indice}] → ${num}`);
+});
+  </pre>
+  <button onclick="runForEach()">▶ Ejecutar</button>
+  <div class="output" id="out-foreach">— presiona ejecutar —</div>
+</div>
+
+<!-- 07. MAP -->
+<div class="section">
+  <h2>07 — Método <code>map()</code></h2>
+  <p class="definition">Transforma cada elemento y <strong>retorna un nuevo array</strong> con los resultados. No modifica el original.</p>
+  <pre>
+const precios = [100, 200, 350];
+
+// Aplica impuesto del 19% a cada precio
+const conImpuesto = precios.map(p => +(p * 1.19).toFixed(2));
+
+console.log("Originales:", precios);
+console.log("Con impuesto:", conImpuesto);
+  </pre>
+  <button onclick="runMap()">▶ Ejecutar</button>
+  <div class="output" id="out-map">— presiona ejecutar —</div>
+</div>
+
+<!-- 08. FILTER -->
+<div class="section">
+  <h2>08 — Método <code>filter()</code></h2>
+  <p class="definition">Crea un nuevo array con solo los elementos que <strong>pasen la condición</strong> dada (retornen true).</p>
+  <pre>
+const edades = [15, 22, 17, 30, 14, 25];
+
+// Solo conserva mayores de 18
+const mayores = edades.filter(edad => edad >= 18);
+
+console.log("Todas:", edades);
+console.log("Mayores de edad:", mayores);
+  </pre>
+  <button onclick="runFilter()">▶ Ejecutar</button>
+  <div class="output" id="out-filter">— presiona ejecutar —</div>
+</div>
+
+<!-- 09. REDUCE -->
+<div class="section">
+  <h2>09 — Método <code>reduce()</code></h2>
+  <p class="definition">Acumula todos los valores en un <strong>único resultado</strong>. Recibe acumulador, elemento actual y valor inicial.</p>
+  <pre>
+const ventas = [500, 300, 850, 120];
+
+// acum: acumulador, actual: valor actual, 0: valor inicial
+const total = ventas.reduce((acum, actual) => acum + actual, 0);
+
+console.log("Ventas:", ventas);
+console.log("Total acumulado: $" + total);
+  </pre>
+  <button onclick="runReduce()">▶ Ejecutar</button>
+  <div class="output" id="out-reduce">— presiona ejecutar —</div>
+</div>
+
+<!-- 10. BREAK / CONTINUE -->
+<div class="section">
+  <h2>10 — Control de flujo: <code>break</code> y <code>continue</code></h2>
+  <p class="definition"><code>break</code> detiene el bucle completamente. <code>continue</code> salta la iteración actual y pasa a la siguiente.</p>
+  <pre>
+for (let i = 1; i <= 10; i++) {
+
+  if (i === 4) {
+    console.log("⏭ Saltando el 4 (continue)");
+    continue; // omite esta iteración
+  }
+
+  if (i === 7) {
+    console.log("🛑 Deteniendo en 7 (break)");
+    break; // termina el bucle
+  }
+
+  console.log(`i = ${i}`);
+}
+  </pre>
+  <button onclick="runControl()">▶ Ejecutar</button>
+  <div class="output" id="out-control">— presiona ejecutar —</div>
+</div>
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+<script>
+  // Captura los console.log para mostrarlos en pantalla
+  function capture(fn) {
+    const logs = [];
+    const orig = console.log;
+    console.log = (...args) => logs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a) : a).join(' '));
+    fn();
+    console.log = orig;
+    return logs.join('\n');
+  }
+
+  function runFor() {
+    document.getElementById('out-for').textContent = capture(() => {
+      for (let i = 1; i <= 5; i++) console.log(`Iteración número: ${i}`);
+    });
+  }
+  function runWhile() {
+    document.getElementById('out-while').textContent = capture(() => {
+      let c = 0;
+      while (c < 4) { console.log(`Contador: ${c}`); c++; }
+    });
+  }
+  function runDoWhile() {
+    document.getElementById('out-dowhile').textContent = capture(() => {
+      let n = 0;
+      do { console.log(`Valor: ${n}`); n++; } while (n < 3);
+    });
+  }
+  function runForOf() {
+    document.getElementById('out-forof').textContent = capture(() => {
+      const f = ["🍎 Manzana","🍌 Banano","🍇 Uva"];
+      for (const x of f) console.log(`Fruta: ${x}`);
+    });
+  }
+  function runForIn() {
+    document.getElementById('out-forin').textContent = capture(() => {
+      const p = { nombre:"Carlos", edad:28, ciudad:"Pereira" };
+      for (const k in p) console.log(`${k}: ${p[k]}`);
+    });
+  }
+  function runForEach() {
+    document.getElementById('out-foreach').textContent = capture(() => {
+      [10,20,30,40].forEach((n,i) => console.log(`[${i}] → ${n}`));
+    });
+  }
+  function runMap() {
+    document.getElementById('out-map').textContent = capture(() => {
+      const p = [100,200,350];
+      const c = p.map(x => +(x*1.19).toFixed(2));
+      console.log("Originales:", p);
+      console.log("Con impuesto:", c);
+    });
+  }
+  function runFilter() {
+    document.getElementById('out-filter').textContent = capture(() => {
+      const e = [15,22,17,30,14,25];
+      const m = e.filter(x => x >= 18);
+      console.log("Todas:", e);
+      console.log("Mayores de edad:", m);
+    });
+  }
+  function runReduce() {
+    document.getElementById('out-reduce').textContent = capture(() => {
+      const v = [500,300,850,120];
+      const t = v.reduce((a,b) => a+b, 0);
+      console.log("Ventas:", v);
+      console.log("Total acumulado: $" + t);
+    });
+  }
+  function runControl() {
+    document.getElementById('out-control').textContent = capture(() => {
+      for (let i = 1; i <= 10; i++) {
+        if (i === 4) { console.log("⏭ Saltando el 4 (continue)"); continue; }
+        if (i === 7) { console.log("🛑 Deteniendo en 7 (break)"); break; }
+        console.log(`i = ${i}`);
+      }
+    });
+  }
+</script>
+</body>
+</html>

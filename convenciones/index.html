@@ -1,0 +1,1465 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Conventions en Introducción a JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     CSS VARIABLES — Temas de color (claro/oscuro)
+     Equivalente a convención de constantes en JS
+  ============================================ */
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --surface2: #1c1c28;
+    --border: #2a2a3e;
+    --accent: #00e5ff;
+    --accent2: #ff6b6b;
+    --accent3: #a78bfa;
+    --text: #e8e8f0;
+    --text-muted: #7070a0;
+    --code-bg: #0d0d15;
+    --nav-h: 64px;
+    --radius: 12px;
+    --transition: 0.3s cubic-bezier(0.4,0,0.2,1);
+  }
+
+  [data-theme="light"] {
+    --bg: #f0f0f8;
+    --surface: #ffffff;
+    --surface2: #e8e8f4;
+    --border: #d0d0e8;
+    --accent: #0077cc;
+    --accent2: #e63946;
+    --accent3: #7c3aed;
+    --text: #1a1a2e;
+    --text-muted: #606080;
+    --code-bg: #1a1a2e;
+  }
+
+  [data-theme="green"] {
+    --bg: #0a0f0a;
+    --surface: #0f1a0f;
+    --surface2: #162416;
+    --border: #1e3a1e;
+    --accent: #00ff88;
+    --accent2: #ffcc00;
+    --accent3: #00ccaa;
+    --text: #e0f0e0;
+    --text-muted: #507050;
+    --code-bg: #080e08;
+  }
+
+  [data-theme="sunset"] {
+    --bg: #0f0a14;
+    --surface: #1a0f20;
+    --surface2: #231228;
+    --border: #3a1e40;
+    --accent: #ff7c00;
+    --accent2: #ff3399;
+    --accent3: #ffd700;
+    --text: #f5e8ff;
+    --text-muted: #8060a0;
+    --code-bg: #0c080f;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Syne', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background var(--transition), color var(--transition);
+  }
+
+  /* ===== NAVBAR ===== */
+  nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: var(--nav-h);
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 2rem;
+    z-index: 1000;
+    backdrop-filter: blur(12px);
+    transition: background var(--transition), border-color var(--transition);
+  }
+
+  .nav-logo {
+    font-size: 1.2rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .nav-logo span { color: var(--text); }
+
+  /* Links del nav — visibles en desktop */
+  .nav-links {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: var(--text-muted);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    transition: color var(--transition), background var(--transition);
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+  }
+
+  /* Controles del nav — tema y hamburguesa */
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+  }
+
+  /* Selector de temas */
+  .theme-picker {
+    display: flex;
+    gap: 6px;
+    background: var(--surface2);
+    padding: 5px;
+    border-radius: 20px;
+    border: 1px solid var(--border);
+  }
+
+  .theme-dot {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border: 2px solid transparent;
+    position: relative;
+  }
+
+  .theme-dot:hover { transform: scale(1.2); }
+
+  .theme-dot.active {
+    border-color: var(--text);
+    box-shadow: 0 0 0 2px var(--accent);
+  }
+
+  .theme-dot[data-t="dark"]   { background: linear-gradient(135deg, #0a0a0f, #00e5ff); }
+  .theme-dot[data-t="light"]  { background: linear-gradient(135deg, #f0f0f8, #0077cc); }
+  .theme-dot[data-t="green"]  { background: linear-gradient(135deg, #0a0f0a, #00ff88); }
+  .theme-dot[data-t="sunset"] { background: linear-gradient(135deg, #0f0a14, #ff7c00); }
+
+  /* Botón hamburguesa — solo en móvil */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 6px;
+    background: none;
+    border: none;
+    border-radius: 8px;
+    transition: background var(--transition);
+  }
+
+  .hamburger:hover { background: var(--surface2); }
+
+  .hamburger span {
+    display: block;
+    width: 22px; height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  /* Animación hamburguesa → X */
+  .hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .hamburger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Menú móvil desplegable */
+  .mobile-menu {
+    display: none;
+    position: fixed;
+    top: var(--nav-h);
+    left: 0; right: 0;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem;
+    z-index: 999;
+    transform: translateY(-10px);
+    opacity: 0;
+    transition: transform var(--transition), opacity var(--transition);
+    pointer-events: none;
+  }
+
+  .mobile-menu.open {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .mobile-menu a {
+    display: block;
+    color: var(--text-muted);
+    text-decoration: none;
+    font-weight: 600;
+    padding: 10px 12px;
+    border-radius: 8px;
+    margin-bottom: 4px;
+    transition: all var(--transition);
+  }
+
+  .mobile-menu a:hover {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    padding-left: 20px;
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    margin-top: var(--nav-h);
+    padding: 5rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%; left: 50%;
+    transform: translate(-50%, 0);
+    width: 600px; height: 400px;
+    background: radial-gradient(ellipse, color-mix(in srgb, var(--accent) 15%, transparent), transparent 70%);
+    pointer-events: none;
+    transition: background var(--transition);
+  }
+
+  .hero-tag {
+    display: inline-block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    padding: 4px 12px;
+    border-radius: 20px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+
+  .hero h1 {
+    font-size: clamp(2.5rem, 6vw, 4.5rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+    letter-spacing: -2px;
+  }
+
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+    position: relative;
+  }
+
+  .hero p {
+    font-size: 1.1rem;
+    color: var(--text-muted);
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+
+  /* ===== MAIN CONTENT ===== */
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 2rem 6rem;
+  }
+
+  /* ===== SECTION HEADERS ===== */
+  .section-title {
+    font-size: 0.7rem;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 2.5rem;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .section-title::before {
+    content: '//';
+    opacity: 0.5;
+  }
+
+  /* ===== CONVENTION CARDS ===== */
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 4rem;
+  }
+
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color var(--transition), transform 0.2s, box-shadow 0.2s;
+    position: relative;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, var(--accent), var(--accent3));
+    opacity: 0;
+    transition: opacity var(--transition);
+  }
+
+  .card:hover {
+    border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card-header {
+    padding: 1.25rem 1.5rem 0;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+  }
+
+  .card-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.4rem;
+  }
+
+  .card-desc {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .card-badge {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    background: color-mix(in srgb, var(--accent3) 15%, transparent);
+    color: var(--accent3);
+    border: 1px solid color-mix(in srgb, var(--accent3) 30%, transparent);
+    padding: 3px 8px;
+    border-radius: 4px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  /* Bloque de código dentro de la card */
+  .code-block {
+    margin: 1.25rem 1.5rem 1.5rem;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .code-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    border-bottom: 1px solid var(--border);
+    background: color-mix(in srgb, var(--surface2) 50%, transparent);
+  }
+
+  .code-dots {
+    display: flex;
+    gap: 6px;
+  }
+
+  .code-dots span {
+    width: 10px; height: 10px;
+    border-radius: 50%;
+  }
+
+  .code-dots span:nth-child(1) { background: #ff5f57; }
+  .code-dots span:nth-child(2) { background: #ffbd2e; }
+  .code-dots span:nth-child(3) { background: #28c840; }
+
+  .code-lang {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--text-muted);
+  }
+
+  pre {
+    padding: 1rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    line-height: 1.7;
+    overflow-x: auto;
+    color: var(--text);
+  }
+
+  /* Coloreado manual de sintaxis */
+  .kw  { color: #c792ea; }   /* keyword */
+  .fn  { color: #82aaff; }   /* function */
+  .str { color: #c3e88d; }   /* string */
+  .num { color: #f78c6c; }   /* number */
+  .cm  { color: #546e7a; font-style: italic; } /* comment */
+  .op  { color: var(--accent2); }  /* operator */
+  .cn  { color: var(--accent); }   /* const/var name */
+
+  /* ===== LIVE DEMO SECTION ===== */
+  .demo-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    margin-bottom: 4rem;
+  }
+
+  .demo-tabs {
+    display: flex;
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+
+  .demo-tab {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    padding: 12px 20px;
+    cursor: pointer;
+    color: var(--text-muted);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: all var(--transition);
+    white-space: nowrap;
+  }
+
+  .demo-tab:hover { color: var(--text); }
+
+  .demo-tab.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 6%, transparent);
+  }
+
+  .demo-content { display: none; padding: 1.5rem; }
+  .demo-content.active { display: block; }
+
+  .demo-output {
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent);
+    margin-top: 1rem;
+    min-height: 60px;
+    white-space: pre-wrap;
+  }
+
+  .run-btn {
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 8px 20px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+    margin-top: 1rem;
+  }
+
+  .run-btn:hover { opacity: 0.85; transform: scale(0.98); }
+
+  /* ===== QUIZ ===== */
+  .quiz-section {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .quiz-q {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    line-height: 1.5;
+  }
+
+  .quiz-q .qnum {
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--accent);
+    margin-right: 8px;
+  }
+
+  .quiz-options {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .quiz-opt {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 10px 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem;
+    color: var(--text);
+    cursor: pointer;
+    transition: all var(--transition);
+    text-align: left;
+  }
+
+  .quiz-opt:hover {
+    border-color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+  }
+
+  .quiz-opt.correct { border-color: #00ff88; background: rgba(0,255,136,0.1); color: #00ff88; }
+  .quiz-opt.wrong   { border-color: #ff6b6b; background: rgba(255,107,107,0.1); color: #ff6b6b; }
+
+  .quiz-feedback {
+    font-size: 0.82rem;
+    color: var(--text-muted);
+    padding: 8px 12px;
+    background: var(--surface2);
+    border-radius: 6px;
+    display: none;
+  }
+
+  .quiz-feedback.show { display: block; }
+
+  .quiz-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 1.5rem;
+  }
+
+  .quiz-progress {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 768px) {
+    /* Ocultar nav links en móvil */
+    .nav-links { display: none; }
+
+    /* Mostrar hamburguesa */
+    .hamburger { display: flex; }
+
+    /* Mostrar menú móvil */
+    .mobile-menu { display: block; }
+
+    .theme-picker { padding: 4px; }
+    .theme-dot { width: 15px; height: 15px; }
+
+    nav { padding: 0 1rem; }
+
+    .hero { padding: 4rem 1.25rem 2rem; }
+
+    main { padding: 0 1.25rem 4rem; }
+
+    .cards-grid {
+      grid-template-columns: 1fr;
+    }
+
+    .quiz-options {
+      grid-template-columns: 1fr;
+    }
+
+    .hero h1 { letter-spacing: -1px; }
+  }
+
+  @media (max-width: 480px) {
+    .nav-logo { font-size: 1rem; }
+    pre { font-size: 0.72rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ===================================================================
+     NAVBAR
+     Convención aplicada: camelCase en IDs y funciones
+     El nav hamburguesa solo es visible en pantallas < 768px (CSS media query)
+=================================================================== -->
+<nav>
+  <div class="nav-logo">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <rect width="20" height="20" rx="5" fill="currentColor" opacity="0.15"/>
+      <text x="3" y="15" font-size="13" font-weight="bold" fill="currentColor">JS</text>
+    </svg>
+    <span>Convenciones<em style="color:var(--accent)">.</em></span>
+  </div>
+
+  <!-- Nav links — desktop -->
+  <ul class="nav-links" id="navLinks">
+    <li><a href="#nomenclatura">Nomenclatura</a></li>
+    <li><a href="#variables">Variables</a></li>
+    <li><a href="#funciones">Funciones</a></li>
+    <li><a href="#demo">Demo</a></li>
+    <li><a href="#quiz">Quiz</a></li>
+  </ul>
+
+  <div class="nav-controls">
+    <!-- Selector de temas de color -->
+    <div class="theme-picker" title="Cambiar tema">
+      <div class="theme-dot active" data-t="dark"   title="Oscuro"></div>
+      <div class="theme-dot"        data-t="light"  title="Claro"></div>
+      <div class="theme-dot"        data-t="green"  title="Verde"></div>
+      <div class="theme-dot"        data-t="sunset" title="Sunset"></div>
+    </div>
+
+    <!-- Botón hamburguesa — solo móvil -->
+    <button class="hamburger" id="hamburger" aria-label="Menú">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Menú móvil desplegable -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#nomenclatura" class="menu-link">📝 Nomenclatura</a>
+  <a href="#variables"    class="menu-link">📦 Variables</a>
+  <a href="#funciones"    class="menu-link">⚙️ Funciones</a>
+  <a href="#demo"         class="menu-link">▶️ Demo</a>
+  <a href="#quiz"         class="menu-link">🎯 Quiz</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-tag">Introducción</div>
+  <h1>Convenciones en<br><em>JavaScript</em></h1>
+  <p>Guía visual e interactiva de las convenciones y buenas prácticas que todo dev JS debe conocer.</p>
+</section>
+
+<main>
+
+  <!-- =============================================================
+       SECCIÓN 1 — NOMENCLATURA
+       Convención: usar camelCase para variables y funciones,
+       PascalCase para clases/constructores, UPPER_SNAKE para constantes
+  ============================================================= -->
+  <h2 class="section-title" id="nomenclatura">01 — Nomenclatura</h2>
+
+  <div class="cards-grid">
+
+    <!-- CARD: camelCase -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">camelCase</div>
+          <div class="card-desc">Para variables y funciones. La primera palabra en minúscula, las siguientes con mayúscula inicial. Es el estilo más común en JS.</div>
+        </div>
+        <span class="card-badge">variables</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ✅ Correcto — camelCase</span>
+<span class="kw">let</span> <span class="cn">userName</span> = <span class="str">"Ana García"</span>;
+<span class="kw">const</span> <span class="cn">totalPrice</span> = <span class="num">199.99</span>;
+
+<span class="kw">function</span> <span class="fn">getUserAge</span>() { ... }
+<span class="kw">const</span> <span class="cn">calculateTax</span> = () => { ... };
+
+<span class="cm">// ❌ Incorrecto</span>
+<span class="kw">let</span> <span class="cn">user_name</span> = <span class="str">"Ana"</span>; <span class="cm">// snake_case (no es JS)</span>
+<span class="kw">let</span> <span class="cn">Username</span> = <span class="str">"Ana"</span>; <span class="cm">// PascalCase (reservado para clases)</span></pre>
+      </div>
+    </div>
+
+    <!-- CARD: PascalCase -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">PascalCase</div>
+          <div class="card-desc">Para clases y constructores. Cada palabra empieza con mayúscula. Le indica a otros devs que deben usar <code>new</code>.</div>
+        </div>
+        <span class="card-badge">clases</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ✅ PascalCase para clases</span>
+<span class="kw">class</span> <span class="fn">UserProfile</span> {
+  <span class="fn">constructor</span>(<span class="cn">name</span>, <span class="cn">email</span>) {
+    <span class="kw">this</span>.name  = <span class="cn">name</span>;
+    <span class="kw">this</span>.email = <span class="cn">email</span>;
+  }
+}
+
+<span class="cm">// Instanciar con new</span>
+<span class="kw">const</span> <span class="cn">user</span> = <span class="kw">new</span> <span class="fn">UserProfile</span>(
+  <span class="str">"Ana"</span>, <span class="str">"ana@mail.com"</span>
+);</pre>
+      </div>
+    </div>
+
+    <!-- CARD: UPPER_SNAKE_CASE -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">UPPER_SNAKE_CASE</div>
+          <div class="card-desc">Para constantes globales e inmutables. Las mayúsculas advierten que el valor NUNCA debe cambiar.</div>
+        </div>
+        <span class="card-badge">constantes</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ✅ Constantes globales en UPPER_SNAKE</span>
+<span class="kw">const</span> <span class="cn">MAX_RETRIES</span>    = <span class="num">3</span>;
+<span class="kw">const</span> <span class="cn">API_BASE_URL</span>   = <span class="str">"https://api.example.com"</span>;
+<span class="kw">const</span> <span class="cn">DEFAULT_TIMEOUT</span> = <span class="num">5000</span>; <span class="cm">// ms</span>
+<span class="kw">const</span> <span class="cn">COLORS</span> = {
+  PRIMARY: <span class="str">"#00e5ff"</span>,
+  DANGER:  <span class="str">"#ff6b6b"</span>
+};</pre>
+      </div>
+    </div>
+
+    <!-- CARD: Nombres descriptivos -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Nombres descriptivos</div>
+          <div class="card-desc">El nombre debe revelar la intención. Evitar abreviaciones crípticas — el código se lee más de lo que se escribe.</div>
+        </div>
+        <span class="card-badge">legibilidad</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ❌ Nombres crípticos</span>
+<span class="kw">let</span> <span class="cn">d</span> = <span class="kw">new</span> <span class="fn">Date</span>();
+<span class="kw">let</span> <span class="cn">n</span> = <span class="str">"Juan"</span>;
+<span class="kw">function</span> <span class="fn">p</span>(<span class="cn">x</span>, <span class="cn">y</span>) { ... }
+
+<span class="cm">// ✅ Nombres descriptivos</span>
+<span class="kw">let</span> <span class="cn">currentDate</span> = <span class="kw">new</span> <span class="fn">Date</span>();
+<span class="kw">let</span> <span class="cn">customerName</span> = <span class="str">"Juan"</span>;
+<span class="kw">function</span> <span class="fn">calculateDiscount</span>(<span class="cn">price</span>, <span class="cn">rate</span>) { ... }</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =============================================================
+       SECCIÓN 2 — DECLARACIÓN DE VARIABLES
+       Convención: preferir const > let, evitar var
+  ============================================================= -->
+  <h2 class="section-title" id="variables">02 — Variables</h2>
+
+  <div class="cards-grid">
+
+    <!-- CARD: const vs let vs var -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">const › let › var</div>
+          <div class="card-desc">Usa <code>const</code> por defecto. Solo usa <code>let</code> si necesitas reasignar. Evita <code>var</code> — tiene scope confuso y permite redeclaración.</div>
+        </div>
+        <span class="card-badge">scope</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ✅ const — valor no reasignable</span>
+<span class="kw">const</span> <span class="cn">PI</span> = <span class="num">3.14159</span>;
+<span class="kw">const</span> <span class="cn">user</span> = { name: <span class="str">"Ana"</span> }; <span class="cm">// obj mutable</span>
+
+<span class="cm">// ✅ let — cuando hay reasignación</span>
+<span class="kw">let</span> <span class="cn">counter</span> = <span class="num">0</span>;
+<span class="cn">counter</span><span class="op">++</span>;
+
+<span class="cm">// ❌ var — evitar siempre</span>
+<span class="kw">var</span> <span class="cn">oldStyle</span> = <span class="str">"confuso"</span>;
+<span class="kw">var</span> <span class="cn">oldStyle</span> = <span class="str">"permite redeclarar"</span>; <span class="cm">// 😬</span></pre>
+      </div>
+    </div>
+
+    <!-- CARD: Una variable por línea -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Una declaración por línea</div>
+          <div class="card-desc">Declarar una variable por línea mejora la legibilidad, facilita el debugging y hace más claros los diffs en git.</div>
+        </div>
+        <span class="card-badge">formato</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ❌ Múltiples en una línea</span>
+<span class="kw">let</span> <span class="cn">a</span> = <span class="num">1</span>, <span class="cn">b</span> = <span class="num">2</span>, <span class="cn">c</span> = <span class="num">3</span>;
+
+<span class="cm">// ✅ Una por línea — más legible</span>
+<span class="kw">const</span> <span class="cn">firstName</span> = <span class="str">"Ana"</span>;
+<span class="kw">const</span> <span class="cn">lastName</span>  = <span class="str">"García"</span>;
+<span class="kw">let</span>   <span class="cn">age</span>       = <span class="num">28</span>;
+
+<span class="cm">// ✅ Destructuring cuando aplica</span>
+<span class="kw">const</span> { <span class="cn">name</span>, <span class="cn">email</span> } = <span class="cn">userData</span>;</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =============================================================
+       SECCIÓN 3 — FUNCIONES
+       Convención: funciones pequeñas, nombres con verbo, arrow functions
+  ============================================================= -->
+  <h2 class="section-title" id="funciones">03 — Funciones</h2>
+
+  <div class="cards-grid">
+
+    <!-- CARD: Arrow functions -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Arrow Functions</div>
+          <div class="card-desc">Sintaxis concisa para funciones. No tienen su propio <code>this</code>, ideal para callbacks y métodos de array.</div>
+        </div>
+        <span class="card-badge">ES6+</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// Función tradicional</span>
+<span class="kw">function</span> <span class="fn">add</span>(<span class="cn">a</span>, <span class="cn">b</span>) { <span class="kw">return</span> <span class="cn">a</span> <span class="op">+</span> <span class="cn">b</span>; }
+
+<span class="cm">// Arrow function equivalente</span>
+<span class="kw">const</span> <span class="cn">add</span> = (<span class="cn">a</span>, <span class="cn">b</span>) <span class="op">=></span> <span class="cn">a</span> <span class="op">+</span> <span class="cn">b</span>;
+
+<span class="cm">// Con callbacks — mucho más limpio</span>
+<span class="kw">const</span> <span class="cn">doubled</span> = [<span class="num">1</span>,<span class="num">2</span>,<span class="num">3</span>]
+  .map(<span class="cn">n</span> <span class="op">=></span> <span class="cn">n</span> <span class="op">*</span> <span class="num">2</span>)      <span class="cm">// [2, 4, 6]</span>
+  .filter(<span class="cn">n</span> <span class="op">=></span> <span class="cn">n</span> <span class="op">></span> <span class="num">2</span>); <span class="cm">// [4, 6]</span></pre>
+      </div>
+    </div>
+
+    <!-- CARD: Responsabilidad única -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Responsabilidad única</div>
+          <div class="card-desc">Cada función debe hacer UNA sola cosa y hacerla bien. Si el nombre tiene "y" o "or", probablemente necesita dividirse.</div>
+        </div>
+        <span class="card-badge">clean code</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ❌ Hace demasiado</span>
+<span class="kw">function</span> <span class="fn">validateAndSaveAndSendEmail</span>(<span class="cn">data</span>) { ... }
+
+<span class="cm">// ✅ Una responsabilidad c/u</span>
+<span class="kw">function</span> <span class="fn">validateUserData</span>(<span class="cn">data</span>) { ... }
+<span class="kw">function</span> <span class="fn">saveToDatabase</span>(<span class="cn">data</span>) { ... }
+<span class="kw">function</span> <span class="fn">sendWelcomeEmail</span>(<span class="cn">email</span>) { ... }
+
+<span class="cm">// Composición clara</span>
+<span class="kw">async function</span> <span class="fn">registerUser</span>(<span class="cn">data</span>) {
+  <span class="fn">validateUserData</span>(<span class="cn">data</span>);
+  <span class="kw">await</span> <span class="fn">saveToDatabase</span>(<span class="cn">data</span>);
+  <span class="fn">sendWelcomeEmail</span>(<span class="cn">data</span>.email);
+}</pre>
+      </div>
+    </div>
+
+    <!-- CARD: Default parameters -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Parámetros por defecto</div>
+          <div class="card-desc">Evitar condiciones internas para validar parámetros. Usar valores por defecto directamente en la firma de la función.</div>
+        </div>
+        <span class="card-badge">ES6+</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="cm">// ❌ Validación interna verbose</span>
+<span class="kw">function</span> <span class="fn">greet</span>(<span class="cn">name</span>) {
+  <span class="kw">const</span> <span class="cn">n</span> = <span class="cn">name</span> <span class="op">||</span> <span class="str">"Visitante"</span>;
+  <span class="kw">return</span> <span class="str">`Hola, <span class="op">${</span><span class="cn">n</span><span class="op">}</span>`</span>;
+}
+
+<span class="cm">// ✅ Parámetro por defecto</span>
+<span class="kw">function</span> <span class="fn">greet</span>(<span class="cn">name</span> = <span class="str">"Visitante"</span>) {
+  <span class="kw">return</span> <span class="str">`Hola, <span class="op">${</span><span class="cn">name</span><span class="op">}</span>`</span>;
+}
+
+<span class="fn">greet</span>();           <span class="cm">// "Hola, Visitante"</span>
+<span class="fn">greet</span>(<span class="str">"Ana"</span>);      <span class="cm">// "Hola, Ana"</span></pre>
+      </div>
+    </div>
+
+    <!-- CARD: Template literals -->
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <div class="card-title">Template Literals</div>
+          <div class="card-desc">Usar backticks para interpolación de cadenas. Más legible que concatenación con <code>+</code>, soporta multilínea.</div>
+        </div>
+        <span class="card-badge">strings</span>
+      </div>
+      <div class="code-block">
+        <div class="code-header">
+          <div class="code-dots"><span></span><span></span><span></span></div>
+          <span class="code-lang">javascript</span>
+        </div>
+        <pre><span class="kw">const</span> <span class="cn">user</span> = { name: <span class="str">"Ana"</span>, age: <span class="num">28</span> };
+
+<span class="cm">// ❌ Concatenación vieja</span>
+<span class="kw">const</span> <span class="cn">msg1</span> = <span class="str">"Hola, "</span> <span class="op">+</span> <span class="cn">user</span>.name
+             <span class="op">+</span> <span class="str">". Tienes "</span> <span class="op">+</span> <span class="cn">user</span>.age <span class="op">+</span> <span class="str">" años."</span>;
+
+<span class="cm">// ✅ Template literal</span>
+<span class="kw">const</span> <span class="cn">msg2</span> = <span class="str">`Hola, <span class="op">${</span><span class="cn">user</span>.name<span class="op">}</span>.
+Tienes <span class="op">${</span><span class="cn">user</span>.age<span class="op">}</span> años.`</span>;</pre>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- =============================================================
+       SECCIÓN 4 — DEMO INTERACTIVO
+       Permite ejecutar pequeños ejemplos de las convenciones
+  ============================================================= -->
+  <h2 class="section-title" id="demo">04 — Demo Interactiva</h2>
+
+  <div class="demo-section">
+    <div class="demo-tabs">
+      <button class="demo-tab active" data-tab="t1">camelCase checker</button>
+      <button class="demo-tab"        data-tab="t2">const vs let</button>
+      <button class="demo-tab"        data-tab="t3">Arrow fn</button>
+      <button class="demo-tab"        data-tab="t4">Template literal</button>
+    </div>
+
+    <!-- Tab 1: camelCase checker -->
+    <div class="demo-content active" id="t1">
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Escribe un nombre de variable y verifica si sigue la convención camelCase:</p>
+      <input id="ccInput" type="text" placeholder="ej: myVariableName"
+        style="width:100%;padding:10px 14px;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.85rem;outline:none;">
+      <button class="run-btn" onclick="checkCamelCase()">Verificar</button>
+      <div class="demo-output" id="ccOutput">// Resultado aparecerá aquí...</div>
+    </div>
+
+    <!-- Tab 2: const vs let -->
+    <div class="demo-content" id="t2">
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Observa el comportamiento de const y let:</p>
+      <button class="run-btn" onclick="runConstLet()">▶ Ejecutar</button>
+      <div class="demo-output" id="clOutput">// Resultado aparecerá aquí...</div>
+    </div>
+
+    <!-- Tab 3: Arrow functions -->
+    <div class="demo-content" id="t3">
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Comparación de función tradicional vs arrow function:</p>
+      <button class="run-btn" onclick="runArrow()">▶ Ejecutar</button>
+      <div class="demo-output" id="arOutput">// Resultado aparecerá aquí...</div>
+    </div>
+
+    <!-- Tab 4: Template literal -->
+    <div class="demo-content" id="t4">
+      <p style="color:var(--text-muted);font-size:.85rem;margin-bottom:1rem">Ingresa tu nombre y edad:</p>
+      <div style="display:flex;gap:.75rem;flex-wrap:wrap">
+        <input id="tlName" type="text" placeholder="Nombre" value="Ana"
+          style="flex:1;min-width:120px;padding:10px 14px;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.85rem;outline:none;">
+        <input id="tlAge" type="number" placeholder="Edad" value="28"
+          style="width:90px;padding:10px 14px;background:var(--code-bg);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:.85rem;outline:none;">
+      </div>
+      <button class="run-btn" onclick="runTemplate()">▶ Generar</button>
+      <div class="demo-output" id="tlOutput">// Resultado aparecerá aquí...</div>
+    </div>
+  </div>
+
+  <!-- =============================================================
+       SECCIÓN 5 — QUIZ
+       Preguntas de opción múltiple sobre las convenciones
+  ============================================================= -->
+  <h2 class="section-title" id="quiz">05 — Quiz</h2>
+
+  <div class="quiz-section">
+    <div id="quizContainer"></div>
+    <div class="quiz-feedback" id="quizFeedback"></div>
+    <div class="quiz-nav">
+      <span class="quiz-progress" id="quizProgress">Pregunta 1 / 5</span>
+      <button class="run-btn" id="nextBtn" onclick="nextQuestion()" style="display:none">Siguiente →</button>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+
+<!-- =================================================================
+     JAVASCRIPT
+     Convenciones aplicadas a lo largo de todo el código:
+     - camelCase para funciones y variables
+     - const por defecto, let cuando hay reasignación
+     - Arrow functions para callbacks
+     - Template literals para strings
+     - Funciones con responsabilidad única
+================================================================= -->
+<script>
+
+/* ─────────────────────────────────────────────
+   MÓDULO: CAMBIO DE TEMA
+   Convención: módulo con responsabilidad única
+   Patrón: IIFE para encapsular estado
+───────────────────────────────────────────── */
+const themeManager = (() => {
+  // Constante con temas disponibles (UPPER_SNAKE podría usarse, pero
+  // aquí es config interna — camelCase es aceptable)
+  const availableThemes = ['dark', 'light', 'green', 'sunset'];
+
+  // Aplicar tema al <html> y actualizar dot activo
+  const applyTheme = (themeName) => {
+    // Validar que el tema exista antes de aplicar
+    if (!availableThemes.includes(themeName)) return;
+
+    document.documentElement.setAttribute('data-theme', themeName);
+
+    // Actualizar estado visual de los dots
+    document.querySelectorAll('.theme-dot').forEach(dot => {
+      dot.classList.toggle('active', dot.dataset.t === themeName);
+    });
+
+    // Persistir en localStorage para recordar preferencia
+    localStorage.setItem('preferredTheme', themeName);
+  };
+
+  // Inicializar con tema guardado o por defecto
+  const init = () => {
+    const saved = localStorage.getItem('preferredTheme') || 'dark';
+    applyTheme(saved);
+
+    // Event listeners en los dots de colores
+    document.querySelectorAll('.theme-dot').forEach(dot => {
+      dot.addEventListener('click', () => applyTheme(dot.dataset.t));
+    });
+  };
+
+  return { init, applyTheme };
+})();
+
+
+/* ─────────────────────────────────────────────
+   MÓDULO: NAV HAMBURGUESA
+   Convención: nombres descriptivos con verbo
+   toggleMenu = acción + objeto
+───────────────────────────────────────────── */
+const navManager = (() => {
+  const hamburgerBtn = document.getElementById('hamburger');
+  const mobileMenu   = document.getElementById('mobileMenu');
+
+  // Toggle del menú móvil
+  const toggleMenu = () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    hamburgerBtn.classList.toggle('open', isOpen);
+  };
+
+  // Cerrar menú al hacer click en un link
+  const closeMenu = () => {
+    mobileMenu.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+  };
+
+  const init = () => {
+    hamburgerBtn.addEventListener('click', toggleMenu);
+
+    // Cerrar al navegar — mejor UX
+    document.querySelectorAll('.menu-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Cerrar si se hace click fuera del menú
+    document.addEventListener('click', (event) => {
+      const clickedOutside = !mobileMenu.contains(event.target)
+                          && !hamburgerBtn.contains(event.target);
+      if (clickedOutside && mobileMenu.classList.contains('open')) {
+        closeMenu();
+      }
+    });
+  };
+
+  return { init };
+})();
+
+
+/* ─────────────────────────────────────────────
+   MÓDULO: TABS DE DEMO
+   Convención: arrow function + event delegation
+───────────────────────────────────────────── */
+const initDemoTabs = () => {
+  document.querySelectorAll('.demo-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      const targetId = tab.dataset.tab;
+
+      // Desactivar todos
+      document.querySelectorAll('.demo-tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.demo-content').forEach(c => c.classList.remove('active'));
+
+      // Activar el seleccionado
+      tab.classList.add('active');
+      document.getElementById(targetId).classList.add('active');
+    });
+  });
+};
+
+
+/* ─────────────────────────────────────────────
+   DEMO 1: camelCase checker
+   Convención: regex para validar nomenclatura
+───────────────────────────────────────────── */
+const checkCamelCase = () => {
+  const input = document.getElementById('ccInput').value.trim();
+  const output = document.getElementById('ccOutput');
+
+  if (!input) {
+    output.textContent = '// Escribe un nombre primero';
+    return;
+  }
+
+  // Regex: empieza con minúscula, solo letras y números
+  const isCamelCase   = /^[a-z][a-zA-Z0-9]*$/.test(input);
+  const isPascalCase  = /^[A-Z][a-zA-Z0-9]*$/.test(input);
+  const isUpperSnake  = /^[A-Z][A-Z0-9_]+$/.test(input);
+  const hasUnderscore = input.includes('_');
+
+  let result = '';
+
+  if (isCamelCase)  result = `✅ "${input}" → camelCase correcto\n// Ideal para variables y funciones`;
+  else if (isPascalCase) result = `📘 "${input}" → PascalCase\n// Correcto para clases/constructores, no para variables`;
+  else if (isUpperSnake) result = `🔴 "${input}" → UPPER_SNAKE_CASE\n// Correcto para constantes globales`;
+  else if (hasUnderscore) result = `❌ "${input}" → snake_case detectado\n// No es convención JS. Usa camelCase: "${toCamelCase(input)}"`;
+  else result = `⚠️ "${input}" → No sigue ninguna convención estándar`;
+
+  output.textContent = result;
+};
+
+// Helper para convertir snake_case a camelCase
+const toCamelCase = (str) =>
+  str.replace(/_([a-z])/g, (_, letter) => letter.toUpperCase());
+
+
+/* ─────────────────────────────────────────────
+   DEMO 2: const vs let
+───────────────────────────────────────────── */
+const runConstLet = () => {
+  const output = document.getElementById('clOutput');
+
+  let log = '';
+
+  // const — no se puede reasignar
+  const maxUsers = 100;
+  log += `const maxUsers = ${maxUsers}\n`;
+  log += `Intentar reasignar: genera TypeError\n\n`;
+
+  // let — sí se puede reasignar
+  let counter = 0;
+  log += `let counter = ${counter}\n`;
+  counter++;
+  counter++;
+  log += `Tras dos counter++: ${counter}\n\n`;
+
+  // const con objeto — el objeto es mutable!
+  const config = { debug: false };
+  config.debug = true; // ✅ esto SÍ funciona
+  log += `const config = { debug: false }\n`;
+  log += `config.debug = true → { debug: ${config.debug} }\n`;
+  log += `// ⚠️ const no "congela" el objeto, solo la referencia`;
+
+  output.textContent = log;
+};
+
+
+/* ─────────────────────────────────────────────
+   DEMO 3: Arrow functions
+───────────────────────────────────────────── */
+const runArrow = () => {
+  const output = document.getElementById('arOutput');
+
+  // Función tradicional
+  function multiplyTraditional(a, b) {
+    return a * b;
+  }
+
+  // Arrow function equivalente
+  const multiplyArrow = (a, b) => a * b;
+
+  // Arrow function con array methods
+  const numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+  const result = numbers
+    .filter(n => n % 2 === 0)   // pares
+    .map(n => n * n)            // al cuadrado
+    .reduce((sum, n) => sum + n, 0); // suma
+
+  let log = '';
+  log += `multiplyTraditional(6, 7) = ${multiplyTraditional(6, 7)}\n`;
+  log += `multiplyArrow(6, 7) = ${multiplyArrow(6, 7)}\n\n`;
+  log += `[1..10].filter(par).map(²).reduce(+)\n`;
+  log += `Pares al cuadrado sumados = ${result}\n`;
+  log += `// (4+16+36+64+100 = ${result})`;
+
+  output.textContent = log;
+};
+
+
+/* ─────────────────────────────────────────────
+   DEMO 4: Template literals
+───────────────────────────────────────────── */
+const runTemplate = () => {
+  const name = document.getElementById('tlName').value || 'Visitante';
+  const age  = parseInt(document.getElementById('tlAge').value) || 0;
+
+  // Template literal con expresiones
+  const greeting = `Hola, ${name}!
+Tienes ${age} años.
+En 10 años tendrás ${age + 10}.
+Eres ${age >= 18 ? 'mayor' : 'menor'} de edad.`;
+
+  document.getElementById('tlOutput').textContent = greeting;
+};
+
+
+/* ─────────────────────────────────────────────
+   MÓDULO: QUIZ INTERACTIVO
+   Convención: datos separados de la lógica (array de objetos)
+───────────────────────────────────────────── */
+const quizData = [
+  {
+    question: '¿Qué convención de nombres se usa para variables y funciones en JavaScript?',
+    options: ['snake_case', 'camelCase', 'PascalCase', 'UPPER_CASE'],
+    correct: 1,
+    feedback: 'camelCase es el estándar para variables y funciones en JS. PascalCase se reserva para clases.'
+  },
+  {
+    question: '¿Cuál es la forma preferida de declarar una variable que no cambiará?',
+    options: ['var nombre', 'let nombre', 'const nombre', 'variable nombre'],
+    correct: 2,
+    feedback: 'const garantiza que la referencia no se reasignará. Úsala por defecto.'
+  },
+  {
+    question: '¿Qué tipo de nombre corresponde a una clase como "UserProfile"?',
+    options: ['camelCase', 'UPPER_SNAKE_CASE', 'PascalCase', 'kebab-case'],
+    correct: 2,
+    feedback: 'PascalCase (cada palabra inicia con mayúscula) es el estándar para clases en JS.'
+  },
+  {
+    question: '¿Cuál es la sintaxis correcta de una arrow function?',
+    options: [
+      'function => (a, b) { return a + b }',
+      'const add = (a, b) => a + b',
+      'const add = function(a, b) -> a + b',
+      'arrow add(a, b) { return a + b }'
+    ],
+    correct: 1,
+    feedback: 'Las arrow functions usan la sintaxis: const nombre = (params) => expresión o bloque.'
+  },
+  {
+    question: '¿Qué convención se usa para constantes globales como URLs o límites?',
+    options: ['camelCase', 'PascalCase', 'kebab-case', 'UPPER_SNAKE_CASE'],
+    correct: 3,
+    feedback: 'UPPER_SNAKE_CASE (ej: MAX_RETRIES, API_URL) señala que el valor nunca debe cambiar.'
+  }
+];
+
+// Estado del quiz — uso de let porque cambia
+let currentQuestion = 0;
+let score = 0;
+let answered = false;
+
+const renderQuestion = () => {
+  const q = quizData[currentQuestion];
+  const container = document.getElementById('quizContainer');
+  const progress = document.getElementById('quizProgress');
+  const nextBtn = document.getElementById('nextBtn');
+
+  answered = false;
+  nextBtn.style.display = 'none';
+  document.getElementById('quizFeedback').classList.remove('show');
+
+  progress.textContent = `Pregunta ${currentQuestion + 1} / ${quizData.length}`;
+
+  // Template literal para generar HTML
+  container.innerHTML = `
+    <div class="quiz-q">
+      <span class="qnum">Q${currentQuestion + 1}.</span> ${q.question}
+    </div>
+    <div class="quiz-options">
+      ${q.options.map((opt, i) => `
+        <button class="quiz-opt" onclick="selectAnswer(${i})">${opt}</button>
+      `).join('')}
+    </div>
+  `;
+};
+
+const selectAnswer = (selectedIndex) => {
+  if (answered) return; // Evitar doble click
+  answered = true;
+
+  const q = quizData[currentQuestion];
+  const buttons = document.querySelectorAll('.quiz-opt');
+  const feedback = document.getElementById('quizFeedback');
+
+  // Marcar correcto e incorrecto
+  buttons.forEach((btn, i) => {
+    if (i === q.correct) btn.classList.add('correct');
+    else if (i === selectedIndex) btn.classList.add('wrong');
+    btn.disabled = true;
+  });
+
+  if (selectedIndex === q.correct) score++;
+
+  // Mostrar feedback
+  feedback.textContent = `💡 ${q.feedback}`;
+  feedback.classList.add('show');
+
+  // Mostrar botón siguiente
+  const nextBtn = document.getElementById('nextBtn');
+  nextBtn.style.display = 'inline-block';
+  nextBtn.textContent = currentQuestion < quizData.length - 1
+    ? 'Siguiente →'
+    : `Ver resultado (${score}/${quizData.length})`;
+};
+
+const nextQuestion = () => {
+  if (currentQuestion < quizData.length - 1) {
+    currentQuestion++;
+    renderQuestion();
+  } else {
+    showResult();
+  }
+};
+
+const showResult = () => {
+  const container = document.getElementById('quizContainer');
+  const feedback  = document.getElementById('quizFeedback');
+  const nextBtn   = document.getElementById('nextBtn');
+  const progress  = document.getElementById('quizProgress');
+
+  feedback.classList.remove('show');
+  nextBtn.style.display = 'none';
+  progress.textContent = '¡Quiz completado!';
+
+  const percentage = Math.round((score / quizData.length) * 100);
+  const emoji = percentage >= 80 ? '🏆' : percentage >= 60 ? '👍' : '📚';
+
+  container.innerHTML = `
+    <div style="text-align:center;padding:2rem 0">
+      <div style="font-size:3rem;margin-bottom:1rem">${emoji}</div>
+      <div style="font-size:1.4rem;font-weight:800;color:var(--accent);margin-bottom:.5rem">
+        ${score} / ${quizData.length} correctas
+      </div>
+      <div style="color:var(--text-muted);margin-bottom:1.5rem">
+        ${percentage}% — ${percentage >= 80 ? 'Excelente dominio de las convenciones JS' : percentage >= 60 ? 'Buen progreso, sigue practicando' : 'Repasa las convenciones y vuelve a intentarlo'}
+      </div>
+      <button class="run-btn" onclick="restartQuiz()">Reintentar</button>
+    </div>
+  `;
+};
+
+const restartQuiz = () => {
+  currentQuestion = 0;
+  score = 0;
+  renderQuestion();
+};
+
+
+/* ─────────────────────────────────────────────
+   INIT — inicializar todos los módulos
+   Convención: llamar init() al cargar el DOM
+───────────────────────────────────────────── */
+document.addEventListener('DOMContentLoaded', () => {
+  themeManager.init();
+  navManager.init();
+  initDemoTabs();
+  renderQuestion();
+});
+
+</script>
+</body>
+</html>

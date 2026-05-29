@@ -1,0 +1,1098 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matemáticas en Introducción a JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ── Variables de tema ── */
+  :root {
+    --bg: #0d0d0d;
+    --surface: #161616;
+    --card: #1e1e1e;
+    --border: #2e2e2e;
+    --text: #f0f0f0;
+    --muted: #888;
+    --accent: #00e5a0;
+    --accent2: #7c3aed;
+    --accent3: #f59e0b;
+    --radius: 12px;
+    --font-mono: 'Space Mono', monospace;
+    --font-display: 'Syne', sans-serif;
+  }
+
+  /* Tema claro */
+  [data-theme="light"] {
+    --bg: #f5f5f0;
+    --surface: #ffffff;
+    --card: #fafafa;
+    --border: #e0e0e0;
+    --text: #111;
+    --muted: #666;
+  }
+
+  /* Temas de color */
+  [data-color="purple"] { --accent: #a855f7; --accent2: #ec4899; --accent3: #f59e0b; }
+  [data-color="blue"]   { --accent: #38bdf8; --accent2: #6366f1; --accent3: #f472b6; }
+  [data-color="orange"] { --accent: #fb923c; --accent2: #ef4444; --accent3: #facc15; }
+  [data-color="green"]  { --accent: #00e5a0; --accent2: #7c3aed; --accent3: #f59e0b; }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: var(--font-display);
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    transition: background .3s, color .3s;
+  }
+
+  /* ══════════════════════════════════════
+     NAV — barra principal
+  ══════════════════════════════════════ */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    height: 60px;
+    transition: background .3s, border-color .3s;
+  }
+
+  .nav-logo {
+    font-size: 1.1rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    color: var(--accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .nav-logo span { color: var(--text); }
+
+  /* ── Links inline (DESKTOP ≥ 860px) ── */
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: .15rem;
+    flex: 1;
+    justify-content: center;
+    flex-wrap: nowrap;
+    overflow: hidden;
+  }
+  .nav-links a {
+    font-family: var(--font-mono);
+    font-size: .68rem;
+    color: var(--muted);
+    text-decoration: none;
+    padding: .38rem .55rem;
+    border-radius: 6px;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: .35rem;
+    border-left: none;
+    transition: color .2s, background .2s;
+  }
+  .nav-links a .nav-num {
+    font-family: var(--font-mono);
+    font-size: .6rem;
+    color: var(--accent);
+    opacity: .8;
+    flex-shrink: 0;
+  }
+  .nav-links a:hover,
+  .nav-links a.active {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    transform: none;
+    border-left-color: transparent;
+  }
+
+  /* ── Controles de tema (siempre visibles) ── */
+  .nav-controls {
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    flex-shrink: 0;
+  }
+
+  .theme-toggle {
+    background: var(--card);
+    border: 1px solid var(--border);
+    color: var(--text);
+    width: 34px; height: 34px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    transition: border-color .2s, transform .1s;
+  }
+  .theme-toggle:hover { border-color: var(--accent); transform: scale(1.08); }
+
+  .color-picker { display: flex; gap: .3rem; align-items: center; }
+  .color-dot {
+    width: 16px; height: 16px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    transition: transform .15s, border-color .15s;
+    flex-shrink: 0;
+  }
+  .color-dot:hover, .color-dot.active { transform: scale(1.3); border-color: var(--text); }
+  .color-dot[data-c="green"]  { background: #00e5a0; }
+  .color-dot[data-c="purple"] { background: #a855f7; }
+  .color-dot[data-c="blue"]   { background: #38bdf8; }
+  .color-dot[data-c="orange"] { background: #fb923c; }
+
+  /* ── Botón hamburguesa (solo MOBILE) ── */
+  .burger {
+    display: none; /* oculto en desktop */
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px; height: 36px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    padding: 8px;
+    flex-shrink: 0;
+    transition: border-color .2s;
+  }
+  .burger:hover { border-color: var(--accent); }
+  .burger span {
+    display: block;
+    height: 2px;
+    background: var(--text);
+    border-radius: 2px;
+    transition: transform .3s, opacity .2s;
+    transform-origin: center;
+  }
+  .burger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .burger.open span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .burger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* ══════════════════════════════════════
+     DRAWER (solo MOBILE — aparece debajo del nav)
+  ══════════════════════════════════════ */
+  .nav-drawer {
+    display: none; /* invisible en desktop */
+    position: fixed;
+    top: 60px;
+    left: 0; right: 0;
+    background: var(--surface);
+    border-bottom: 2px solid var(--border);
+    z-index: 199;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    transition: max-height .4s cubic-bezier(.4,0,.2,1), opacity .3s;
+  }
+  .nav-drawer.open {
+    max-height: 600px;
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  /* Links dentro del drawer (columna vertical) */
+  .nav-drawer .nav-links {
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
+    padding: .6rem 1.25rem 1.1rem;
+    gap: .15rem;
+    overflow: visible;
+  }
+  .nav-drawer .nav-links a {
+    width: 100%;
+    font-size: .83rem;
+    padding: .7rem .85rem;
+    border-radius: 8px;
+    border-left: 2px solid transparent;
+    gap: .7rem;
+    transition: color .2s, background .2s, transform .18s, border-color .2s;
+  }
+  .nav-drawer .nav-links a .nav-num {
+    font-size: .66rem;
+    min-width: 2rem;
+  }
+  .nav-drawer .nav-links a:hover,
+  .nav-drawer .nav-links a.active {
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 10%, transparent);
+    border-left-color: var(--accent);
+    transform: translateX(4px);
+  }
+
+  /* Overlay oscuro detrás del drawer */
+  .nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 60px 0 0 0;
+    background: rgba(0,0,0,.5);
+    z-index: 198;
+    backdrop-filter: blur(3px);
+  }
+  .nav-overlay.open { display: block; }
+
+  /* ══════════════════════════════════════
+     BREAKPOINT MOBILE ≤ 859px
+     — mostrar burger, ocultar links inline
+  ══════════════════════════════════════ */
+  @media (max-width: 859px) {
+    /* Ocultar links del nav principal */
+    nav > .nav-links { display: none; }
+    /* Mostrar botón hamburguesa */
+    .burger { display: flex; }
+    /* Hacer visible el drawer (animado por JS) */
+    .nav-drawer { display: block; }
+  }
+
+  /* ── HERO ── */
+  .hero {
+    text-align: center;
+    padding: 4rem 1.5rem 2.5rem;
+  }
+  .hero-tag {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--accent);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: .75rem;
+  }
+  .hero h1 {
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  .hero p {
+    margin-top: .75rem;
+    color: var(--muted);
+    font-size: 1rem;
+    max-width: 500px;
+    margin-inline: auto;
+  }
+
+  /* ── GRID DE SECCIONES ── */
+  main { padding: 1.5rem; max-width: 1100px; margin: 0 auto; }
+
+  .section { margin-bottom: 2.5rem; scroll-margin-top: 70px; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: .75rem;
+    margin-bottom: 1rem;
+  }
+  .section-num {
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 12%, transparent);
+    border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    padding: .2rem .5rem;
+    border-radius: 4px;
+  }
+  .section h2 { font-size: 1.2rem; font-weight: 700; }
+
+  /* Cards con 2 columnas: concepto + demo */
+  .card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+  }
+  @media (max-width: 680px) { .card-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1.25rem;
+    transition: border-color .2s;
+  }
+  .card:hover { border-color: var(--accent); }
+
+  .card-title {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: .5rem;
+  }
+
+  .card-desc {
+    font-size: .85rem;
+    color: var(--muted);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+
+  /* Bloque de código */
+  pre {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: .75rem 1rem;
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    line-height: 1.6;
+    overflow-x: auto;
+    white-space: pre;
+    color: #ccc;
+  }
+  .kw  { color: var(--accent2); }
+  .fn  { color: var(--accent); }
+  .num { color: var(--accent3); }
+  .cm  { color: var(--muted); font-style: italic; }
+  .str { color: #86efac; }
+
+  /* Demo interactiva */
+  .demo {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: .6rem;
+  }
+  .demo label {
+    font-family: var(--font-mono);
+    font-size: .72rem;
+    color: var(--muted);
+  }
+  .demo input[type=number], .demo input[type=range] {
+    width: 100%;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--text);
+    font-family: var(--font-mono);
+    font-size: .8rem;
+    padding: .4rem .7rem;
+    outline: none;
+    transition: border-color .2s;
+  }
+  .demo input:focus { border-color: var(--accent); }
+  .demo input[type=range] { padding: 0; cursor: pointer; accent-color: var(--accent); }
+
+  .btn {
+    background: var(--accent);
+    color: #000;
+    border: none;
+    border-radius: 7px;
+    padding: .45rem .9rem;
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: opacity .2s, transform .1s;
+  }
+  .btn:hover { opacity: .85; transform: translateY(-1px); }
+  .btn:active { transform: translateY(0); }
+
+  .result {
+    font-family: var(--font-mono);
+    font-size: .85rem;
+    color: var(--accent);
+    background: color-mix(in srgb, var(--accent) 8%, transparent);
+    border: 1px dashed color-mix(in srgb, var(--accent) 25%, transparent);
+    border-radius: 6px;
+    padding: .5rem .75rem;
+    min-height: 2rem;
+    word-break: break-all;
+  }
+
+  /* Canvas */
+  canvas {
+    width: 100%;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: var(--surface);
+    display: block;
+  }
+
+  /* Tabla de verdad */
+  table { width: 100%; border-collapse: collapse; font-family: var(--font-mono); font-size: .75rem; }
+  th, td { padding: .4rem .6rem; text-align: center; border: 1px solid var(--border); }
+  th { background: var(--surface); color: var(--accent); }
+  td { background: var(--card); }
+  .t { color: #4ade80; } .f { color: #f87171; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 2rem 1rem;
+    font-family: var(--font-mono);
+    font-size: .7rem;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+</style>
+</head>
+<body data-theme="dark" data-color="green">
+
+<!-- ═══════════ NAV ═══════════ -->
+<nav id="navbar">
+  <div class="nav-logo">Math<span>.js</span></div>
+
+  <!-- Links inline — visibles solo en DESKTOP ≥860px vía CSS -->
+  <div class="nav-links" id="nav-links-desktop">
+    <a href="#aritmetica"><span class="nav-num">01</span>Aritmética básica</a>
+    <a href="#algebra"><span class="nav-num">02</span>Objeto Math</a>
+    <a href="#trigono"><span class="nav-num">03</span>Trigonometría</a>
+    <a href="#estadistica"><span class="nav-num">04</span>Estadística</a>
+    <a href="#binario"><span class="nav-num">05</span>Binario</a>
+    <a href="#graficas"><span class="nav-num">06</span>Gráficas</a>
+  </div>
+
+  <div class="nav-controls">
+    <div class="color-picker">
+      <div class="color-dot active" data-c="green"  title="Verde"   onclick="setColor('green',this)"></div>
+      <div class="color-dot"        data-c="purple" title="Púrpura" onclick="setColor('purple',this)"></div>
+      <div class="color-dot"        data-c="blue"   title="Azul"    onclick="setColor('blue',this)"></div>
+      <div class="color-dot"        data-c="orange" title="Naranja" onclick="setColor('orange',this)"></div>
+    </div>
+    <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">☀️</button>
+    <!-- Botón hamburguesa: solo visible en mobile ≤859px -->
+    <button class="burger" id="burger-btn" onclick="toggleMenu()" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- Drawer vertical — solo visible en mobile, controlado por JS -->
+<div class="nav-drawer" id="nav-drawer">
+  <div class="nav-links">
+    <a href="#aritmetica" onclick="closeMenu()"><span class="nav-num">01</span>Aritmética básica</a>
+    <a href="#algebra"    onclick="closeMenu()"><span class="nav-num">02</span>Objeto Math — Álgebra</a>
+    <a href="#trigono"    onclick="closeMenu()"><span class="nav-num">03</span>Trigonometría</a>
+    <a href="#estadistica"onclick="closeMenu()"><span class="nav-num">04</span>Estadística descriptiva</a>
+    <a href="#binario"    onclick="closeMenu()"><span class="nav-num">05</span>Sistema binario y operadores bit a bit</a>
+    <a href="#graficas"   onclick="closeMenu()"><span class="nav-num">06</span>Gráficas con Canvas</a>
+  </div>
+</div>
+
+<!-- Overlay oscuro al abrir el drawer en mobile -->
+<div class="nav-overlay" id="nav-overlay" onclick="closeMenu()"></div>
+
+<!-- ═══════════ HERO ═══════════ -->
+<div class="hero">
+  <p class="hero-tag">// Introducción a JavaScript</p>
+  <h1>Matemáticas en JavaScript</h1>
+  <p>Explora los conceptos matemáticos esenciales con ejemplos de código comentados e interactivos.</p>
+</div>
+
+<!-- ═══════════ MAIN ═══════════ -->
+<main>
+
+  <!-- ── 1. ARITMÉTICA ── -->
+  <section class="section" id="aritmetica">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <h2>Aritmética básica</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Código comentado</div>
+        <div class="card-desc">Los operadores aritméticos realizan las operaciones matemáticas fundamentales: suma, resta, multiplicación, división y módulo.</div>
+        <pre><span class="cm">// Operadores aritméticos básicos</span>
+<span class="kw">const</span> a = <span class="num">10</span>, b = <span class="num">3</span>;
+
+<span class="cm">// Suma: añade dos valores</span>
+<span class="fn">console</span>.log(a + b);   <span class="cm">// → 13</span>
+
+<span class="cm">// Resta: diferencia entre valores</span>
+<span class="fn">console</span>.log(a - b);   <span class="cm">// → 7</span>
+
+<span class="cm">// Multiplicación</span>
+<span class="fn">console</span>.log(a * b);   <span class="cm">// → 30</span>
+
+<span class="cm">// División: cociente exacto</span>
+<span class="fn">console</span>.log(a / b);   <span class="cm">// → 3.333...</span>
+
+<span class="cm">// Módulo: resto de la división</span>
+<span class="fn">console</span>.log(a % b);   <span class="cm">// → 1</span>
+
+<span class="cm">// Potencia: base elevada al exp.</span>
+<span class="fn">console</span>.log(a ** b);  <span class="cm">// → 1000</span></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Demo interactiva</div>
+        <div class="demo">
+          <label>Número A</label>
+          <input type="number" id="ar-a" value="10">
+          <label>Número B</label>
+          <input type="number" id="ar-b" value="3">
+          <button class="btn" onclick="calcAritmetica()">Calcular</button>
+          <div class="result" id="ar-result">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 2. ÁLGEBRA / Math object ── -->
+  <section class="section" id="algebra">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <h2>Objeto Math — Álgebra</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Código comentado</div>
+        <div class="card-desc">El objeto global <code>Math</code> provee constantes y funciones matemáticas sin necesidad de instanciarse.</div>
+        <pre><span class="cm">// Math.abs → valor absoluto</span>
+<span class="fn">Math</span>.abs(-<span class="num">7</span>);       <span class="cm">// 7</span>
+
+<span class="cm">// Math.sqrt → raíz cuadrada</span>
+<span class="fn">Math</span>.sqrt(<span class="num">144</span>);     <span class="cm">// 12</span>
+
+<span class="cm">// Math.pow → potenciación</span>
+<span class="fn">Math</span>.pow(<span class="num">2</span>, <span class="num">8</span>);     <span class="cm">// 256</span>
+
+<span class="cm">// Math.log → logaritmo natural</span>
+<span class="fn">Math</span>.log(<span class="fn">Math</span>.E);  <span class="cm">// 1</span>
+
+<span class="cm">// Math.PI → constante π</span>
+<span class="fn">Math</span>.PI;            <span class="cm">// 3.14159...</span>
+
+<span class="cm">// Math.random → número [0,1)</span>
+<span class="fn">Math</span>.random();
+
+<span class="cm">// Math.floor/ceil/round → redondeo</span>
+<span class="fn">Math</span>.floor(<span class="num">4.9</span>);   <span class="cm">// 4</span>
+<span class="fn">Math</span>.ceil(<span class="num">4.1</span>);    <span class="cm">// 5</span></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Demo interactiva</div>
+        <div class="demo">
+          <label>Número</label>
+          <input type="number" id="alg-n" value="144">
+          <button class="btn" onclick="calcAlgebra()">Explorar Math</button>
+          <div class="result" id="alg-result">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 3. TRIGONOMETRÍA ── -->
+  <section class="section" id="trigono">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <h2>Trigonometría</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Código comentado</div>
+        <div class="card-desc">Las funciones trigonométricas de JS trabajan en radianes. Para convertir desde grados: <code>rad = deg × (π/180)</code>.</div>
+        <pre><span class="cm">// Conversión de grados a radianes</span>
+<span class="kw">const</span> toRad = deg =&gt; deg * (<span class="fn">Math</span>.PI / <span class="num">180</span>);
+
+<span class="cm">// Seno: relación opuesto/hipotenusa</span>
+<span class="fn">Math</span>.sin(toRad(<span class="num">90</span>));  <span class="cm">// 1</span>
+
+<span class="cm">// Coseno: relación adyacente/hipotenusa</span>
+<span class="fn">Math</span>.cos(toRad(<span class="num">0</span>));   <span class="cm">// 1</span>
+
+<span class="cm">// Tangente: opuesto/adyacente</span>
+<span class="fn">Math</span>.tan(toRad(<span class="num">45</span>));  <span class="cm">// ≈ 1</span>
+
+<span class="cm">// Hipotenusa con Pitágoras</span>
+<span class="kw">const</span> hip = (a, b) =&gt;
+  <span class="fn">Math</span>.sqrt(a**<span class="num">2</span> + b**<span class="num">2</span>);
+hip(<span class="num">3</span>, <span class="num">4</span>);  <span class="cm">// 5</span></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Demo interactiva</div>
+        <div class="demo">
+          <label>Ángulo en grados: <span id="ang-label">45</span>°</label>
+          <input type="range" id="tri-deg" min="0" max="360" value="45"
+                 oninput="document.getElementById('ang-label').textContent=this.value; calcTrig()">
+          <div class="result" id="tri-result">—</div>
+          <canvas id="tri-canvas" height="100"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 4. ESTADÍSTICA ── -->
+  <section class="section" id="estadistica">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <h2>Estadística descriptiva</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Código comentado</div>
+        <div class="card-desc">Las medidas de tendencia central resumen un conjunto de datos en un solo valor representativo.</div>
+        <pre><span class="kw">const</span> datos = [<span class="num">4</span>,<span class="num">8</span>,<span class="num">6</span>,<span class="num">5</span>,<span class="num">3</span>,<span class="num">2</span>,<span class="num">8</span>,<span class="num">9</span>,<span class="num">10</span>,<span class="num">4</span>];
+
+<span class="cm">// Media: suma dividida entre total</span>
+<span class="kw">const</span> media = arr =&gt;
+  arr.reduce((s,n) =&gt; s+n, <span class="num">0</span>) / arr.length;
+
+<span class="cm">// Mediana: valor central ordenado</span>
+<span class="kw">const</span> mediana = arr =&gt; {
+  <span class="kw">const</span> s = [...arr].sort((a,b)=&gt;a-b);
+  <span class="kw">const</span> m = Math.floor(s.length/<span class="num">2</span>);
+  <span class="kw">return</span> s.length%<span class="num">2</span> ? s[m] : (s[m-<span class="num">1</span>]+s[m])/<span class="num">2</span>;
+};
+
+<span class="cm">// Varianza: dispersión respecto a la media</span>
+<span class="kw">const</span> varianza = arr =&gt; {
+  <span class="kw">const</span> m = media(arr);
+  <span class="kw">return</span> media(arr.map(x =&gt; (x-m)**<span class="num">2</span>));
+};
+
+<span class="cm">// Desviación estándar: √varianza</span>
+<span class="kw">const</span> desv = arr =&gt; Math.sqrt(varianza(arr));</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Demo interactiva</div>
+        <div class="demo">
+          <label>Números separados por coma</label>
+          <input type="text" id="stat-input" value="4,8,6,5,3,2,8,9,10,4"
+                 style="background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.8rem;padding:.4rem .7rem;outline:none;width:100%;transition:border-color .2s"
+                 onfocus="this.style.borderColor='var(--accent)'"
+                 onblur="this.style.borderColor='var(--border)'">
+          <button class="btn" onclick="calcEstadistica()">Analizar</button>
+          <div class="result" id="stat-result">—</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 5. BINARIO / Bits ── -->
+  <section class="section" id="binario">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <h2>Sistema binario y operadores bit a bit</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Código comentado</div>
+        <div class="card-desc">JavaScript permite manipular los bits de los números directamente con operadores bitwise, usados en flags, máscaras y gráficos.</div>
+        <pre><span class="kw">const</span> n = <span class="num">42</span>;
+
+<span class="cm">// toString(2) convierte a binario</span>
+n.toString(<span class="num">2</span>);   <span class="cm">// "101010"</span>
+
+<span class="cm">// AND: 1 solo si ambos bits son 1</span>
+<span class="num">12</span> &amp; <span class="num">10</span>;        <span class="cm">// 8  (1100 & 1010)</span>
+
+<span class="cm">// OR: 1 si al menos un bit es 1</span>
+<span class="num">12</span> | <span class="num">10</span>;        <span class="cm">// 14 (1100 | 1010)</span>
+
+<span class="cm">// XOR: 1 solo si los bits difieren</span>
+<span class="num">12</span> ^ <span class="num">10</span>;        <span class="cm">// 6  (1100 ^ 1010)</span>
+
+<span class="cm">// NOT: invierte todos los bits</span>
+~<span class="num">5</span>;             <span class="cm">// -6</span>
+
+<span class="cm">// Desplazamiento izquierda (×2)</span>
+<span class="num">1</span> &lt;&lt; <span class="num">4</span>;         <span class="cm">// 16</span>
+
+<span class="cm">// Desplazamiento derecha (÷2)</span>
+<span class="num">16</span> &gt;&gt; <span class="num">2</span>;        <span class="cm">// 4</span></pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Demo interactiva</div>
+        <div class="demo">
+          <label>Número entero</label>
+          <input type="number" id="bin-n" value="42" min="0" max="255">
+          <button class="btn" onclick="calcBinario()">Ver binario</button>
+          <div class="result" id="bin-result">—</div>
+          <div id="truth-table"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── 6. GRÁFICAS ── -->
+  <section class="section" id="graficas">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <h2>Gráficas con Canvas</h2>
+    </div>
+    <div class="card-grid">
+      <div class="card">
+        <div class="card-title">Código comentado</div>
+        <div class="card-desc">Usando el API Canvas de HTML5 podemos graficar funciones matemáticas al convertir coordenadas matemáticas en píxeles.</div>
+        <pre><span class="cm">// Graficar f(x) = sin(x) en canvas</span>
+<span class="kw">function</span> <span class="fn">graficar</span>(canvas, fn) {
+  <span class="kw">const</span> ctx = canvas.getContext(<span class="str">'2d'</span>);
+  <span class="kw">const</span> {width: W, height: H} = canvas;
+
+  <span class="cm">// Limpiar lienzo</span>
+  ctx.clearRect(<span class="num">0</span>, <span class="num">0</span>, W, H);
+
+  <span class="cm">// Centro del canvas como origen</span>
+  <span class="kw">const</span> cx = W/<span class="num">2</span>, cy = H/<span class="num">2</span>;
+
+  ctx.beginPath();
+  <span class="kw">for</span> (<span class="kw">let</span> px = <span class="num">0</span>; px &lt; W; px++) {
+    <span class="cm">// Convertir px a radianes</span>
+    <span class="kw">const</span> x = (px - cx) / <span class="num">40</span>;
+    <span class="cm">// Evaluar función y escalar</span>
+    <span class="kw">const</span> y = cy - fn(x) * <span class="num">40</span>;
+    px === <span class="num">0</span> ? ctx.moveTo(px,y)
+              : ctx.lineTo(px,y);
+  }
+  ctx.stroke();
+}</pre>
+      </div>
+      <div class="card">
+        <div class="card-title">Demo interactiva</div>
+        <div class="demo">
+          <label>Función a graficar</label>
+          <select id="fn-select" onchange="drawGraph()"
+            style="background:var(--card);border:1px solid var(--border);border-radius:6px;color:var(--text);font-family:var(--font-mono);font-size:.8rem;padding:.4rem .7rem;outline:none;width:100%;cursor:pointer">
+            <option value="sin">sin(x)</option>
+            <option value="cos">cos(x)</option>
+            <option value="tan">tan(x)</option>
+            <option value="x2">x²</option>
+            <option value="sqrt">√|x|</option>
+            <option value="log">log(|x|+1)</option>
+          </select>
+          <canvas id="main-canvas" height="160"></canvas>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+
+<script>
+/* ═══════════════════════════════════════════
+   TEMA: Alternar modo oscuro / claro
+   ═══════════════════════════════════════════ */
+function toggleTheme() {
+  const body = document.body;
+  const isDark = body.dataset.theme === 'dark';
+  // Cambia el atributo data-theme que CSS usa para aplicar variables
+  body.dataset.theme = isDark ? 'light' : 'dark';
+  document.querySelector('.theme-toggle').textContent = isDark ? '🌙' : '☀️';
+  drawGraph(); // redibujar canvas con nuevo fondo
+}
+
+/* ═══════════════════════════════════════════
+   TEMA: Cambiar paleta de acento
+   ═══════════════════════════════════════════ */
+function setColor(color, el) {
+  // Aplica el tema de color al body via atributo CSS
+  document.body.dataset.color = color;
+  document.querySelectorAll('.color-dot').forEach(d => d.classList.remove('active'));
+  el.classList.add('active');
+  drawGraph();
+}
+
+/* ═══════════════════════════════════════════
+   NAV HAMBURGUESA: abrir / cerrar menú
+   ═══════════════════════════════════════════ */
+function toggleMenu() {
+  const drawer  = document.getElementById('nav-drawer');
+  const burger  = document.getElementById('burger-btn');
+  const overlay = document.getElementById('nav-overlay');
+  // Alterna la clase open en todos los elementos del menú
+  const isOpen = drawer.classList.toggle('open');
+  burger.classList.toggle('open', isOpen);
+  overlay.classList.toggle('open', isOpen);
+}
+
+function closeMenu() {
+  // Cierra el menú (al hacer clic en un enlace o en el overlay)
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('burger-btn').classList.remove('open');
+  document.getElementById('nav-overlay').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════
+   NAV: Marcar enlace activo al hacer scroll
+   (aplica a links del desktop y del drawer)
+   ═══════════════════════════════════════════ */
+const sections = document.querySelectorAll('.section');
+const navLinks = document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll', () => {
+  let current = '';
+  sections.forEach(sec => {
+    if (window.scrollY >= sec.offsetTop - 80) current = sec.id;
+  });
+  navLinks.forEach(a => {
+    // Compara el href del enlace con la sección visible
+    a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+  });
+});
+
+/* ═══════════════════════════════════════════
+   DEMO 1: Aritmética básica
+   ═══════════════════════════════════════════ */
+function calcAritmetica() {
+  const a = parseFloat(document.getElementById('ar-a').value);
+  const b = parseFloat(document.getElementById('ar-b').value);
+  if (isNaN(a) || isNaN(b)) return;
+  // Aplica los seis operadores y muestra resultados
+  document.getElementById('ar-result').innerHTML =
+    `${a} + ${b} = <b>${a + b}</b> | ` +
+    `${a} - ${b} = <b>${a - b}</b><br>` +
+    `${a} × ${b} = <b>${(a * b).toFixed(4)}</b> | ` +
+    `${a} ÷ ${b} = <b>${b !== 0 ? (a / b).toFixed(4) : '∞'}</b><br>` +
+    `${a} % ${b} = <b>${(a % b).toFixed(4)}</b> | ` +
+    `${a} ** ${b} = <b>${(a ** b).toExponential(2)}</b>`;
+}
+calcAritmetica();
+
+/* ═══════════════════════════════════════════
+   DEMO 2: Objeto Math
+   ═══════════════════════════════════════════ */
+function calcAlgebra() {
+  const n = parseFloat(document.getElementById('alg-n').value);
+  if (isNaN(n)) return;
+  // Aplica varias funciones del objeto Math
+  document.getElementById('alg-result').innerHTML =
+    `abs: <b>${Math.abs(n)}</b> | sqrt: <b>${Math.sqrt(Math.abs(n)).toFixed(4)}</b><br>` +
+    `floor: <b>${Math.floor(n)}</b> | ceil: <b>${Math.ceil(n)}</b> | round: <b>${Math.round(n)}</b><br>` +
+    `log(|n|+1): <b>${Math.log(Math.abs(n)+1).toFixed(4)}</b> | pow(n,2): <b>${Math.pow(n,2).toExponential(3)}</b><br>` +
+    `min(n,0): <b>${Math.min(n,0)}</b> | max(n,0): <b>${Math.max(n,0)}</b>`;
+}
+calcAlgebra();
+
+/* ═══════════════════════════════════════════
+   DEMO 3: Trigonometría
+   ═══════════════════════════════════════════ */
+function calcTrig() {
+  const deg = parseFloat(document.getElementById('tri-deg').value);
+  // Convierte grados a radianes para las funciones de Math
+  const rad = deg * (Math.PI / 180);
+  const sin = Math.sin(rad), cos = Math.cos(rad), tan = Math.tan(rad);
+  document.getElementById('tri-result').innerHTML =
+    `sin(${deg}°) = <b>${sin.toFixed(4)}</b> | ` +
+    `cos(${deg}°) = <b>${cos.toFixed(4)}</b> | ` +
+    `tan(${deg}°) = <b>${Math.abs(tan) > 999 ? '∞' : tan.toFixed(4)}</b>`;
+  // Dibujar círculo unitario
+  drawUnitCircle(deg, sin, cos);
+}
+
+function drawUnitCircle(deg, sin, cos) {
+  const canvas = document.getElementById('tri-canvas');
+  const ctx = canvas.getContext('2d');
+  canvas.width = canvas.offsetWidth * devicePixelRatio || 300;
+  canvas.height = 100 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = canvas.offsetWidth, H = 100;
+  const cx = W / 2, cy = H / 2, r = Math.min(cx, cy) - 10;
+
+  // Obtener color acento del CSS para el dibujo
+  const accent = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+  const muted  = getComputedStyle(document.body).getPropertyValue('--muted').trim();
+
+  ctx.clearRect(0, 0, W, H);
+  // Círculo unitario
+  ctx.beginPath();
+  ctx.arc(cx, cy, r, 0, Math.PI * 2);
+  ctx.strokeStyle = muted;
+  ctx.lineWidth = 1;
+  ctx.stroke();
+
+  // Ejes
+  ctx.beginPath();
+  ctx.moveTo(cx - r - 5, cy); ctx.lineTo(cx + r + 5, cy);
+  ctx.moveTo(cx, cy - r - 5); ctx.lineTo(cx, cy + r + 5);
+  ctx.strokeStyle = muted;
+  ctx.stroke();
+
+  // Punto en la circunferencia
+  const rad = deg * Math.PI / 180;
+  const px = cx + r * Math.cos(rad);
+  const py = cy - r * Math.sin(rad);
+
+  // Línea del radio
+  ctx.beginPath();
+  ctx.moveTo(cx, cy); ctx.lineTo(px, py);
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 2;
+  ctx.stroke();
+
+  // Proyecciones sen y cos
+  ctx.beginPath();
+  ctx.moveTo(px, py); ctx.lineTo(px, cy);
+  ctx.strokeStyle = '#f59e0b';
+  ctx.setLineDash([3, 3]);
+  ctx.stroke();
+
+  ctx.beginPath();
+  ctx.moveTo(cx, cy); ctx.lineTo(px, cy);
+  ctx.strokeStyle = '#38bdf8';
+  ctx.stroke();
+  ctx.setLineDash([]);
+
+  // Punto
+  ctx.beginPath();
+  ctx.arc(px, py, 4, 0, Math.PI * 2);
+  ctx.fillStyle = accent;
+  ctx.fill();
+}
+calcTrig();
+
+/* ═══════════════════════════════════════════
+   DEMO 4: Estadística descriptiva
+   ═══════════════════════════════════════════ */
+function calcEstadistica() {
+  const raw = document.getElementById('stat-input').value;
+  // Parsear la cadena de números separados por coma
+  const arr = raw.split(',').map(Number).filter(n => !isNaN(n));
+  if (!arr.length) return;
+
+  // Media aritmética: suma total / cantidad
+  const media = arr.reduce((s, n) => s + n, 0) / arr.length;
+
+  // Mediana: valor central del arreglo ordenado
+  const sorted = [...arr].sort((a, b) => a - b);
+  const mid = Math.floor(sorted.length / 2);
+  const mediana = sorted.length % 2
+    ? sorted[mid]
+    : (sorted[mid - 1] + sorted[mid]) / 2;
+
+  // Moda: valor que más se repite
+  const freq = {};
+  arr.forEach(n => freq[n] = (freq[n] || 0) + 1);
+  const maxFreq = Math.max(...Object.values(freq));
+  const moda = Object.keys(freq).filter(k => freq[k] === maxFreq).join(', ');
+
+  // Varianza: promedio de cuadrados de diferencias
+  const varianza = arr.reduce((s, n) => s + (n - media) ** 2, 0) / arr.length;
+  const desv = Math.sqrt(varianza); // Desviación estándar
+
+  document.getElementById('stat-result').innerHTML =
+    `n: <b>${arr.length}</b> | media: <b>${media.toFixed(3)}</b> | mediana: <b>${mediana}</b><br>` +
+    `moda: <b>${moda}</b> | mín: <b>${Math.min(...arr)}</b> | máx: <b>${Math.max(...arr)}</b><br>` +
+    `varianza: <b>${varianza.toFixed(3)}</b> | desv.std: <b>${desv.toFixed(3)}</b>`;
+}
+calcEstadistica();
+
+/* ═══════════════════════════════════════════
+   DEMO 5: Sistema binario y operadores bit a bit
+   ═══════════════════════════════════════════ */
+function calcBinario() {
+  const n = parseInt(document.getElementById('bin-n').value);
+  if (isNaN(n)) return;
+
+  // toString(2) convierte el entero a su representación binaria
+  const bin = (n >>> 0).toString(2).padStart(8, '0');
+  const hex = n.toString(16).toUpperCase();
+
+  document.getElementById('bin-result').innerHTML =
+    `DEC: <b>${n}</b> → BIN: <b>${bin}</b> → HEX: <b>0x${hex}</b><br>` +
+    `n &amp; 0xF0 = <b>${n & 0xF0}</b> | n | 0x0F = <b>${n | 0x0F}</b> | n ^ 0xFF = <b>${n ^ 0xFF}</b><br>` +
+    `n &lt;&lt; 1 = <b>${n << 1}</b> | n &gt;&gt; 1 = <b>${n >> 1}</b> | ~n = <b>${~n}</b>`;
+
+  // Tabla de bits del byte
+  const container = document.getElementById('truth-table');
+  const bits = bin.split('');
+  container.innerHTML = `<table>
+    <tr>${bits.map((_, i) => `<th>b${7 - i}</th>`).join('')}</tr>
+    <tr>${bits.map(b => `<td class="${b === '1' ? 't' : 'f'}">${b}</td>`).join('')}</tr>
+  </table>`;
+}
+calcBinario();
+
+/* ═══════════════════════════════════════════
+   DEMO 6: Graficar funciones con Canvas
+   ═══════════════════════════════════════════ */
+function drawGraph() {
+  const canvas = document.getElementById('main-canvas');
+  const ctx = canvas.getContext('2d');
+  const fnName = document.getElementById('fn-select').value;
+
+  // Diccionario de funciones matemáticas a graficar
+  const fns = {
+    sin:  x => Math.sin(x),
+    cos:  x => Math.cos(x),
+    tan:  x => Math.tan(x),
+    x2:   x => x * x / 10,         // escala para que quepa
+    sqrt: x => Math.sqrt(Math.abs(x)),
+    log:  x => Math.log(Math.abs(x) + 1),
+  };
+  const fn = fns[fnName];
+
+  canvas.width  = canvas.offsetWidth  * devicePixelRatio || 400;
+  canvas.height = 160 * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+  const W = canvas.offsetWidth, H = 160;
+
+  // Obtener colores del tema actual
+  const accent  = getComputedStyle(document.body).getPropertyValue('--accent').trim();
+  const surface = getComputedStyle(document.body).getPropertyValue('--surface').trim();
+  const muted   = getComputedStyle(document.body).getPropertyValue('--muted').trim();
+
+  ctx.fillStyle = surface;
+  ctx.fillRect(0, 0, W, H);
+
+  const cx = W / 2, cy = H / 2;
+  const scaleX = 40, scaleY = 40;
+
+  // Rejilla
+  ctx.strokeStyle = muted + '33';
+  ctx.lineWidth = 1;
+  for (let x = 0; x < W; x += scaleX) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+  for (let y = 0; y < H; y += scaleY) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+
+  // Ejes
+  ctx.strokeStyle = muted;
+  ctx.lineWidth = 1.5;
+  ctx.beginPath(); ctx.moveTo(0, cy); ctx.lineTo(W, cy); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(cx, 0); ctx.lineTo(cx, H); ctx.stroke();
+
+  // Trazar la función
+  ctx.beginPath();
+  ctx.strokeStyle = accent;
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  let started = false;
+  for (let px = 0; px < W; px++) {
+    // Convertir pixel a coordenada matemática
+    const x = (px - cx) / scaleX;
+    const y = fn(x);
+    const py = cy - y * scaleY;
+    // Evitar líneas verticales en discontinuidades (tan)
+    if (py < -H || py > 2 * H) { started = false; continue; }
+    if (!started) { ctx.moveTo(px, py); started = true; }
+    else ctx.lineTo(px, py);
+  }
+  ctx.stroke();
+
+  // Etiqueta
+  ctx.fillStyle = accent;
+  ctx.font = `bold 12px 'Space Mono', monospace`;
+  ctx.fillText('f(x) = ' + fnName.replace('x2', 'x²').replace('sqrt', '√|x|').replace('log', 'log(|x|+1)'), 10, 18);
+}
+drawGraph();
+
+// Redibujar canvas cuando cambie el tamaño de la ventana
+window.addEventListener('resize', () => { drawGraph(); calcTrig(); });
+</script>
+</body>
+</html>
