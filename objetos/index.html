@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Objetos en JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;600;800&family=Unbounded:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  @import url('./css/style.css');
+</style>
+</head>
+<body>
+
+<header>
+  <div class="badge">Introducción</div>
+  <h1>Objetos en JavaScript</h1>
+  <p>Guía estructurada con ejemplos comentados y consola interactiva. Haz clic en cada tema para expandirlo.</p>
+</header>
+
+<nav class="nav-topics">
+  <button class="nav-btn active" onclick="filterCards('all', this)">Todos</button>
+  <button class="nav-btn" onclick="filterCards('fundamental', this)">Fundamental</button>
+  <button class="nav-btn" onclick="filterCards('intermedio', this)">Intermedio</button>
+  <button class="nav-btn" onclick="filterCards('avanzado', this)">Avanzado</button>
+</nav>
+
+<main class="container" id="cards-container">
+
+  <!-- 01 -->
+  <div class="topic-card" data-level="fundamental">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">01</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Creación de Objetos</div>
+        <div class="card-def">Un objeto es una colección de pares clave-valor que agrupa datos y comportamientos relacionados.</div>
+      </div>
+      <span class="card-tag tag-fundamental">Fundamental</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="cm">// Objeto literal: la forma más común y directa de crear objetos</span>
+<span class="kw">const</span> <span class="prop">persona</span> = {
+  nombre: <span class="str">"Ana García"</span>,   <span class="cm">// propiedad de tipo string</span>
+  edad: <span class="num">28</span>,              <span class="cm">// propiedad de tipo number</span>
+  activo: <span class="bool">true</span>          <span class="cm">// propiedad de tipo boolean</span>
+};
+
+<span class="cm">// Constructor new Object(): alternativa menos usada</span>
+<span class="kw">const</span> <span class="prop">vehiculo</span> = <span class="kw">new</span> <span class="fn">Object</span>();
+<span class="prop">vehiculo</span>.marca = <span class="str">"Toyota"</span>;
+<span class="prop">vehiculo</span>.año = <span class="num">2023</span>;
+
+<span class="cm">// Object.create(): crea un objeto con prototipo específico</span>
+<span class="kw">const</span> <span class="prop">base</span> = { tipo: <span class="str">"animal"</span> };
+<span class="kw">const</span> <span class="prop">perro</span> = <span class="fn">Object</span>.<span class="fn">create</span>(<span class="prop">base</span>);
+<span class="prop">perro</span>.nombre = <span class="str">"Firulais"</span>;
+
+<span class="cm">// Mostrar resultados</span>
+console.<span class="fn">log</span>(<span class="str">"Persona:"</span>, <span class="prop">persona</span>.nombre, <span class="str">"-"</span>, <span class="prop">persona</span>.edad, <span class="str">"años"</span>);
+console.<span class="fn">log</span>(<span class="str">"Vehículo:"</span>, <span class="prop">vehiculo</span>.marca, <span class="prop">vehiculo</span>.año);
+console.<span class="fn">log</span>(<span class="str">"Perro hereda tipo:"</span>, <span class="prop">perro</span>.tipo);</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 1)">▶ Ejecutar</button>
+        <div class="console-out" id="out-1">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 -->
+  <div class="topic-card" data-level="fundamental">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">02</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Acceso a Propiedades</div>
+        <div class="card-def">Dos formas de leer o escribir propiedades: notación de punto (simple) y notación de corchetes (dinámica).</div>
+      </div>
+      <span class="card-tag tag-fundamental">Fundamental</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="kw">const</span> <span class="prop">producto</span> = {
+  nombre: <span class="str">"Laptop"</span>,
+  precio: <span class="num">1299.99</span>,
+  <span class="str">"en-stock"</span>: <span class="bool">true</span>   <span class="cm">// propiedad con guion requiere corchetes</span>
+};
+
+<span class="cm">// Notación de punto: rápida y legible para nombres simples</span>
+console.<span class="fn">log</span>(<span class="prop">producto</span>.nombre);   <span class="cm">// → "Laptop"</span>
+console.<span class="fn">log</span>(<span class="prop">producto</span>.precio);   <span class="cm">// → 1299.99</span>
+
+<span class="cm">// Notación de corchetes: necesaria para nombres especiales o dinámicos</span>
+console.<span class="fn">log</span>(<span class="prop">producto</span>[<span class="str">"en-stock"</span>]);  <span class="cm">// → true</span>
+
+<span class="cm">// Acceso dinámico con variable: muy útil en funciones genéricas</span>
+<span class="kw">const</span> campo = <span class="str">"precio"</span>;
+console.<span class="fn">log</span>(<span class="prop">producto</span>[campo]);   <span class="cm">// → 1299.99 (accede dinámicamente)</span>
+
+<span class="cm">// Propiedad inexistente devuelve undefined (sin error)</span>
+console.<span class="fn">log</span>(<span class="prop">producto</span>.color);    <span class="cm">// → undefined</span>
+
+<span class="cm">// Optional chaining (?.) evita errores con objetos nulos</span>
+<span class="kw">const</span> <span class="prop">usuario</span> = <span class="bool">null</span>;
+console.<span class="fn">log</span>(<span class="prop">usuario</span>?.<span class="prop">nombre</span> ?? <span class="str">"Sin usuario"</span>); <span class="cm">// → "Sin usuario"</span></code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 2)">▶ Ejecutar</button>
+        <div class="console-out" id="out-2">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 -->
+  <div class="topic-card" data-level="fundamental">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">03</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Métodos de Objeto</div>
+        <div class="card-def">Los métodos son funciones almacenadas como propiedades de un objeto. Pueden usar <code>this</code> para acceder a sus propias propiedades.</div>
+      </div>
+      <span class="card-tag tag-fundamental">Fundamental</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="kw">const</span> <span class="prop">calculadora</span> = {
+  historial: [],           <span class="cm">// propiedad que almacena datos internos</span>
+
+  <span class="cm">// Método con sintaxis abreviada (shorthand method)</span>
+  <span class="fn">sumar</span>(a, b) {
+    <span class="kw">const</span> resultado = a + b;
+    <span class="kw">this</span>.<span class="prop">historial</span>.<span class="fn">push</span>(<span class="str">`${a} + ${b} = ${resultado}`</span>); <span class="cm">// this → el objeto mismo</span>
+    <span class="kw">return</span> resultado;
+  },
+
+  <span class="cm">// Arrow functions NO tienen su propio 'this'</span>
+  <span class="fn">multiplicar</span>: (a, b) => a * b,  <span class="cm">// válida para cálculos sin 'this'</span>
+
+  <span class="cm">// Método que accede a datos internos</span>
+  <span class="fn">verHistorial</span>() {
+    <span class="kw">return</span> <span class="kw">this</span>.<span class="prop">historial</span>.<span class="fn">join</span>(<span class="str">"\n"</span>);
+  }
+};
+
+console.<span class="fn">log</span>(<span class="prop">calculadora</span>.<span class="fn">sumar</span>(<span class="num">5</span>, <span class="num">3</span>));      <span class="cm">// → 8</span>
+console.<span class="fn">log</span>(<span class="prop">calculadora</span>.<span class="fn">sumar</span>(<span class="num">10</span>, <span class="num">20</span>));   <span class="cm">// → 30</span>
+console.<span class="fn">log</span>(<span class="prop">calculadora</span>.<span class="fn">multiplicar</span>(<span class="num">4</span>, <span class="num">6</span>)); <span class="cm">// → 24</span>
+console.<span class="fn">log</span>(<span class="prop">calculadora</span>.<span class="fn">verHistorial</span>());</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 3)">▶ Ejecutar</button>
+        <div class="console-out" id="out-3">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 -->
+  <div class="topic-card" data-level="intermedio">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">04</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Destructuring y Spread</div>
+        <div class="card-def">Destructuring extrae propiedades en variables. Spread (<code>...</code>) expande o combina objetos de forma concisa.</div>
+      </div>
+      <span class="card-tag tag-intermedio">Intermedio</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="kw">const</span> <span class="prop">empleado</span> = {
+  id: <span class="num">42</span>,
+  nombre: <span class="str">"Carlos"</span>,
+  puesto: <span class="str">"Desarrollador"</span>,
+  salario: <span class="num">55000</span>,
+  departamento: <span class="str">"IT"</span>
+};
+
+<span class="cm">// Destructuring: extrae propiedades a variables locales</span>
+<span class="kw">const</span> { nombre, puesto, salario } = <span class="prop">empleado</span>;
+console.<span class="fn">log</span>(<span class="str">`${nombre} → ${puesto}`</span>);
+
+<span class="cm">// Renombrar al destructurar + valor por defecto</span>
+<span class="kw">const</span> { nombre: nombreCompleto, bonus = <span class="num">0</span> } = <span class="prop">empleado</span>;
+console.<span class="fn">log</span>(<span class="str">`Bonus de ${nombreCompleto}: $${bonus}`</span>);
+
+<span class="cm">// Rest en destructuring: agrupa el resto de propiedades</span>
+<span class="kw">const</span> { id, ...<span class="prop">datosPublicos</span> } = <span class="prop">empleado</span>;
+console.<span class="fn">log</span>(<span class="str">"Sin ID:"</span>, <span class="prop">datosPublicos</span>);
+
+<span class="cm">// Spread: crea una copia superficial del objeto</span>
+<span class="kw">const</span> <span class="prop">empleadoActualizado</span> = { ...<span class="prop">empleado</span>, salario: <span class="num">60000</span>, nivel: <span class="str">"Senior"</span> };
+console.<span class="fn">log</span>(<span class="str">"Salario nuevo:"</span>, <span class="prop">empleadoActualizado</span>.salario);
+
+<span class="cm">// Combinar dos objetos (el segundo sobreescribe propiedades repetidas)</span>
+<span class="kw">const</span> extra = { idiomas: [<span class="str">"JS"</span>, <span class="str">"Python"</span>], remoto: <span class="bool">true</span> };
+<span class="kw">const</span> perfil = { ...<span class="prop">empleado</span>, ...extra };
+console.<span class="fn">log</span>(<span class="str">"Perfil completo:"</span>, perfil.idiomas);</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 4)">▶ Ejecutar</button>
+        <div class="console-out" id="out-4">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 -->
+  <div class="topic-card" data-level="intermedio">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">05</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Métodos de Object</div>
+        <div class="card-def">Object.keys(), Object.values() y Object.entries() permiten iterar y transformar objetos como si fueran arrays.</div>
+      </div>
+      <span class="card-tag tag-intermedio">Intermedio</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="kw">const</span> <span class="prop">inventario</span> = {
+  manzanas: <span class="num">50</span>,
+  naranjas: <span class="num">30</span>,
+  uvas: <span class="num">80</span>,
+  peras: <span class="num">20</span>
+};
+
+<span class="cm">// Object.keys(): array con los nombres de las propiedades</span>
+<span class="kw">const</span> frutas = <span class="fn">Object</span>.<span class="fn">keys</span>(<span class="prop">inventario</span>);
+console.<span class="fn">log</span>(<span class="str">"Frutas:"</span>, frutas);
+
+<span class="cm">// Object.values(): array con los valores</span>
+<span class="kw">const</span> cantidades = <span class="fn">Object</span>.<span class="fn">values</span>(<span class="prop">inventario</span>);
+<span class="kw">const</span> total = cantidades.<span class="fn">reduce</span>((acc, n) => acc + n, <span class="num">0</span>);
+console.<span class="fn">log</span>(<span class="str">"Total en stock:"</span>, total);
+
+<span class="cm">// Object.entries(): array de pares [clave, valor] — ideal para iterar</span>
+<span class="fn">Object</span>.<span class="fn">entries</span>(<span class="prop">inventario</span>).<span class="fn">forEach</span>(([fruta, cantidad]) => {
+  <span class="kw">const</span> estado = cantidad > <span class="num">40</span> ? <span class="str">"✓ OK"</span> : <span class="str">"⚠ Bajo"</span>;
+  console.<span class="fn">log</span>(<span class="str">`${fruta}: ${cantidad} unidades ${estado}`</span>);
+});
+
+<span class="cm">// Object.fromEntries(): convierte entries de vuelta a objeto</span>
+<span class="kw">const</span> <span class="prop">doblado</span> = <span class="fn">Object</span>.<span class="fn">fromEntries</span>(
+  <span class="fn">Object</span>.<span class="fn">entries</span>(<span class="prop">inventario</span>).<span class="fn">map</span>(([k, v]) => [k, v * <span class="num">2</span>])
+);
+console.<span class="fn">log</span>(<span class="str">"Stock duplicado:"</span>, <span class="prop">doblado</span>);</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 5)">▶ Ejecutar</button>
+        <div class="console-out" id="out-5">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 -->
+  <div class="topic-card" data-level="intermedio">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">06</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Constructores y Clases</div>
+        <div class="card-def">Las clases son plantillas para crear múltiples objetos con la misma estructura. Son "azúcar sintáctica" sobre prototipos.</div>
+      </div>
+      <span class="card-tag tag-intermedio">Intermedio</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="cm">// Clase base: define la estructura compartida</span>
+<span class="kw">class</span> <span class="cls">Cuenta</span> {
+  <span class="cm">// #saldo es una propiedad privada (solo accesible dentro de la clase)</span>
+  #saldo = <span class="num">0</span>;
+
+  <span class="fn">constructor</span>(titular, saldoInicial) {
+    <span class="kw">this</span>.titular = titular;          <span class="cm">// propiedad pública</span>
+    <span class="kw">this</span>.#saldo = saldoInicial;       <span class="cm">// inicializar privada</span>
+    <span class="kw">this</span>.movimientos = [];
+  }
+
+  <span class="fn">depositar</span>(monto) {
+    <span class="kw">this</span>.#saldo += monto;
+    <span class="kw">this</span>.movimientos.<span class="fn">push</span>(<span class="str">`+${monto}`</span>);
+  }
+
+  <span class="fn">retirar</span>(monto) {
+    <span class="kw">if</span> (monto > <span class="kw">this</span>.#saldo) <span class="kw">throw new</span> <span class="cls">Error</span>(<span class="str">"Fondos insuficientes"</span>);
+    <span class="kw">this</span>.#saldo -= monto;
+    <span class="kw">this</span>.movimientos.<span class="fn">push</span>(<span class="str">`-${monto}`</span>);
+  }
+
+  <span class="cm">// Getter: propiedad de solo lectura que calcula un valor</span>
+  <span class="kw">get</span> <span class="fn">saldo</span>() { <span class="kw">return</span> <span class="kw">this</span>.#saldo; }
+
+  <span class="fn">toString</span>() {
+    <span class="kw">return</span> <span class="str">`[${this.titular}] Saldo: $${this.saldo}`</span>;
+  }
+}
+
+<span class="kw">const</span> <span class="prop">cta</span> = <span class="kw">new</span> <span class="cls">Cuenta</span>(<span class="str">"María López"</span>, <span class="num">1000</span>);
+<span class="prop">cta</span>.<span class="fn">depositar</span>(<span class="num">500</span>);
+<span class="prop">cta</span>.<span class="fn">retirar</span>(<span class="num">200</span>);
+console.<span class="fn">log</span>(<span class="prop">cta</span>.<span class="fn">toString</span>());
+console.<span class="fn">log</span>(<span class="str">"Movimientos:"</span>, <span class="prop">cta</span>.movimientos);</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 6)">▶ Ejecutar</button>
+        <div class="console-out" id="out-6">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 -->
+  <div class="topic-card" data-level="avanzado">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">07</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Herencia con Clases</div>
+        <div class="card-def">Una subclase extiende otra con <code>extends</code> y llama al constructor padre con <code>super()</code>, heredando sus propiedades y métodos.</div>
+      </div>
+      <span class="card-tag tag-avanzado">Avanzado</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="cm">// Clase padre: define comportamiento base</span>
+<span class="kw">class</span> <span class="cls">Animal</span> {
+  <span class="fn">constructor</span>(nombre, especie) {
+    <span class="kw">this</span>.nombre = nombre;
+    <span class="kw">this</span>.especie = especie;
+    <span class="kw">this</span>.vivo = <span class="bool">true</span>;
+  }
+
+  <span class="fn">describir</span>() {
+    <span class="kw">return</span> <span class="str">`${this.nombre} es un ${this.especie}`</span>;
+  }
+
+  <span class="fn">hablar</span>() { <span class="kw">return</span> <span class="str">"..."</span>; } <span class="cm">// método base a sobrescribir</span>
+}
+
+<span class="cm">// Subclase: extends hereda todo de Animal</span>
+<span class="kw">class</span> <span class="cls">Perro</span> <span class="kw">extends</span> <span class="cls">Animal</span> {
+  <span class="fn">constructor</span>(nombre, raza) {
+    <span class="kw">super</span>(nombre, <span class="str">"Canis lupus familiaris"</span>); <span class="cm">// llama al padre</span>
+    <span class="kw">this</span>.raza = raza;  <span class="cm">// propiedad exclusiva de Perro</span>
+  }
+
+  <span class="cm">// Override: reemplaza el método del padre</span>
+  <span class="fn">hablar</span>() { <span class="kw">return</span> <span class="str">`${this.nombre} dice: ¡Guau!`</span>; }
+
+  <span class="fn">fetch</span>(objeto) { <span class="kw">return</span> <span class="str">`${this.nombre} trae el ${objeto} 🎾`</span>; }
+}
+
+<span class="kw">class</span> <span class="cls">Gato</span> <span class="kw">extends</span> <span class="cls">Animal</span> {
+  <span class="fn">constructor</span>(nombre) { <span class="kw">super</span>(nombre, <span class="str">"Felis catus"</span>); }
+  <span class="fn">hablar</span>() { <span class="kw">return</span> <span class="str">`${this.nombre} dice: Miau...`</span>; }
+}
+
+<span class="kw">const</span> animales = [
+  <span class="kw">new</span> <span class="cls">Perro</span>(<span class="str">"Rex"</span>, <span class="str">"Labrador"</span>),
+  <span class="kw">new</span> <span class="cls">Gato</span>(<span class="str">"Misi"</span>),
+  <span class="kw">new</span> <span class="cls">Perro</span>(<span class="str">"Luna"</span>, <span class="str">"Beagle"</span>)
+];
+
+<span class="cm">// Polimorfismo: cada animal ejecuta su propia versión de hablar()</span>
+animales.<span class="fn">forEach</span>(a => console.<span class="fn">log</span>(a.<span class="fn">hablar</span>()));
+console.<span class="fn">log</span>(animales[<span class="num">0</span>].<span class="fn">fetch</span>(<span class="str">"palo"</span>));
+console.<span class="fn">log</span>(<span class="str">"¿Rex es Animal?"</span>, animales[<span class="num">0</span>] <span class="kw">instanceof</span> <span class="cls">Animal</span>);</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 7)">▶ Ejecutar</button>
+        <div class="console-out" id="out-7">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 -->
+  <div class="topic-card" data-level="avanzado">
+    <div class="card-header" onclick="toggleCard(this)">
+      <span class="card-number">08</span>
+      <div class="card-title-wrap">
+        <div class="card-title">Inmutabilidad y Object.freeze</div>
+        <div class="card-def"><code>Object.freeze()</code> congela un objeto impidiendo cambios. <code>Object.assign()</code> copia propiedades de uno o más objetos fuente.</div>
+      </div>
+      <span class="card-tag tag-avanzado">Avanzado</span>
+      <span class="toggle-icon">▶</span>
+    </div>
+    <div class="card-body">
+      <div class="code-wrap">
+        <div class="code-bar">
+          <div class="dots"><div class="dot dot-r"></div><div class="dot dot-y"></div><div class="dot dot-g"></div></div>
+          <button class="copy-btn" onclick="copyCode(this)">Copiar</button>
+        </div>
+        <pre><code><span class="cm">// Objeto de configuración inmutable: evita modificaciones accidentales</span>
+<span class="kw">const</span> CONFIG = <span class="fn">Object</span>.<span class="fn">freeze</span>({
+  API_URL: <span class="str">"https://api.ejemplo.com"</span>,
+  TIMEOUT: <span class="num">5000</span>,
+  VERSION: <span class="str">"2.1.0"</span>
+});
+
+<span class="cm">// Intentar modificar lanza error en strict mode, silencioso en normal</span>
+CONFIG.API_URL = <span class="str">"hackeado"</span>;  <span class="cm">// ← no hace nada</span>
+console.<span class="fn">log</span>(<span class="str">"URL (sin cambio):"</span>, CONFIG.API_URL);
+console.<span class="fn">log</span>(<span class="str">"¿Está congelado?"</span>, <span class="fn">Object</span>.<span class="fn">isFrozen</span>(CONFIG));
+
+<span class="cm">// Object.assign(): copia propiedades de objetos fuente al destino</span>
+<span class="kw">const</span> defaults = { color: <span class="str">"azul"</span>, tamaño: <span class="str">"M"</span>, cantidad: <span class="num">1</span> };
+<span class="kw">const</span> opciones = { color: <span class="str">"rojo"</span>, cantidad: <span class="num">3</span> };  <span class="cm">// sobreescribe</span>
+
+<span class="kw">const</span> pedido = <span class="fn">Object</span>.<span class="fn">assign</span>({}, defaults, opciones); <span class="cm">// {} evita mutar defaults</span>
+console.<span class="fn">log</span>(<span class="str">"Pedido final:"</span>, pedido);
+
+<span class="cm">// Patrón inmutable: actualizar sin mutar el original</span>
+<span class="kw">const</span> estadoAnterior = { usuario: <span class="str">"Ana"</span>, puntos: <span class="num">100</span>, nivel: <span class="num">3</span> };
+<span class="kw">const</span> nuevoEstado = { ...estadoAnterior, puntos: <span class="num">150</span>, nivel: <span class="num">4</span> }; <span class="cm">// spread para inmutabilidad</span>
+console.<span class="fn">log</span>(<span class="str">"Estado anterior:"</span>, estadoAnterior.puntos);
+console.<span class="fn">log</span>(<span class="str">"Nuevo estado:"</span>, nuevoEstado.puntos);</code></pre>
+      </div>
+      <div class="output-section">
+        <div class="output-label">▸ Consola Interactiva</div>
+        <button class="run-btn" onclick="runCode(this, 8)">▶ Ejecutar</button>
+        <div class="console-out" id="out-8">// La salida aparecerá aquí...</div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+
+<script src="js/script.js"></script>
+</body>
+</html>

@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+  <title>Fechas y Horas en JavaScript</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', sans-serif; background: #0f172a; color: #e2e8f0; padding: 2rem; }
+    h1 { text-align: center; font-size: 2rem; color: #38bdf8; margin-bottom: .4rem; }
+    .subtitle { text-align: center; color: #94a3b8; margin-bottom: 2rem; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 1.5rem; max-width: 1200px; margin: 0 auto; }
+    .card { background: #1e293b; border: 1px solid #334155; border-radius: 12px; padding: 1.4rem; }
+    .card:hover { border-color: #38bdf8; }
+    .card h2 { font-size: 1rem; color: #38bdf8; margin-bottom: .3rem; }
+    .desc { font-size: .78rem; color: #64748b; margin-bottom: 1rem; font-style: italic; }
+    pre { background: #0f172a; border-radius: 8px; padding: 1rem; font-size: .78rem; overflow-x: auto; border: 1px solid #1e3a5f; margin-bottom: .8rem; line-height: 1.6; }
+    .c { color: #64748b; } .k { color: #c084fc; } .s { color: #34d399; } .m { color: #fbbf24; } .n { color: #f87171; }
+    .out { background: #0c1a2e; border-left: 3px solid #38bdf8; padding: .8rem 1rem; font-family: monospace; font-size: .82rem; color: #7dd3fc; white-space: pre-wrap; border-radius: 0 8px 8px 0; }
+    .out span { color: #94a3b8; font-size: .75rem; display: block; margin-bottom: .3rem; }
+    .clock { font-size: 2.5rem; text-align: center; color: #38bdf8; font-family: monospace; letter-spacing: 3px; padding: 1rem 0 .5rem; }
+    .cdate { text-align: center; color: #7dd3fc; margin-bottom: .5rem; }
+    table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+    th { background: #0f172a; color: #38bdf8; padding: 6px 10px; text-align: left; }
+    td { padding: 5px 10px; border-top: 1px solid #1e293b; color: #cbd5e1; font-family: monospace; }
+  </style>
+</head>
+<body>
+<h1>📅 Fechas y Horas en JavaScript</h1>
+<p class="subtitle">Proyecto práctico con definiciones comentadas de cada concepto</p>
+
+<!-- RELOJ EN VIVO -->
+<div style="max-width:480px;margin:0 auto 1.5rem;">
+  <div class="card">
+    <h2>🕐 Reloj en Vivo</h2>
+    <p class="desc">setInterval() actualiza el objeto Date cada segundo para mostrar la hora actual.</p>
+    <div class="clock" id="clock">--:--:--</div>
+    <div class="cdate" id="liveDate">---</div>
+  </div>
+</div>
+
+<!-- TABLA MÉTODOS -->
+<div style="max-width:1200px;margin:0 auto 1.5rem;">
+  <div class="card">
+    <h2>📋 Métodos get* del objeto Date</h2>
+    <p class="desc">Cada método extrae un componente individual. ¡Cuidado: getMonth() devuelve 0-11!</p>
+    <table><thead><tr><th>Método</th><th>Descripción</th><th>Valor actual</th></tr></thead>
+    <tbody id="tbl"></tbody></table>
+  </div>
+</div>
+
+<div class="grid">
+
+  <!-- 1 -->
+  <div class="card">
+    <h2>1️⃣ Crear un objeto Date</h2>
+    <p class="desc">new Date() crea un objeto que representa un momento en el tiempo. Sin argumentos captura ahora; con argumentos define una fecha específica.</p>
+    <pre><span class="c">// Sin args → fecha/hora actual</span>
+<span class="k">const</span> ahora = <span class="k">new</span> <span class="m">Date</span>();
+
+<span class="c">// Con string ISO</span>
+<span class="k">const</span> navidad = <span class="k">new</span> <span class="m">Date</span>(<span class="s">"2025-12-25"</span>);
+
+<span class="c">// Con (año, mes-0, día, h, m, s)</span>
+<span class="k">const</span> d = <span class="k">new</span> <span class="m">Date</span>(<span class="n">2000</span>, <span class="n">0</span>, <span class="n">1</span>);</pre>
+    <div class="out" id="o1"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 2 -->
+  <div class="card">
+    <h2>2️⃣ Timestamp (Unix Time)</h2>
+    <p class="desc">Número de milisegundos desde el 1 ene 1970 (Epoch). Es la representación más universal e interoperable de un instante en el tiempo.</p>
+    <pre><span class="c">// Date.now() → timestamp actual</span>
+<span class="k">const</span> ts = <span class="m">Date</span>.<span class="m">now</span>();
+
+<span class="c">// .getTime() → timestamp del Date</span>
+<span class="k">const</span> t = <span class="k">new</span> <span class="m">Date</span>().<span class="m">getTime</span>();
+
+<span class="c">// Timestamp 0 → Epoch</span>
+<span class="k">new</span> <span class="m">Date</span>(<span class="n">0</span>); <span class="c">// 1 ene 1970 UTC</span></pre>
+    <div class="out" id="o2"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 3 -->
+  <div class="card">
+    <h2>3️⃣ Modificar fechas (set*)</h2>
+    <p class="desc">Los métodos set* mutan el objeto Date, cambiando componentes individuales sin necesidad de crear un nuevo objeto.</p>
+    <pre><span class="k">const</span> d = <span class="k">new</span> <span class="m">Date</span>();
+<span class="c">// Cambiar el año</span>
+d.<span class="m">setFullYear</span>(<span class="n">2030</span>);
+<span class="c">// Cambiar mes (0=Enero)</span>
+d.<span class="m">setMonth</span>(<span class="n">0</span>);
+<span class="c">// Cambiar día del mes</span>
+d.<span class="m">setDate</span>(<span class="n">1</span>);
+<span class="c">// Cambiar hora, min, seg</span>
+d.<span class="m">setHours</span>(<span class="n">12</span>, <span class="n">0</span>, <span class="n">0</span>);</pre>
+    <div class="out" id="o3"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 4 -->
+  <div class="card">
+    <h2>4️⃣ Formatear fechas</h2>
+    <p class="desc">Métodos built-in para convertir un Date a texto. toLocaleDateString() adapta el formato al idioma y región indicada automáticamente.</p>
+    <pre><span class="k">const</span> d = <span class="k">new</span> <span class="m">Date</span>();
+<span class="c">// Fecha según idioma</span>
+d.<span class="m">toLocaleDateString</span>(<span class="s">"es-MX"</span>);
+<span class="c">// Solo la hora</span>
+d.<span class="m">toLocaleTimeString</span>(<span class="s">"es-MX"</span>);
+<span class="c">// Estándar ISO 8601</span>
+d.<span class="m">toISOString</span>();
+<span class="c">// Texto completo legible</span>
+d.<span class="m">toString</span>();</pre>
+    <div class="out" id="o4"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 5 -->
+  <div class="card">
+    <h2>5️⃣ Intl.DateTimeFormat</h2>
+    <p class="desc">API para formateo avanzado e internacionalizado de fechas con control total sobre componentes, idioma y zona horaria.</p>
+    <pre><span class="k">const</span> fmt = <span class="k">new</span> Intl.<span class="m">DateTimeFormat</span>(<span class="s">"es-MX"</span>, {
+  weekday: <span class="s">"long"</span>,   <span class="c">// "lunes"</span>
+  year:    <span class="s">"numeric"</span>, <span class="c">// 2025</span>
+  month:   <span class="s">"long"</span>,    <span class="c">// "enero"</span>
+  day:     <span class="s">"numeric"</span>, <span class="c">// 1</span>
+  hour:    <span class="s">"2-digit"</span>,
+  minute:  <span class="s">"2-digit"</span>
+});
+fmt.<span class="m">format</span>(<span class="k">new</span> <span class="m">Date</span>());</pre>
+    <div class="out" id="o5"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 6 -->
+  <div class="card">
+    <h2>6️⃣ Diferencia entre fechas</h2>
+    <p class="desc">Restar dos objetos Date devuelve milisegundos. Dividiendo entre las constantes adecuadas se obtienen días, horas o minutos.</p>
+    <pre><span class="k">const</span> inicio = <span class="k">new</span> <span class="m">Date</span>(<span class="s">"2025-01-01"</span>);
+<span class="k">const</span> hoy = <span class="k">new</span> <span class="m">Date</span>();
+<span class="c">// Diferencia en milisegundos</span>
+<span class="k">const</span> ms = hoy - inicio;
+<span class="c">// → días (÷ 86_400_000)</span>
+<span class="k">const</span> dias = Math.<span class="m">floor</span>(ms / <span class="n">86400000</span>);
+<span class="c">// → horas (÷ 3_600_000)</span>
+<span class="k">const</span> hrs = Math.<span class="m">floor</span>(ms / <span class="n">3600000</span>);</pre>
+    <div class="out" id="o6"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 7 -->
+  <div class="card">
+    <h2>7️⃣ Countdown (Cuenta regresiva)</h2>
+    <p class="desc">Combinar diferencia de fechas con setInterval() crea un temporizador que se actualiza cada segundo mostrando el tiempo restante.</p>
+    <pre><span class="k">function</span> <span class="m">countdown</span>(target) {
+  <span class="k">const</span> diff = <span class="k">new</span> <span class="m">Date</span>(target) - <span class="m">Date</span>.<span class="m">now</span>();
+  <span class="k">if</span> (diff &lt;= <span class="n">0</span>) <span class="k">return</span> <span class="s">"¡Llegó!"</span>;
+  <span class="k">const</span> d = Math.<span class="m">floor</span>(diff/<span class="n">86400000</span>);
+  <span class="k">const</span> h = Math.<span class="m">floor</span>(diff%<span class="n">86400000</span>/<span class="n">3600000</span>);
+  <span class="k">const</span> m = Math.<span class="m">floor</span>(diff%<span class="n">3600000</span>/<span class="n">60000</span>);
+  <span class="k">const</span> s = Math.<span class="m">floor</span>(diff%<span class="n">60000</span>/<span class="n">1000</span>);
+  <span class="k">return</span> <span class="s">`${d}d ${h}h ${m}m ${s}s`</span>;
+}</pre>
+    <div class="out" id="o7"><span>▶ Navidad 2025:</span>Cargando...</div>
+  </div>
+
+  <!-- 8 -->
+  <div class="card">
+    <h2>8️⃣ Date.parse() y Validación</h2>
+    <p class="desc">Date.parse() convierte un string a timestamp. Retorna NaN si el string no es una fecha válida, permitiendo validar entradas del usuario.</p>
+    <pre><span class="c">// String → timestamp en ms</span>
+<span class="m">Date</span>.<span class="m">parse</span>(<span class="s">"2025-06-15"</span>); <span class="c">// número</span>
+<span class="m">Date</span>.<span class="m">parse</span>(<span class="s">"texto"</span>);       <span class="c">// NaN</span>
+
+<span class="c">// Función de validación</span>
+<span class="k">function</span> <span class="m">esValida</span>(str) {
+  <span class="k">return</span> !<span class="m">isNaN</span>(<span class="m">Date</span>.<span class="m">parse</span>(str));
+}
+<span class="m">esValida</span>(<span class="s">"2025-06-15"</span>); <span class="c">// true</span>
+<span class="m">esValida</span>(<span class="s">"2025-13-01"</span>); <span class="c">// false</span></pre>
+    <div class="out" id="o8"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 9 -->
+  <div class="card">
+    <h2>9️⃣ Zonas Horarias (UTC)</h2>
+    <p class="desc">getTimezoneOffset() devuelve los minutos de diferencia entre la hora local y UTC. toLocaleString() acepta una zona horaria para mostrar la hora de cualquier región.</p>
+    <pre><span class="k">const</span> d = <span class="k">new</span> <span class="m">Date</span>();
+<span class="c">// Diferencia local vs UTC (minutos)</span>
+d.<span class="m">getTimezoneOffset</span>(); <span class="c">// ej: 300 = UTC-5</span>
+<span class="c">// Fecha en UTC universal</span>
+d.<span class="m">toUTCString</span>();
+<span class="c">// Mostrar en zona específica</span>
+d.<span class="m">toLocaleString</span>(<span class="s">"es-MX"</span>, {
+  timeZone: <span class="s">"America/Mexico_City"</span>
+});
+d.<span class="m">toLocaleString</span>(<span class="s">"es-ES"</span>, {
+  timeZone: <span class="s">"Europe/Madrid"</span>
+});</pre>
+    <div class="out" id="o9"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+  <!-- 10 -->
+  <div class="card">
+    <h2>🔟 Comparar fechas correctamente</h2>
+    <p class="desc">Dos objetos Date nunca son iguales con === aunque representen el mismo instante. La comparación correcta es mediante sus timestamps o los operadores < >.</p>
+    <pre><span class="k">const</span> a = <span class="k">new</span> <span class="m">Date</span>(<span class="s">"2025-06-01"</span>);
+<span class="k">const</span> b = <span class="k">new</span> <span class="m">Date</span>(<span class="s">"2025-12-31"</span>);
+
+<span class="c">// ❌ MAL: compara referencias</span>
+a === b; <span class="c">// siempre false</span>
+
+<span class="c">// ✅ BIEN: comparar timestamps</span>
+a.<span class="m">getTime</span>() &lt; b.<span class="m">getTime</span>(); <span class="c">// true</span>
+
+<span class="c">// ✅ También OK: operadores &lt; &gt;</span>
+a &lt; b; <span class="c">// true (auto-conversión)</span></pre>
+    <div class="out" id="o10"><span>▶ Resultado:</span>Cargando...</div>
+  </div>
+
+</div>
+<footer>
+  <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+</footer>
+<script>
+const pad = n => String(n).padStart(2,'0');
+const DIAS  = ["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
+const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+
+// 1. new Date()
+document.getElementById('o1').innerHTML = `<span>▶ Resultado:</span>ahora    → ${new Date().toLocaleDateString('es-MX')} ${new Date().toLocaleTimeString('es-MX')}
+navidad  → ${new Date("2025-12-25").toLocaleDateString('es-MX')}
+año 2000 → ${new Date(2000,0,1).toLocaleDateString('es-MX')}`;
+
+// 2. Timestamp
+document.getElementById('o2').innerHTML = `<span>▶ Resultado:</span>Date.now()  → ${Date.now()}
+getTime()   → ${new Date().getTime()}
+new Date(0) → ${new Date(0).toUTCString()}`;
+
+// 3. set*
+const mod = new Date(); mod.setFullYear(2030); mod.setMonth(0); mod.setDate(1); mod.setHours(12,0,0);
+document.getElementById('o3').innerHTML = `<span>▶ Fecha modificada:</span>${mod.toLocaleDateString('es-MX')} a las ${mod.toLocaleTimeString('es-MX')}`;
+
+// 4. Formatear
+const f = new Date();
+document.getElementById('o4').innerHTML = `<span>▶ Resultado:</span>toLocaleDateString → ${f.toLocaleDateString('es-MX')}
+toLocaleTimeString → ${f.toLocaleTimeString('es-MX')}
+toISOString        → ${f.toISOString()}`;
+
+// 5. Intl
+const fmt = new Intl.DateTimeFormat("es-MX",{weekday:"long",year:"numeric",month:"long",day:"numeric",hour:"2-digit",minute:"2-digit"});
+document.getElementById('o5').innerHTML = `<span>▶ Resultado:</span>${fmt.format(new Date())}`;
+
+// 6. Diferencia
+const ini = new Date("2025-01-01"), hoy = new Date(), ms = hoy - ini;
+document.getElementById('o6').innerHTML = `<span>▶ Desde 01/01/2025 hasta hoy:</span>Milisegundos → ${ms.toLocaleString()}
+Días         → ${Math.floor(ms/86400000)}
+Horas        → ${Math.floor(ms/3600000).toLocaleString()}`;
+
+// 7. Countdown
+function countdown(t){ const d=new Date(t)-Date.now(); if(d<=0)return"¡Ya llegó!"; return`${Math.floor(d/86400000)}d ${pad(Math.floor(d%86400000/3600000))}h ${pad(Math.floor(d%3600000/60000))}m ${pad(Math.floor(d%60000/1000))}s`;}
+function uCD(){ document.getElementById('o7').innerHTML=`<span>▶ Navidad 2025:</span>${countdown("2025-12-25T00:00:00")}`;}
+uCD(); setInterval(uCD,1000);
+
+// 8. Date.parse
+function esValida(s){ return !isNaN(Date.parse(s)); }
+document.getElementById('o8').innerHTML = `<span>▶ Resultado:</span>esValida("2025-06-15")  → ${esValida("2025-06-15")}
+esValida("2025-13-01") → ${esValida("2025-13-01")}
+esValida("texto")      → ${esValida("texto")}
+Date.parse("2025-06-15") → ${Date.parse("2025-06-15")}`;
+
+// 9. Zonas
+const n = new Date(), off = -n.getTimezoneOffset()/60;
+document.getElementById('o9').innerHTML = `<span>▶ Resultado:</span>Offset local  → UTC${off>=0?'+':''}${off}h
+UTC           → ${n.toUTCString()}
+México (CDMX) → ${n.toLocaleString('es-MX',{timeZone:'America/Mexico_City'})}
+Madrid        → ${n.toLocaleString('es-ES',{timeZone:'Europe/Madrid'})}`;
+
+// 10. Comparar
+const a=new Date("2025-06-01"), b=new Date("2025-12-31");
+document.getElementById('o10').innerHTML = `<span>▶ Resultado:</span>a === b                    → ${a===b}  (❌ siempre false)
+a.getTime() < b.getTime()  → ${a.getTime()<b.getTime()}  (✅ correcto)
+a < b (auto-cast)          → ${a<b}  (✅ funciona)`;
+
+// Reloj en vivo
+function uC(){ const n=new Date(); document.getElementById('clock').textContent=`${pad(n.getHours())}:${pad(n.getMinutes())}:${pad(n.getSeconds())}`; document.getElementById('liveDate').textContent=`${DIAS[n.getDay()]}, ${n.getDate()} de ${MESES[n.getMonth()]} de ${n.getFullYear()}`; }
+uC(); setInterval(uC,1000);
+
+// Tabla
+const d2=new Date();
+[["getFullYear()","Año completo",d2.getFullYear()],["getMonth()","Mes 0-11 (enero=0)",`${d2.getMonth()} → ${MESES[d2.getMonth()]}`],["getDate()","Día del mes (1-31)",d2.getDate()],["getDay()","Día semana 0=Dom",`${d2.getDay()} → ${DIAS[d2.getDay()]}`],["getHours()","Hora (0-23)",d2.getHours()],["getMinutes()","Minutos (0-59)",d2.getMinutes()],["getSeconds()","Segundos (0-59)",d2.getSeconds()],["getMilliseconds()","Milisegundos (0-999)",d2.getMilliseconds()],["getTime()","Timestamp desde Epoch",d2.getTime()],["getTimezoneOffset()","Diferencia UTC (min)",d2.getTimezoneOffset()]].forEach(([m,d,v])=>{const tr=document.createElement('tr');tr.innerHTML=`<td style="color:#fbbf24">${m}</td><td>${d}</td><td style="color:#34d399">${v}</td>`;document.getElementById('tbl').appendChild(tr);});
+</script>
+</body>
+</html>

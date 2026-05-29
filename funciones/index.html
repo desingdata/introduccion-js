@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Funciones en JavaScript</title>
+<link rel="icon" href="https://desingdata.github.io/desingdata/img/DesingData_favicon-96x96.png" sizes="96x96" type="image/png">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap" rel="stylesheet">
+<style>
+ @import url('./css/style.css');
+</style>
+</head>
+<body>
+<div class="container">
+
+  <header>
+    <div class="badge">▸ Introducción</div>
+    <h1>Funciones en<br><span class="hl">Java</span><span class="hl2">Script</span></h1>
+    <p class="subtitle">// declaración · expresión · arrow · parámetros · scope · closure · recursión · IIFE</p>
+  </header>
+
+  <!-- 1. DECLARACIÓN DE FUNCIÓN -->
+  <div class="section" id="s1">
+    <div class="section-header">
+      <span class="section-num">01</span>
+      <span class="section-title">Declaración de función <span class="tag">function declaration</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">01-declaracion.js</span>
+      </div>
+      <pre><span class="cm">// Declaración de función: se define con la palabra clave 'function'
+// seguida del nombre. Se puede llamar ANTES de su definición (hoisting).</span>
+
+<span class="kw">function</span> <span class="fn">saludar</span>(<span class="param">nombre</span>) {
+  <span class="cm">// 'nombre' es el parámetro: valor que recibe la función al llamarse</span>
+  <span class="kw">return</span> <span class="str">`¡Hola, <span class="ret">${nombre}</span>! Bienvenido a JavaScript.`</span>;
+}
+
+<span class="cm">// Llamada a la función pasando un argumento</span>
+<span class="kw">const</span> mensaje <span class="op">=</span> <span class="fn">saludar</span>(<span class="str">"Ana"</span>);
+console.<span class="fn">log</span>(mensaje); <span class="cm">// ¡Hola, Ana! Bienvenido a JavaScript.</span></pre>
+    </div>
+    <div class="concept"><strong>Declaración (Function Declaration):</strong> Forma clásica de crear funciones. Gracias al <em>hoisting</em>, el motor de JS la mueve al inicio del scope, por lo que se puede invocar antes de escribirla en el código.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva</div>
+      <div class="demo-controls">
+        <input type="text" id="nombreInput" placeholder="Tu nombre" value="Mundo">
+        <button onclick="runSaludar()">Ejecutar</button>
+      </div>
+      <div class="output" id="out1">→ presiona Ejecutar</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 2. EXPRESIÓN DE FUNCIÓN -->
+  <div class="section" id="s2">
+    <div class="section-header">
+      <span class="section-num">02</span>
+      <span class="section-title">Expresión de función <span class="tag">function expression</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">02-expresion.js</span>
+      </div>
+      <pre><span class="cm">// Expresión de función: se asigna a una variable.
+// NO tiene hoisting, solo puede usarse después de su definición.</span>
+
+<span class="kw">const</span> <span class="fn">calcularArea</span> <span class="op">=</span> <span class="kw">function</span>(<span class="param">base</span>, <span class="param">altura</span>) {
+  <span class="cm">// La función recibe dos parámetros y devuelve su producto / 2</span>
+  <span class="kw">return</span> (<span class="param">base</span> <span class="op">*</span> <span class="param">altura</span>) <span class="op">/</span> <span class="num">2</span>;
+};
+
+<span class="kw">const</span> area <span class="op">=</span> <span class="fn">calcularArea</span>(<span class="num">10</span>, <span class="num">5</span>);
+console.<span class="fn">log</span>(<span class="str">`Área del triángulo: <span class="ret">${area}</span>`</span>); <span class="cm">// 25</span></pre>
+    </div>
+    <div class="concept"><strong>Expresión de función (Function Expression):</strong> La función se trata como un valor y se guarda en una variable. No se eleva con hoisting. Es útil para pasarla como argumento o asignarla condicionalmente.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva</div>
+      <div class="demo-controls">
+        <input type="number" id="baseInput" placeholder="Base" value="10" style="width:100px">
+        <input type="number" id="altInput" placeholder="Altura" value="5" style="width:100px">
+        <button onclick="runArea()">Calcular área</button>
+      </div>
+      <div class="output" id="out2">→ presiona Calcular</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 3. ARROW FUNCTION -->
+  <div class="section" id="s3">
+    <div class="section-header">
+      <span class="section-num">03</span>
+      <span class="section-title">Arrow Function <span class="tag">sintaxis flecha ⇒</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">03-arrow.js</span>
+      </div>
+      <pre><span class="cm">// Arrow function: sintaxis compacta introducida en ES6.
+// Si solo hay una expresión, el 'return' es implícito.</span>
+
+<span class="cm">// Forma completa con bloque de código</span>
+<span class="kw">const</span> <span class="fn">cuadrado</span> <span class="op">=</span> (<span class="param">n</span>) <span class="op">=></span> {
+  <span class="kw">return</span> <span class="param">n</span> <span class="op">**</span> <span class="num">2</span>;
+};
+
+<span class="cm">// Forma compacta: retorno implícito (sin llaves)</span>
+<span class="kw">const</span> <span class="fn">doble</span> <span class="op">=</span> <span class="param">n</span> <span class="op">=></span> <span class="param">n</span> <span class="op">*</span> <span class="num">2</span>;
+
+<span class="cm">// Con arrays: las arrows son ideales con métodos de orden superior</span>
+<span class="kw">const</span> nums <span class="op">=</span> [<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>, <span class="num">5</span>];
+<span class="kw">const</span> cuadrados <span class="op">=</span> nums.<span class="fn">map</span>(<span class="param">n</span> <span class="op">=></span> <span class="param">n</span> <span class="op">**</span> <span class="num">2</span>);
+console.<span class="fn">log</span>(cuadrados); <span class="cm">// [1, 4, 9, 16, 25]</span></pre>
+    </div>
+    <div class="concept"><strong>Arrow Function:</strong> Sintaxis corta y moderna. No tiene su propio <code>this</code>, lo hereda del contexto donde fue creada. Ideal para callbacks y métodos funcionales como <code>map</code>, <code>filter</code>, <code>reduce</code>.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva</div>
+      <div class="demo-controls">
+        <input type="number" id="numInput" placeholder="Número" value="7" style="width:110px">
+        <button onclick="runArrow()">Calcular doble y cuadrado</button>
+      </div>
+      <div class="output" id="out3">→ presiona el botón</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 4. PARÁMETROS -->
+  <div class="section" id="s4">
+    <div class="section-header">
+      <span class="section-num">04</span>
+      <span class="section-title">Parámetros <span class="tag">default · rest · spread</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">04-parametros.js</span>
+      </div>
+      <pre><span class="cm">// Parámetro por defecto: valor usado si no se pasa argumento</span>
+<span class="kw">const</span> <span class="fn">potencia</span> <span class="op">=</span> (<span class="param">base</span>, <span class="param">exp</span> <span class="op">=</span> <span class="num">2</span>) <span class="op">=></span> <span class="param">base</span> <span class="op">**</span> <span class="param">exp</span>;
+console.<span class="fn">log</span>(<span class="fn">potencia</span>(<span class="num">3</span>));    <span class="cm">// 9 (usa exp=2 por defecto)</span>
+console.<span class="fn">log</span>(<span class="fn">potencia</span>(<span class="num">3</span>, <span class="num">3</span>)); <span class="cm">// 27</span>
+
+<span class="cm">// Parámetro rest (...): agrupa el resto de argumentos en un array</span>
+<span class="kw">const</span> <span class="fn">sumarTodo</span> <span class="op">=</span> (<span class="param">...numeros</span>) <span class="op">=></span>
+  <span class="param">numeros</span>.<span class="fn">reduce</span>((<span class="param">acc</span>, <span class="param">n</span>) <span class="op">=></span> <span class="param">acc</span> <span class="op">+</span> <span class="param">n</span>, <span class="num">0</span>);
+
+console.<span class="fn">log</span>(<span class="fn">sumarTodo</span>(<span class="num">1</span>, <span class="num">2</span>, <span class="num">3</span>, <span class="num">4</span>)); <span class="cm">// 10</span>
+
+<span class="cm">// Spread: expande un array como argumentos individuales</span>
+<span class="kw">const</span> valores <span class="op">=</span> [<span class="num">5</span>, <span class="num">8</span>, <span class="num">3</span>];
+console.<span class="fn">log</span>(Math.<span class="fn">max</span>(<span class="op">...</span>valores)); <span class="cm">// 8</span></pre>
+    </div>
+    <div class="concept"><strong>Parámetros avanzados:</strong> Los <em>default params</em> evitan errores si falta un argumento. El operador <em>rest</em> (<code>...param</code>) captura argumentos variables. El operador <em>spread</em> (<code>...</code>) expande arrays al invocar funciones.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva — sumarTodo()</div>
+      <div class="demo-controls">
+        <input type="text" id="restInput" placeholder="e.g. 1,2,3,4,5" value="1,2,3,4,5">
+        <button onclick="runRest()">Sumar todos</button>
+      </div>
+      <div class="output" id="out4">→ ingresa números separados por coma</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 5. SCOPE -->
+  <div class="section" id="s5">
+    <div class="section-header">
+      <span class="section-num">05</span>
+      <span class="section-title">Scope <span class="tag">ámbito de variables</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">05-scope.js</span>
+      </div>
+      <pre><span class="cm">// Scope global: disponible en todo el programa</span>
+<span class="kw">let</span> global <span class="op">=</span> <span class="str">"soy global"</span>;
+
+<span class="kw">function</span> <span class="fn">exterior</span>() {
+  <span class="cm">// Scope de función: solo accesible dentro de 'exterior'</span>
+  <span class="kw">let</span> local <span class="op">=</span> <span class="str">"soy local"</span>;
+
+  <span class="kw">function</span> <span class="fn">interior</span>() {
+    <span class="cm">// Scope anidado: puede acceder a 'local' y 'global'</span>
+    <span class="kw">let</span> privada <span class="op">=</span> <span class="str">"soy privada"</span>;
+    console.<span class="fn">log</span>(global);  <span class="cm">// ✓ accesible</span>
+    console.<span class="fn">log</span>(local);   <span class="cm">// ✓ accesible (scope padre)</span>
+    console.<span class="fn">log</span>(privada); <span class="cm">// ✓ accesible (propio scope)</span>
+  }
+
+  <span class="fn">interior</span>();
+  <span class="cm">// console.log(privada) → ✗ ReferenceError: no accesible aquí</span>
+}</pre>
+    </div>
+    <div class="concept"><strong>Scope (Ámbito):</strong> Define dónde son accesibles las variables. JS usa <em>lexical scope</em>: las funciones internas pueden acceder a las variables del contexto externo, pero no al revés.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo — visualizar scope</div>
+      <div class="demo-controls">
+        <button onclick="runScope()">Mostrar cadena de scope</button>
+      </div>
+      <div class="output" id="out5">→ presiona el botón</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 6. CLOSURE -->
+  <div class="section" id="s6">
+    <div class="section-header">
+      <span class="section-num">06</span>
+      <span class="section-title">Closure <span class="tag">función + entorno léxico</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">06-closure.js</span>
+      </div>
+      <pre><span class="cm">// Closure: una función interna que "recuerda" las variables
+// de su contexto externo, incluso después de que este haya terminado.</span>
+
+<span class="kw">function</span> <span class="fn">crearContador</span>() {
+  <span class="kw">let</span> cuenta <span class="op">=</span> <span class="num">0</span>; <span class="cm">// variable en el scope de crearContador</span>
+
+  <span class="kw">return</span> {
+    <span class="cm">// La función interna tiene acceso a 'cuenta' por closure</span>
+    <span class="fn">incrementar</span>: () <span class="op">=></span> <span class="op">++</span>cuenta,
+    <span class="fn">decrementar</span>: () <span class="op">=></span> <span class="op">--</span>cuenta,
+    <span class="fn">valor</span>: () <span class="op">=></span> cuenta
+  };
+}
+
+<span class="kw">const</span> contador <span class="op">=</span> <span class="fn">crearContador</span>();
+contador.<span class="fn">incrementar</span>(); <span class="cm">// 1</span>
+contador.<span class="fn">incrementar</span>(); <span class="cm">// 2</span>
+contador.<span class="fn">decrementar</span>(); <span class="cm">// 1</span>
+console.<span class="fn">log</span>(contador.<span class="fn">valor</span>()); <span class="cm">// 1</span></pre>
+    </div>
+    <div class="concept"><strong>Closure:</strong> Una función "cierra" sobre las variables de su entorno léxico. Permite crear datos privados y fábricas de funciones. Es uno de los conceptos más poderosos de JavaScript.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva — contador con closure</div>
+      <div class="demo-controls">
+        <button onclick="runIncrement()">+ Incrementar</button>
+        <button class="sec" onclick="runDecrement()">− Decrementar</button>
+        <button class="sec" onclick="resetCounter()">↺ Reset</button>
+      </div>
+      <div class="output" id="out6">Valor: 0</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 7. RECURSIÓN -->
+  <div class="section" id="s7">
+    <div class="section-header">
+      <span class="section-num">07</span>
+      <span class="section-title">Recursión <span class="tag">función que se llama a sí misma</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">07-recursion.js</span>
+      </div>
+      <pre><span class="cm">// Recursión: una función que se llama a sí misma.
+// SIEMPRE necesita un caso base para detenerse (evitar stack overflow).</span>
+
+<span class="kw">function</span> <span class="fn">factorial</span>(<span class="param">n</span>) {
+  <span class="cm">// Caso base: factorial de 0 o 1 es 1</span>
+  <span class="kw">if</span> (<span class="param">n</span> <span class="op"><=</span> <span class="num">1</span>) <span class="kw">return</span> <span class="num">1</span>;
+
+  <span class="cm">// Caso recursivo: n * factorial(n-1)</span>
+  <span class="kw">return</span> <span class="param">n</span> <span class="op">*</span> <span class="fn">factorial</span>(<span class="param">n</span> <span class="op">-</span> <span class="num">1</span>);
+}
+
+<span class="cm">// factorial(5) → 5 * 4 * 3 * 2 * 1 = 120</span>
+console.<span class="fn">log</span>(<span class="fn">factorial</span>(<span class="num">5</span>)); <span class="cm">// 120</span>
+
+<span class="cm">// Fibonacci recursivo: cada número = suma de los dos anteriores</span>
+<span class="kw">const</span> <span class="fn">fibonacci</span> <span class="op">=</span> <span class="param">n</span> <span class="op">=></span>
+  <span class="param">n</span> <span class="op"><=</span> <span class="num">1</span> <span class="op">?</span> <span class="param">n</span> <span class="op">:</span> <span class="fn">fibonacci</span>(<span class="param">n</span> <span class="op">-</span> <span class="num">1</span>) <span class="op">+</span> <span class="fn">fibonacci</span>(<span class="param">n</span> <span class="op">-</span> <span class="num">2</span>);</pre>
+    </div>
+    <div class="concept"><strong>Recursión:</strong> Técnica donde una función se invoca a sí misma para dividir un problema en partes más pequeñas. Requiere un <em>caso base</em> para detener la cadena. Muy útil en estructuras jerárquicas y algoritmos de búsqueda.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva</div>
+      <div class="demo-controls">
+        <input type="number" id="factInput" placeholder="n" value="5" style="width:80px" min="0" max="20">
+        <button onclick="runFactorial()">Factorial</button>
+        <button class="sec" onclick="runFibonacci()">Fibonacci(n)</button>
+      </div>
+      <div class="output" id="out7">→ ingresa un número</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 8. IIFE -->
+  <div class="section" id="s8">
+    <div class="section-header">
+      <span class="section-num">08</span>
+      <span class="section-title">IIFE <span class="tag">Immediately Invoked Function Expression</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">08-iife.js</span>
+      </div>
+      <pre><span class="cm">// IIFE: función que se define y ejecuta inmediatamente.
+// Crea su propio scope, evitando contaminar el scope global.</span>
+
+<span class="kw">const</span> resultado <span class="op">=</span> (() <span class="op">=></span> {
+  <span class="cm">// Todo lo declarado aquí no contamina el scope global</span>
+  <span class="kw">const</span> privado <span class="op">=</span> <span class="str">"no accesible desde afuera"</span>;
+  <span class="kw">const</span> pi <span class="op">=</span> Math.<span class="num">PI</span>;
+  <span class="kw">return</span> <span class="str">`π ≈ <span class="ret">${pi.<span class="fn">toFixed</span>(<span class="num">4</span>)}</span>`</span>;
+})(); <span class="cm">// ← los () del final la invocan inmediatamente</span>
+
+console.<span class="fn">log</span>(resultado); <span class="cm">// "π ≈ 3.1416"</span>
+<span class="cm">// console.log(privado) → ✗ ReferenceError</span>
+
+<span class="cm">// IIFE clásica con parámetros</span>
+((nombre, version) <span class="op">=></span> {
+  console.<span class="fn">log</span>(<span class="str">`App: <span class="ret">${nombre}</span> v<span class="ret">${version}</span>`</span>);
+})(<span class="str">"MiApp"</span>, <span class="str">"1.0.0"</span>);</pre>
+    </div>
+    <div class="concept"><strong>IIFE:</strong> Se usa para encapsular código de inicialización, crear módulos privados o evitar conflictos de nombres en el scope global. Era muy común antes de los módulos ES6.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo — IIFE con configuración</div>
+      <div class="demo-controls">
+        <input type="text" id="appName" placeholder="Nombre app" value="MiApp" style="width:130px">
+        <input type="text" id="appVer" placeholder="Versión" value="2.0.1" style="width:90px">
+        <button onclick="runIIFE()">Inicializar</button>
+      </div>
+      <div class="output" id="out8">→ ingresa datos y presiona Inicializar</div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- 9. HIGHER ORDER FUNCTIONS -->
+  <div class="section" id="s9">
+    <div class="section-header">
+      <span class="section-num">09</span>
+      <span class="section-title">Funciones de orden superior <span class="tag">higher-order functions</span></span>
+    </div>
+    <div class="code-card">
+      <div class="code-topbar">
+        <div class="dot r"></div><div class="dot y"></div><div class="dot g"></div>
+        <span class="file-name">09-higher-order.js</span>
+      </div>
+      <pre><span class="cm">// Función de orden superior: recibe o retorna otras funciones.
+// map, filter y reduce son los ejemplos más comunes en arrays.</span>
+
+<span class="kw">const</span> productos <span class="op">=</span> [
+  { nombre: <span class="str">"Laptop"</span>,   precio: <span class="num">1200</span> },
+  { nombre: <span class="str">"Mouse"</span>,    precio: <span class="num">25</span>   },
+  { nombre: <span class="str">"Monitor"</span>,  precio: <span class="num">350</span>  },
+  { nombre: <span class="str">"Teclado"</span>,  precio: <span class="num">80</span>   },
+];
+
+<span class="cm">// filter: filtra elementos según condición</span>
+<span class="kw">const</span> caros <span class="op">=</span> productos.<span class="fn">filter</span>(<span class="param">p</span> <span class="op">=></span> <span class="param">p</span>.precio <span class="op">></span> <span class="num">100</span>);
+
+<span class="cm">// map: transforma cada elemento</span>
+<span class="kw">const</span> nombres <span class="op">=</span> caros.<span class="fn">map</span>(<span class="param">p</span> <span class="op">=></span> <span class="param">p</span>.nombre);
+
+<span class="cm">// reduce: acumula un resultado único</span>
+<span class="kw">const</span> totalCaros <span class="op">=</span> caros.<span class="fn">reduce</span>((<span class="param">sum</span>, <span class="param">p</span>) <span class="op">=></span> <span class="param">sum</span> <span class="op">+</span> <span class="param">p</span>.precio, <span class="num">0</span>);
+
+console.<span class="fn">log</span>(nombres, totalCaros); <span class="cm">// ["Laptop","Monitor"], 1550</span></pre>
+    </div>
+    <div class="concept"><strong>Funciones de orden superior:</strong> Las funciones son "ciudadanos de primera clase" en JS — se pueden pasar como argumentos, retornar y asignar. <code>map</code> transforma, <code>filter</code> selecciona, <code>reduce</code> acumula.</div>
+    <div class="demo-card">
+      <div class="demo-label">▸ Demo interactiva — filter + map + reduce</div>
+      <div class="demo-controls">
+        <input type="number" id="precioMin" placeholder="precio mín." value="100" style="width:120px">
+        <button onclick="runHigherOrder()">Filtrar productos caros</button>
+      </div>
+      <div class="output" id="out9">→ define un precio mínimo</div>
+    </div>
+  </div>
+
+  <footer>
+   <p><small>
+      ·<a style="text-decoration: none; color: white;" href="https://desingdata.github.io/desingdata/" target="_blank">Desing Data</a> 2026 |
+    ·By <a style="text-decoration: none; color: white;" href="https://miguelmauricioriveralopez18686.github.io/mrlPortafolio/" target="_blank">
+      Miguel Mauricio Rivera López</a>.
+    </small></p>
+  </footer>
+
+</div>
+
+<script src="js/script.js"></script>
+</body>
+</html>
